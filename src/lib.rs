@@ -15,6 +15,7 @@ impl FmtLog {
 
     /// Set this logger active.
     pub fn set(self) -> Result<(), SetLoggerError> {
+        set_max_level(STATIC_MAX_LEVEL);
         set_boxed_logger(Box::new(self))
     }
 }
@@ -24,8 +25,8 @@ impl Log for FmtLog {
         true
     }
 
-    fn log(&self, _record: &Record) {
-        eprintln!("Unimplemented");
+    fn log(&self, record: &Record) {
+        eprintln!("{}: {}", record.level(), record.args());
     }
 
     fn flush(&self) {}
