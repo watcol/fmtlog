@@ -5,9 +5,9 @@ use log::*;
 
 /// The body of fmtlog.
 #[derive(Default)]
-pub struct FmtLog;
+pub struct Logger;
 
-impl FmtLog {
+impl Logger {
     /// Create a new instance.
     pub fn new() -> Self {
         Self::default()
@@ -20,7 +20,7 @@ impl FmtLog {
     }
 }
 
-impl Log for FmtLog {
+impl Log for Logger {
     fn enabled(&self, _metadata: &Metadata) -> bool {
         true
     }
