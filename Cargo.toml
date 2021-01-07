@@ -1,0 +1,24 @@
+[package]
+name = "fmtlog"
+version = "0.1.0"
+description = "A simple configurable logger with format specification."
+authors = ["watcol <potfman@gmail.com>"]
+homepage = "https://github.com/watcol/fmtlog"
+repository = "https://github.com/watcol/fmtlog"
+keywords = ["log", "logger", "format"]
+categories = ["development-tools::debugging"]
+license = "MIT"
+readme = "README.md"
+edition = "2018"
+
+include = [
+  "README.md",
+  "Cargo.toml",
+  "src/**/*.rs"
+]
+
+[dependencies]
+log = { version = "0.4.11", features = ["std"] }
+
+[package.metadata.docs.rs]
+all-features = true
