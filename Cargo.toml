@@ -19,6 +19,7 @@ include = [
 
 [dependencies]
 log = { version = "0.4.11", features = ["std"] }
+thread_local = "1.0"
 
 [package.metadata.docs.rs]
 all-features = true
