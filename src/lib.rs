@@ -2,12 +2,14 @@
 extern crate log;
 
 use log::*;
-use std::fmt;
+use std::{fmt, fs};
+use std::io::Write;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Output {
     Stdout,
     Stderr,
+    File(std::path::PathBuf)
 }
 
 impl fmt::Display for Output {
@@ -18,6 +20,7 @@ impl fmt::Display for Output {
             match self {
                 Self::Stdout => "<stdout>",
                 Self::Stderr => "<stderr>",
+                Self::File(path) => path.to_str().unwrap_or("<???>")
             }
         )
     }
@@ -59,9 +62,15 @@ impl Log for Logger {
     }
 
     fn log(&self, record: &Record) {
-        match self.output {
+        match self.output.clone() {
             Output::Stdout => println!("{}: {}", record.level(), record.args()),
             Output::Stderr => eprintln!("{}: {}", record.level(), record.args()),
+            Output::File(path) => {
+                let mut file = fs::File::open(path)
+                    .expect("Failed to open the log file.");
+                write!(file, "{}: {}", record.level(), record.args())
+                    .expect("Failed to write the file.");
+            }
         }
     }
 
