@@ -144,16 +144,29 @@ impl Log for Logger {
     }
 
     fn log(&self, record: &Record) {
-        let mut writer = self.writer.get_or(|| {
-            RefCell::new(
-                self.config
-                    .output
-                    .to_stream()
-                    .expect("Failed to open a file."),
-            )
-        }).borrow_mut();
+        let mut writer = self
+            .writer
+            .get_or(|| {
+                RefCell::new(
+                    self.config
+                        .output
+                        .to_stream()
+                        .expect("Failed to open a file."),
+                )
+            })
+            .borrow_mut();
         writeln!(writer, "{}: {}", record.level(), record.args()).expect("Failed to write.");
     }
 
-    fn flush(&self) {}
+    fn flush(&self) {
+        match self.writer.get() {
+            Some(writer) => {
+                writer
+                    .borrow_mut()
+                    .flush()
+                    .expect("Failed to flush the stream.");
+            }
+            None => {}
+        }
+    }
 }
