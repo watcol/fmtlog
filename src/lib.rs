@@ -5,14 +5,14 @@ extern crate thread_local;
 use log::*;
 use std::cell::RefCell;
 use std::io::{self, Write};
-use std::{fmt, fs};
+use std::{fmt, fs, path};
 use thread_local::CachedThreadLocal;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Output {
     Stdout,
     Stderr,
-    File(std::path::PathBuf),
+    File(path::PathBuf),
 }
 
 impl fmt::Display for Output {
@@ -35,10 +35,17 @@ impl Default for Output {
     }
 }
 
-impl<T: Into<std::path::PathBuf>> From<T> for Output {
+impl<T: Into<path::PathBuf>> From<T> for Output {
     fn from(path: T) -> Self {
         Output::File(path.into())
     }
+}
+
+fn new_file(path: path::PathBuf) -> io::Result<fs::File> {
+    fs::OpenOptions::new()
+        .append(true)
+        .open(path.clone())
+        .or(fs::File::create(path))
 }
 
 impl Output {
@@ -47,9 +54,7 @@ impl Output {
         Ok(match self.clone() {
             Self::Stdout => Stream::from(io::stdout()),
             Self::Stderr => Stream::from(io::stderr()),
-            Self::File(path) => {
-                Stream::from(fs::File::open(path.clone()).or(fs::File::create(path.clone()))?)
-            }
+            Self::File(path) => Stream::from(new_file(path)?),
         })
     }
 }
