@@ -3,7 +3,7 @@ extern crate log;
 extern crate thread_local;
 
 use log::*;
-use thread_local::ThreadLocal;
+use thread_local::CachedThreadLocal;
 use std::cell::RefCell;
 use std::{fmt, fs};
 use std::io::{
@@ -75,7 +75,7 @@ impl Config {
     }
 
     /// Set the output stream.
-    pub fn output(&mut self, output: Output) -> &mut Self {
+    pub fn output(mut self, output: Output) -> Self {
         self.output = output;
         self
     }
@@ -84,7 +84,7 @@ impl Config {
 /// The body of fmtlog.
 pub struct Logger {
     config: Config,
-    writer: ThreadLocal<RefCell<Stream>>,
+    writer: CachedThreadLocal<RefCell<Stream>>,
 }
 
 impl Logger {
@@ -93,7 +93,7 @@ impl Logger {
 
         Ok(Logger {
             config,
-            writer: ThreadLocal::new(),
+            writer: CachedThreadLocal::new(),
         })
     }
 
@@ -114,14 +114,15 @@ impl Log for Logger {
             let tmp = match self.config.output.clone() {
                 Output::Stdout => Stream::Stdout(io::stdout()),
                 Output::Stderr => Stream::Stderr(io::stderr()),
-                Output::File(path) => Stream::File(fs::File::open(path)
+                Output::File(path) => Stream::File(fs::File::open(path.clone())
+                                                   .or(fs::File::create(path))
                                                    .expect("Failed to read the file"))
             };
             RefCell::new(tmp)
         });
 
         let mut writer = writer.borrow_mut();
-        write!(writer, "{}: {}", record.level(), record.args())
+        writeln!(writer, "{}: {}", record.level(), record.args())
             .expect("Failed to write.");
     }
 
