@@ -124,11 +124,11 @@ pub struct Logger {
 
 impl Logger {
     /// Create a new instance.
-    pub fn new(config: Config) -> io::Result<Logger> {
-        Ok(Logger {
+    pub fn new(config: Config) -> Logger {
+        Logger {
             config,
             writer: CachedThreadLocal::new(),
-        })
+        }
     }
 
     /// Set this logger active.
@@ -169,4 +169,14 @@ impl Log for Logger {
             None => {}
         }
     }
+}
+
+/// Create a logger by default settings.
+pub fn default() -> Logger {
+    Logger::new(Config::default())
+}
+
+/// Create a logger by custom settings.
+pub fn new(config: Config) -> Logger {
+    Logger::new(config)
 }
