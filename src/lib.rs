@@ -3,18 +3,16 @@ extern crate log;
 extern crate thread_local;
 
 use log::*;
-use thread_local::CachedThreadLocal;
 use std::cell::RefCell;
+use std::io::{self, Write};
 use std::{fmt, fs};
-use std::io::{
-    self, Write
-};
+use thread_local::CachedThreadLocal;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Output {
     Stdout,
     Stderr,
-    File(std::path::PathBuf)
+    File(std::path::PathBuf),
 }
 
 impl fmt::Display for Output {
@@ -25,7 +23,7 @@ impl fmt::Display for Output {
             match self {
                 Self::Stdout => "<stdout>",
                 Self::Stderr => "<stderr>",
-                Self::File(path) => path.to_str().unwrap_or("<???>")
+                Self::File(path) => path.to_str().unwrap_or("<???>"),
             }
         )
     }
@@ -37,11 +35,48 @@ impl Default for Output {
     }
 }
 
+impl<T: Into<std::path::PathBuf>> From<T> for Output {
+    fn from(path: T) -> Self {
+        Output::File(path.into())
+    }
+}
+
+impl Output {
+    /// Create `Stream` from `Output`.
+    fn to_stream(&self) -> io::Result<Stream> {
+        Ok(match self.clone() {
+            Self::Stdout => Stream::from(io::stdout()),
+            Self::Stderr => Stream::from(io::stderr()),
+            Self::File(path) => {
+                Stream::from(fs::File::open(path.clone()).or(fs::File::create(path.clone()))?)
+            }
+        })
+    }
+}
+
 #[derive(Debug)]
 enum Stream {
     Stdout(io::Stdout),
     Stderr(io::Stderr),
-    File(fs::File)
+    File(fs::File),
+}
+
+impl From<io::Stdout> for Stream {
+    fn from(s: io::Stdout) -> Self {
+        Stream::Stdout(s)
+    }
+}
+
+impl From<io::Stderr> for Stream {
+    fn from(s: io::Stderr) -> Self {
+        Stream::Stderr(s)
+    }
+}
+
+impl From<fs::File> for Stream {
+    fn from(s: fs::File) -> Self {
+        Stream::File(s)
+    }
 }
 
 impl Write for Stream {
@@ -65,7 +100,7 @@ impl Write for Stream {
 /// The logger settings.
 #[derive(Default, Clone, Debug)]
 pub struct Config {
-    output: Output
+    output: Output,
 }
 
 impl Config {
@@ -90,7 +125,6 @@ pub struct Logger {
 impl Logger {
     /// Create a new instance.
     pub fn new(config: Config) -> io::Result<Logger> {
-
         Ok(Logger {
             config,
             writer: CachedThreadLocal::new(),
@@ -110,20 +144,15 @@ impl Log for Logger {
     }
 
     fn log(&self, record: &Record) {
-        let writer = self.writer.get_or(|| {
-            let tmp = match self.config.output.clone() {
-                Output::Stdout => Stream::Stdout(io::stdout()),
-                Output::Stderr => Stream::Stderr(io::stderr()),
-                Output::File(path) => Stream::File(fs::File::open(path.clone())
-                                                   .or(fs::File::create(path))
-                                                   .expect("Failed to read the file"))
-            };
-            RefCell::new(tmp)
-        });
-
-        let mut writer = writer.borrow_mut();
-        writeln!(writer, "{}: {}", record.level(), record.args())
-            .expect("Failed to write.");
+        let mut writer = self.writer.get_or(|| {
+            RefCell::new(
+                self.config
+                    .output
+                    .to_stream()
+                    .expect("Failed to open a file."),
+            )
+        }).borrow_mut();
+        writeln!(writer, "{}: {}", record.level(), record.args()).expect("Failed to write.");
     }
 
     fn flush(&self) {}
