@@ -1,6 +1,8 @@
 //! A simple configurable logger with format specification.
 extern crate log;
 extern crate thread_local;
+extern crate serde;
+extern crate toml;
 
 pub mod config;
 mod logger;

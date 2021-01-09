@@ -1,8 +1,10 @@
 use crate::Stream;
 use std::{fmt, fs, io, path};
+use serde::{Deserialize, Serialize};
 
 /// Output type
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "lowercase", tag = "stream", content = "path")]
 pub enum Output {
     Stdout,
     Stderr,
