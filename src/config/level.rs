@@ -49,6 +49,30 @@ impl Into<LevelFilter> for Level {
     }
 }
 
+impl PartialEq<LevelFilter> for Level {
+    fn eq(&self, other: &LevelFilter) -> bool {
+        *self == Self::from(*other)
+    }
+}
+
+impl PartialOrd<LevelFilter> for Level {
+    fn partial_cmp(&self, other: &LevelFilter) -> Option<std::cmp::Ordering> {
+        Some((*self).cmp(&Self::from(*other)))
+    }
+}
+
+impl PartialEq<log::Level> for Level {
+    fn eq(&self, other: &log::Level) -> bool {
+        Into::<LevelFilter>::into(*self) == *other
+    }
+}
+
+impl PartialOrd<log::Level> for Level {
+    fn partial_cmp(&self, other: &log::Level) -> Option<std::cmp::Ordering> {
+        Into::<LevelFilter>::into(*self).partial_cmp(other)
+    }
+}
+
 impl fmt::Display for Level {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         write!(

@@ -2,7 +2,7 @@
 use crate::Config;
 use crate::Stream;
 
-use log::{set_boxed_logger, set_max_level, LevelFilter, Log, Metadata, Record, SetLoggerError};
+use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
 use std::cell::RefCell;
 use std::io::Write;
 use thread_local::CachedThreadLocal;
@@ -31,7 +31,7 @@ impl Logger {
 
 impl Log for Logger {
     fn enabled(&self, metadata: &Metadata) -> bool {
-        metadata.level() <= Into::<LevelFilter>::into(self.config.level)
+        self.config.level >= metadata.level()
     }
 
     fn log(&self, record: &Record) {
