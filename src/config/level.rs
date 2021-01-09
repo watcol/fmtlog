@@ -1,8 +1,8 @@
+use log::{LevelFilter, STATIC_MAX_LEVEL};
 use std::fmt;
-use log::{STATIC_MAX_LEVEL, LevelFilter};
 
 #[cfg(feature = "serde")]
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// A struct to wrap `log::LevelFilter`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -14,7 +14,7 @@ pub enum Level {
     Warn,
     Info,
     Debug,
-    Trace
+    Trace,
 }
 
 impl Default for Level {
@@ -51,14 +51,18 @@ impl Into<LevelFilter> for Level {
 
 impl fmt::Display for Level {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}", match self {
-            Self::Off => "off",
-            Self::Error => "error",
-            Self::Warn => "warn",
-            Self::Info => "info",
-            Self::Debug => "debug",
-            Self::Trace => "trace",
-        })
+        write!(
+            fmt,
+            "{}",
+            match self {
+                Self::Off => "off",
+                Self::Error => "error",
+                Self::Warn => "warn",
+                Self::Info => "info",
+                Self::Debug => "debug",
+                Self::Trace => "trace",
+            }
+        )
     }
 }
 
@@ -69,11 +73,11 @@ impl std::str::FromStr for Level {
             "off" | "Off" | "OFF" => Ok(Self::Off),
             "error" | "Error" | "ERROR" => Ok(Self::Error),
             "warn" | "Warn" | "WARN" => Ok(Self::Warn),
-            "info" | "Info" | "INFO "=> Ok(Self::Info),
+            "info" | "Info" | "INFO " => Ok(Self::Info),
             "debug" | "Debug" | "DEBUG" => Ok(Self::Debug),
             "trace" | "Trace" | "TRACE" => Ok(Self::Trace),
             "max" | "Max" | "MAX" => Ok(Self::max()),
-            _ => Err(String::from("Invalid string."))
+            _ => Err(String::from("Invalid string.")),
         }
     }
 }

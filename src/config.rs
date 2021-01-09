@@ -1,18 +1,18 @@
 //! Configuration module.
 #[cfg(feature = "serde")]
 extern crate serde;
-#[cfg(feature = "conf-toml")]
-extern crate toml;
 #[cfg(feature = "conf-json")]
 extern crate serde_json;
 #[cfg(feature = "conf-yaml")]
 extern crate serde_yaml;
+#[cfg(feature = "conf-toml")]
+extern crate toml;
 
-mod output;
 mod level;
+mod output;
 
-pub use output::Output;
 pub use level::Level;
+pub use output::Output;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
