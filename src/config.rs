@@ -33,22 +33,6 @@ impl Config {
         Self::default()
     }
 
-    /// Create a new instance from TOML.
-    ///
-    /// **Requires `conf-toml` feature.**
-    #[cfg(feature = "conf-toml")]
-    pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Self, toml::de::Error> {
-        toml::from_str(s.as_ref())
-    }
-
-    /// Output TOML from the configuration.
-    ///
-    /// **Requires `conf-toml` feature.**
-    #[cfg(feature = "conf-toml")]
-    pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
-        toml::to_string(self)
-    }
-
     /// Create a new instance from JSON.
     ///
     /// **Requires `conf-json` feature.**
@@ -79,6 +63,22 @@ impl Config {
     #[cfg(feature = "conf-yaml")]
     pub fn to_yaml(&self) -> serde_yaml::Result<String> {
         serde_yaml::to_string(self)
+    }
+
+    /// Create a new instance from TOML.
+    ///
+    /// **Requires `conf-toml` feature.**
+    #[cfg(feature = "conf-toml")]
+    pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Self, toml::de::Error> {
+        toml::from_str(s.as_ref())
+    }
+
+    /// Output TOML from the configuration.
+    ///
+    /// **Requires `conf-toml` feature.**
+    #[cfg(feature = "conf-toml")]
+    pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
+        toml::to_string(self)
     }
 
     /// Set the output stream.
