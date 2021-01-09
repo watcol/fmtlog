@@ -24,14 +24,14 @@ impl Logger {
 
     /// Set this logger active.
     pub fn set(self) -> Result<(), SetLoggerError> {
-        set_max_level(STATIC_MAX_LEVEL);
+        set_max_level(self.config.level);
         set_boxed_logger(Box::new(self))
     }
 }
 
 impl Log for Logger {
-    fn enabled(&self, _metadata: &Metadata) -> bool {
-        true
+    fn enabled(&self, metadata: &Metadata) -> bool {
+        metadata.level() <= self.config.level
     }
 
     fn log(&self, record: &Record) {

@@ -2,11 +2,22 @@
 mod output;
 
 pub use output::Output;
+pub use log::LevelFilter;
 
 /// The logger settings.
-#[derive(Default, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub struct Config {
     pub(crate) output: Output,
+    pub(crate) level: LevelFilter,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Config {
+            output: Output::default(),
+            level: LevelFilter::Info,
+        }
+    }
 }
 
 impl Config {
@@ -18,6 +29,12 @@ impl Config {
     /// Set the output stream.
     pub fn output(mut self, output: Output) -> Self {
         self.output = output;
+        self
+    }
+
+    /// Set the log level.
+    pub fn level(mut self, level: LevelFilter) -> Self {
+        self.level = level;
         self
     }
 }
