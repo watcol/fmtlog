@@ -3,6 +3,8 @@
 extern crate serde;
 #[cfg(feature = "conf-toml")]
 extern crate toml;
+#[cfg(feature = "conf-json")]
+extern crate serde_json;
 
 mod output;
 mod level;
@@ -29,16 +31,28 @@ impl Config {
         Self::default()
     }
 
-    /// Create a new instance from toml.
+    /// Create a new instance from TOML.
     #[cfg(feature = "conf-toml")]
     pub fn from_toml(s: &str) -> Result<Self, toml::de::Error> {
         toml::from_str(s)
     }
 
-    /// Create a new instance from toml.
+    /// Output TOML from the configuration.
     #[cfg(feature = "conf-toml")]
     pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
         toml::to_string(self)
+    }
+
+    /// Create a new instance from JSON.
+    #[cfg(feature = "conf-json")]
+    pub fn from_json(s: &str) -> serde_json::Result<Self> {
+        serde_json::from_str(s)
+    }
+
+    /// Output JSON from the configuration.
+    #[cfg(feature = "conf-json")]
+    pub fn to_json(&self) -> serde_json::Result<String> {
+        serde_json::to_string(self)
     }
 
     /// Set the output stream.
