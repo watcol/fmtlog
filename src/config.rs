@@ -5,6 +5,8 @@ extern crate serde;
 extern crate toml;
 #[cfg(feature = "conf-json")]
 extern crate serde_json;
+#[cfg(feature = "conf-yaml")]
+extern crate serde_yaml;
 
 mod output;
 mod level;
@@ -53,6 +55,18 @@ impl Config {
     #[cfg(feature = "conf-json")]
     pub fn to_json(&self) -> serde_json::Result<String> {
         serde_json::to_string(self)
+    }
+
+    /// Create a new instance from YAML.
+    #[cfg(feature = "conf-yaml")]
+    pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Self> {
+        serde_yaml::from_str(s.as_ref())
+    }
+
+    /// Output YAML from the configuration.
+    #[cfg(feature = "conf-yaml")]
+    pub fn to_yaml(&self) -> serde_yaml::Result<String> {
+        serde_yaml::to_string(self)
     }
 
     /// Set the output stream.

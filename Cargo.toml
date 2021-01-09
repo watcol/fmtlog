@@ -20,6 +20,7 @@ include = [
 [features]
 conf-toml = ["serde", "toml"]
 conf-json = ["serde", "serde_json"]
+conf-yaml = ["serde", "serde_yaml"]
 
 [dependencies]
 log = { version = "0.4.11", features = ["std"] }
@@ -27,6 +28,7 @@ thread_local = "1.0"
 serde = { version = "1.0", features = ["derive"], optional = true }
 toml = { version = "0.5.8", optional = true }
 serde_json = { version = "1.0", optional = true }
+serde_yaml = { version = "0.8", optional = true }
 
 [package.metadata.docs.rs]
 all-features = true
