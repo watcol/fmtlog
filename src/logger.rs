@@ -7,7 +7,6 @@ use std::cell::RefCell;
 use std::io::Write;
 use thread_local::CachedThreadLocal;
 
-
 /// The body of fmtlog.
 pub struct Logger {
     config: Config,

@@ -3,8 +3,8 @@ extern crate log;
 extern crate thread_local;
 
 pub mod config;
-mod stream;
 mod logger;
+mod stream;
 
 pub use config::{Config, Output};
 pub use logger::Logger;

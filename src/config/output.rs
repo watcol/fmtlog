@@ -1,5 +1,5 @@
 use crate::Stream;
-use std::{fmt, path, io, fs};
+use std::{fmt, fs, io, path};
 
 /// Output type
 #[derive(Clone, Debug, PartialEq, Eq)]
