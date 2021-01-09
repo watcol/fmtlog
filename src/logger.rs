@@ -2,7 +2,7 @@
 use crate::Config;
 use crate::Stream;
 
-use log::*;
+use log::{set_boxed_logger, set_max_level, LevelFilter, Log, Metadata, Record, SetLoggerError};
 use std::cell::RefCell;
 use std::io::Write;
 use thread_local::CachedThreadLocal;
