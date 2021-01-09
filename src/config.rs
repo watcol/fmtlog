@@ -33,8 +33,8 @@ impl Config {
 
     /// Create a new instance from TOML.
     #[cfg(feature = "conf-toml")]
-    pub fn from_toml(s: &str) -> Result<Self, toml::de::Error> {
-        toml::from_str(s)
+    pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Self, toml::de::Error> {
+        toml::from_str(s.as_ref())
     }
 
     /// Output TOML from the configuration.
@@ -45,8 +45,8 @@ impl Config {
 
     /// Create a new instance from JSON.
     #[cfg(feature = "conf-json")]
-    pub fn from_json(s: &str) -> serde_json::Result<Self> {
-        serde_json::from_str(s)
+    pub fn from_json<T: AsRef<str>>(s: T) -> serde_json::Result<Self> {
+        serde_json::from_str(s.as_ref())
     }
 
     /// Output JSON from the configuration.
