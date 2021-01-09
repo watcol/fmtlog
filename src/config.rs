@@ -13,17 +13,17 @@ fn default_level() -> LevelFilter {
 /// The logger settings.
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Config {
-    #[serde(default)]
-    pub(crate) output: Output,
     #[serde(default = "default_level")]
     pub(crate) level: LevelFilter,
+    #[serde(default)]
+    pub(crate) output: Output,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Config {
-            output: Output::default(),
             level: default_level(),
+            output: Output::default(),
         }
     }
 }
