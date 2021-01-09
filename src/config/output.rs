@@ -1,10 +1,14 @@
 use crate::Stream;
 use std::{fmt, fs, io, path};
+
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 /// Output type
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-#[serde(rename_all = "lowercase", tag = "stream", content = "path")]
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", serde(tag = "stream", content = "path"))]
+#[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 pub enum Output {
     Stdout,
     Stderr,

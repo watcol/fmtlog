@@ -1,31 +1,26 @@
 //! Configuration module.
+#[cfg(feature = "serde")]
+extern crate serde;
+#[cfg(feature = "conf-toml")]
+extern crate toml;
+
 mod output;
+mod level;
 
 pub use output::Output;
-pub use log::LevelFilter;
+pub use level::Level;
 
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-fn default_level() -> LevelFilter {
-    LevelFilter::Info
-}
-
 /// The logger settings.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Default)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct Config {
-    #[serde(default = "default_level")]
-    pub(crate) level: LevelFilter,
-    #[serde(default)]
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub(crate) level: Level,
+    #[cfg_attr(feature = "serde", serde(default))]
     pub(crate) output: Output,
-}
-
-impl Default for Config {
-    fn default() -> Self {
-        Config {
-            level: default_level(),
-            output: Output::default(),
-        }
-    }
 }
 
 impl Config {
@@ -35,11 +30,13 @@ impl Config {
     }
 
     /// Create a new instance from toml.
+    #[cfg(feature = "conf-toml")]
     pub fn from_toml(s: &str) -> Result<Self, toml::de::Error> {
         toml::from_str(s)
     }
 
     /// Create a new instance from toml.
+    #[cfg(feature = "conf-toml")]
     pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
         toml::to_string(self)
     }
@@ -51,7 +48,7 @@ impl Config {
     }
 
     /// Set the log level.
-    pub fn level(mut self, level: LevelFilter) -> Self {
+    pub fn level(mut self, level: Level) -> Self {
         self.level = level;
         self
     }
