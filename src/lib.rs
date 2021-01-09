@@ -6,9 +6,10 @@ pub mod config;
 mod logger;
 mod stream;
 
-pub use config::{Config, Output};
 pub use logger::Logger;
 pub(crate) use stream::Stream;
+
+use config::Config;
 
 /// Create a logger by default settings.
 pub fn default() -> Logger {
