@@ -26,6 +26,7 @@ conf-toml = ["serde", "toml"]
 log = { version = "0.4.11", features = ["std"] }
 thread_local = "1.0"
 colored = "2.0"
+atty = "0.2"
 
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = { version = "1.0", optional = true }

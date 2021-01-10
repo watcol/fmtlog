@@ -8,9 +8,11 @@ extern crate serde_yaml;
 #[cfg(feature = "conf-toml")]
 extern crate toml;
 
+mod colorize;
 mod level;
 mod output;
 
+pub use colorize::Colorize;
 pub use level::Level;
 pub use output::Output;
 
@@ -21,6 +23,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct Config {
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub(crate) colorize: Colorize,
     #[cfg_attr(feature = "serde", serde(default))]
     pub(crate) level: Level,
     #[cfg_attr(feature = "serde", serde(default))]
@@ -81,15 +85,21 @@ impl Config {
         toml::to_string(self)
     }
 
-    /// Set the output stream.
-    pub fn output(mut self, output: Output) -> Self {
-        self.output = output;
+    /// Set the log level.
+    pub fn colorize(mut self, colorize: Colorize) -> Self {
+        self.colorize = colorize;
         self
     }
 
     /// Set the log level.
     pub fn level(mut self, level: Level) -> Self {
         self.level = level;
+        self
+    }
+
+    /// Set the output stream.
+    pub fn output(mut self, output: Output) -> Self {
+        self.output = output;
         self
     }
 }

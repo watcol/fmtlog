@@ -62,13 +62,13 @@ impl Log for Logger {
             log::Level::Trace => Color::Blue,
         };
 
-        writeln!(
-            writer,
-            "{}: {}",
-            level.to_string().color(color),
-            record.args()
-        )
-        .expect("Failed to write.");
+        let level_str = if self.config.colorize.colorize(&self.config.output) {
+            level.to_string().color(color)
+        } else {
+            level.to_string().normal()
+        };
+
+        writeln!(writer, "{}: {}", level_str, record.args()).expect("Failed to write.");
     }
 
     fn flush(&self) {
