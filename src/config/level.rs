@@ -4,7 +4,7 @@ use std::fmt;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-/// A struct to wrap `log::LevelFilter`.
+/// A struct to wrap [`log::LevelFilter`](https://docs.rs/log/0.4/log/enum.LevelFilter.html).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
@@ -107,7 +107,17 @@ impl std::str::FromStr for Level {
 }
 
 impl Level {
-    fn max() -> Self {
+    /// Return the most verbose level like
+    /// [`LevelFilter::max`](https://docs.rs/log/0.4/log/enum.LevelFilter.html#method.max).
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::config::Level;
+    ///
+    /// assert_eq!(Level::max(), Level::Trace);
+    /// ```
+    pub fn max() -> Self {
         STATIC_MAX_LEVEL.into()
     }
 }
