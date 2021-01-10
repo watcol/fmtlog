@@ -7,6 +7,14 @@
 
 A simple configurable logger with format specification.
 
+## Features
+- [ ] Format Specification
+- [ ] Module-level Logging
+- [ ] Timestamp Support
+- [ ] Colorized Log
+- [x] Logging to the File
+- [x] Configure by JSON, YAML, and TOML
+
 ## Documents
 API Documents are *NOT* available on [docs.rs](https://docs.rs/fmtlog) yet. Please wait.
 
