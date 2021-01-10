@@ -13,45 +13,40 @@ use thread_local::CachedThreadLocal;
 
 /// The body of fmtlog.
 pub struct Logger {
-    config: Config,
+    colorize: bool,
+    level: log::LevelFilter,
     writer: CachedThreadLocal<RefCell<Stream>>,
 }
 
 impl Logger {
     /// Create a new instance.
     pub fn new(config: Config) -> Logger {
+        let writer = CachedThreadLocal::new();
+        writer
+            .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
         Logger {
-            config,
-            writer: CachedThreadLocal::new(),
+            colorize: config.colorize.colorize(&config.output),
+            level: config.level.into(),
+            writer,
         }
     }
 
     /// Set this logger active.
     pub fn set(self) -> Result<(), SetLoggerError> {
-        set_max_level(self.config.level.into());
+        set_max_level(self.level);
         set_boxed_logger(Box::new(self))
     }
 }
 
 impl Log for Logger {
     fn enabled(&self, metadata: &Metadata) -> bool {
-        self.config.level >= metadata.level()
+        self.level >= metadata.level()
     }
 
     fn log(&self, record: &Record) {
         use colored::{Color, Colorize};
 
-        let mut writer = self
-            .writer
-            .get_or(|| {
-                RefCell::new(
-                    self.config
-                        .output
-                        .to_stream()
-                        .expect("Failed to open a file."),
-                )
-            })
-            .borrow_mut();
+        let mut writer = self.writer.get().unwrap().borrow_mut();
 
         let level = record.level();
         let color = match level {
@@ -62,7 +57,7 @@ impl Log for Logger {
             log::Level::Trace => Color::Blue,
         };
 
-        let level_str = if self.config.colorize.colorize(&self.config.output) {
+        let level_str = if self.colorize {
             level.to_string().color(color)
         } else {
             level.to_string().normal()
