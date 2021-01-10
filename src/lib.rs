@@ -122,28 +122,130 @@ pub(crate) use stream::Stream;
 use config::Config;
 
 /// Create a logger by default settings.
+///
+/// This function wraps [`Config::default`](config/struct.Config.html#impl-Default).
+///
+/// # Example
+///
+/// ```rust
+/// #[macro_use]
+/// extern crate log;
+/// extern crate fmtlog;
+///
+/// fn main() {
+///     fmtlog::default().set().unwrap();
+///
+///     info!("Hello!"); // INFO: Hello!
+/// }
+/// ```
 pub fn default() -> Logger {
     Logger::new(Config::default())
 }
 
 /// Create a logger by custom settings.
+///
+/// This function wraps [`Logger::new`](struct.Logger.html#method.new).
+///
+/// # Example
+///
+/// ```rust
+/// #[macro_use]
+/// extern crate log;
+/// extern crate fmtlog;
+///
+/// use fmtlog::config::Config;
+///
+/// fn main() {
+///     fmtlog::new(Config::new()).set().unwrap();
+///
+///     info!("Hello!"); // INFO: Hello!
+/// }
+/// ```
 pub fn new(config: Config) -> Logger {
     Logger::new(config)
 }
 
 /// **[conf-json]** Create a logger from JSON file.
+///
+/// This function wraps [`Config::from_json`](config/struct.Config.html#method.from_json).
+///
+/// # Example
+///
+/// ```rust
+/// #[macro_use]
+/// extern crate log;
+/// extern crate fmtlog;
+///
+/// fn main() {
+///     let json = r#"
+///         {
+///             "level": "trace",
+///             "output": {
+///                 "stream": "stdout"
+///             }
+///         }
+///     "#;
+///
+///     fmtlog::from_json(json).unwrap().set().unwrap();
+///
+///     info!("Hello!"); // INFO: Hello!
+/// }
+/// ```
 #[cfg(feature = "conf-json")]
 pub fn from_json<T: AsRef<str>>(s: T) -> serde_json::Result<Logger> {
     Ok(Logger::new(Config::from_json(s)?))
 }
 
 /// **[conf-yaml]** Create a logger from YAML file.
+///
+/// This function wraps [`Config::from_yaml`](config/struct.Config.html#method.from_yaml).
+///
+/// # Example
+///
+/// ```rust
+/// #[macro_use]
+/// extern crate log;
+/// extern crate fmtlog;
+///
+/// fn main() {
+///     let yaml = r#"
+///         level: trace
+///         output:
+///           stream: stdout
+///     "#;
+///
+///     fmtlog::from_yaml(yaml).unwrap().set().unwrap();
+///
+///     info!("Hello!"); // INFO: Hello!
+/// }
+/// ```
 #[cfg(feature = "conf-yaml")]
 pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Logger> {
     Ok(Logger::new(Config::from_yaml(s)?))
 }
 
 /// **[conf-toml]** Create a logger from TOML file.
+///
+/// This function wraps [`Config::from_toml`](config/struct.Config.html#method.from_toml).
+///
+/// # Example
+///
+/// ```rust
+/// #[macro_use]
+/// extern crate log;
+/// extern crate fmtlog;
+///
+/// fn main() {
+///     let toml = r#"
+///         level = "trace"
+///         output = { stream = "stdout" }
+///     "#;
+///
+///     fmtlog::from_toml(toml).unwrap().set().unwrap();
+///
+///     info!("Hello!"); // INFO: Hello!
+/// }
+/// ```
 #[cfg(feature = "conf-toml")]
 pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Logger, toml::de::Error> {
     Ok(Logger::new(Config::from_toml(s)?))
