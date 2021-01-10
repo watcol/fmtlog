@@ -20,16 +20,6 @@ pub struct Logger {
 
 impl Logger {
     /// Create a new instance.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use fmtlog::{Logger, config::Config};
-    ///
-    /// fn main() {
-    ///     Logger::new(Config::new());
-    /// }
-    /// ```
     pub fn new(config: Config) -> Logger {
         let writer = ThreadLocal::new();
         writer
@@ -53,7 +43,6 @@ impl Logger {
     ///
     /// fn main() {
     ///     Logger::new(Config::new()).set().unwrap();
-    ///
     ///     info!("Hello!") // INFO: Hello!
     /// }
     /// ```
