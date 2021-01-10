@@ -86,20 +86,20 @@ impl Config {
     }
 
     /// Set the log level.
-    pub fn colorize(mut self, colorize: Colorize) -> Self {
-        self.colorize = colorize;
+    pub fn colorize<T: Into<Colorize>>(mut self, colorize: T) -> Self {
+        self.colorize = colorize.into();
         self
     }
 
     /// Set the log level.
-    pub fn level(mut self, level: Level) -> Self {
-        self.level = level;
+    pub fn level<T: Into<Level>>(mut self, level: T) -> Self {
+        self.level = level.into();
         self
     }
 
     /// Set the output stream.
-    pub fn output(mut self, output: Output) -> Self {
-        self.output = output;
+    pub fn output<T: Into<Output>>(mut self, output: T) -> Self {
+        self.output = output.into();
         self
     }
 }
