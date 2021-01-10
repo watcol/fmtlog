@@ -11,6 +11,6 @@ A simple configurable logger with format specification.
 API Documents are available on [docs.rs](https://docs.rs/fmtlog).
 
 ## License
-GenLink is licensed under the MIT license.
+This program is licensed under the MIT license.
 
 See [LICENSE](https://github.com/watcol/fmtlog/blob/main/LICENSE) for details.
