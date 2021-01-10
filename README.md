@@ -8,7 +8,7 @@
 A simple configurable logger with format specification.
 
 ## Documents
-API Documents are available on [docs.rs](https://docs.rs/fmtlog).
+API Documents are *NOT* available on [docs.rs](https://docs.rs/fmtlog) yet. Please wait.
 
 ## License
 This program is licensed under the MIT license.
