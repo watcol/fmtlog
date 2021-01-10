@@ -4,14 +4,17 @@ use std::{fmt, fs, io, path};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-/// Output type
+/// The Output type
 #[derive(Clone, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "serde", serde(tag = "stream", content = "path"))]
 #[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 pub enum Output {
+    /// Standard Output
     Stdout,
+    /// Standard Error
     Stderr,
+    /// File Stream
     File(path::PathBuf),
 }
 

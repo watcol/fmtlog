@@ -9,8 +9,11 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 pub enum Colorize {
+    /// Never colorize.
     Off,
+    /// Detect by the output target.
     Auto,
+    /// Always colorize.
     On,
 }
 
