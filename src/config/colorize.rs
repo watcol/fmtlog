@@ -1,5 +1,3 @@
-extern crate atty;
-
 use crate::config::Output;
 use std::fmt;
 
@@ -63,9 +61,8 @@ impl Colorize {
         match self {
             Self::Off => false,
             Self::Auto => match output {
-                Output::Stdout => atty::is(atty::Stream::Stdout),
-                Output::Stderr => atty::is(atty::Stream::Stderr),
-                Output::File(_) => false,
+                Output::Stdout | Output::Stderr => true,
+                _ => false,
             },
             Self::On => true,
         }
