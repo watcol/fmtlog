@@ -1,4 +1,8 @@
 //! Logger definition.
+extern crate colored;
+extern crate log;
+extern crate thread_local;
+
 use crate::Config;
 use crate::Stream;
 
@@ -35,6 +39,8 @@ impl Log for Logger {
     }
 
     fn log(&self, record: &Record) {
+        use colored::{Color, Colorize};
+
         let mut writer = self
             .writer
             .get_or(|| {
@@ -46,7 +52,23 @@ impl Log for Logger {
                 )
             })
             .borrow_mut();
-        writeln!(writer, "{}: {}", record.level(), record.args()).expect("Failed to write.");
+
+        let level = record.level();
+        let color = match level {
+            log::Level::Error => Color::Red,
+            log::Level::Warn => Color::Yellow,
+            log::Level::Info => Color::Green,
+            log::Level::Debug => Color::Cyan,
+            log::Level::Trace => Color::Blue,
+        };
+
+        writeln!(
+            writer,
+            "{}: {}",
+            level.to_string().color(color),
+            record.args()
+        )
+        .expect("Failed to write.");
     }
 
     fn flush(&self) {

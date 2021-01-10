@@ -1,7 +1,4 @@
 //! A simple configurable logger with format specification.
-extern crate log;
-extern crate thread_local;
-
 pub mod config;
 mod logger;
 mod stream;
