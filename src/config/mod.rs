@@ -37,49 +37,37 @@ impl Config {
         Self::default()
     }
 
-    /// Create a new instance from JSON.
-    ///
-    /// **Requires `conf-json` feature.**
+    /// **[conf-json]** Create a new instance from JSON.
     #[cfg(feature = "conf-json")]
     pub fn from_json<T: AsRef<str>>(s: T) -> serde_json::Result<Self> {
         serde_json::from_str(s.as_ref())
     }
 
-    /// Output JSON from the configuration.
-    ///
-    /// **Requires `conf-json` feature.**
+    /// **[conf-json]** Output JSON from the configuration.
     #[cfg(feature = "conf-json")]
     pub fn to_json(&self) -> serde_json::Result<String> {
         serde_json::to_string(self)
     }
 
-    /// Create a new instance from YAML.
-    ///
-    /// **Requires `conf-yaml` feature.**
+    /// **[conf-yaml]** Create a new instance from YAML.
     #[cfg(feature = "conf-yaml")]
     pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Self> {
         serde_yaml::from_str(s.as_ref())
     }
 
-    /// Output YAML from the configuration.
-    ///
-    /// **Requires `conf-yaml` feature.**
+    /// **[conf-yaml]** Output YAML from the configuration.
     #[cfg(feature = "conf-yaml")]
     pub fn to_yaml(&self) -> serde_yaml::Result<String> {
         serde_yaml::to_string(self)
     }
 
-    /// Create a new instance from TOML.
-    ///
-    /// **Requires `conf-toml` feature.**
+    /// **[conf-toml]** Create a new instance from TOML.
     #[cfg(feature = "conf-toml")]
     pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Self, toml::de::Error> {
         toml::from_str(s.as_ref())
     }
 
-    /// Output TOML from the configuration.
-    ///
-    /// **Requires `conf-toml` feature.**
+    /// **[conf-toml]** Output TOML from the configuration.
     #[cfg(feature = "conf-toml")]
     pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
         toml::to_string(self)

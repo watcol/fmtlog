@@ -18,25 +18,19 @@ pub fn new(config: Config) -> Logger {
     Logger::new(config)
 }
 
-/// Create a logger from JSON file.
-///
-/// **Requires feature `conf-json`.**
+/// **[conf-json]** Create a logger from JSON file.
 #[cfg(feature = "conf-json")]
 pub fn from_json<T: AsRef<str>>(s: T) -> serde_json::Result<Logger> {
     Ok(Logger::new(Config::from_json(s)?))
 }
 
-/// Create a logger from YAML file.
-///
-/// **Requires feature `conf-yaml`.**
+/// **[conf-yaml]** Create a logger from YAML file.
 #[cfg(feature = "conf-yaml")]
 pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Logger> {
     Ok(Logger::new(Config::from_yaml(s)?))
 }
 
-/// Create a logger from TOML file.
-///
-/// **Requires feature `conf-toml`.**
+/// **[conf-toml]** Create a logger from TOML file.
 #[cfg(feature = "conf-toml")]
 pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Logger, toml::de::Error> {
     Ok(Logger::new(Config::from_toml(s)?))
