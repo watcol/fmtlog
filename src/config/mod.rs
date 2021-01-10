@@ -20,7 +20,7 @@ pub use output::Output;
 use serde::{Deserialize, Serialize};
 
 /// The logger settings.
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct Config {
     #[cfg_attr(feature = "serde", serde(default))]
@@ -73,19 +73,43 @@ impl Config {
         toml::to_string(self)
     }
 
-    /// Set the log level.
+    /// Colorize the log.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::config::Config;
+    ///
+    /// assert_ne!(Config::new(), Config::new().colorize(false));
+    /// ```
     pub fn colorize<T: Into<Colorize>>(mut self, colorize: T) -> Self {
         self.colorize = colorize.into();
         self
     }
 
     /// Set the log level.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::config::{Config, Level};
+    ///
+    /// assert_eq!(Config::new(), Config::new().level(Level::Info))
+    /// ```
     pub fn level<T: Into<Level>>(mut self, level: T) -> Self {
         self.level = level.into();
         self
     }
 
     /// Set the output stream.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::config::Config;
+    ///
+    /// assert_ne!(Config::new(), Config::new().output("log.txt"))
+    /// ```
     pub fn output<T: Into<Output>>(mut self, output: T) -> Self {
         self.output = output.into();
         self
