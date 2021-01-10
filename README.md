@@ -16,7 +16,7 @@ A simple configurable logger with format specification.
 - [x] Configure by JSON, YAML, and TOML
 
 ## Documents
-API Documents are *NOT* available on [docs.rs](https://docs.rs/fmtlog) yet. Please wait.
+API Documents are **NOT** available on [docs.rs](https://docs.rs/fmtlog) yet. Please wait.
 
 ## License
 This program is licensed under the MIT license.
