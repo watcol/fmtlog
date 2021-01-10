@@ -9,19 +9,19 @@ use crate::Stream;
 use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
 use std::cell::RefCell;
 use std::io::Write;
-use thread_local::CachedThreadLocal;
+use thread_local::ThreadLocal;
 
 /// The body of fmtlog.
 pub struct Logger {
     colorize: bool,
     level: log::LevelFilter,
-    writer: CachedThreadLocal<RefCell<Stream>>,
+    writer: ThreadLocal<RefCell<Stream>>,
 }
 
 impl Logger {
     /// Create a new instance.
     pub fn new(config: Config) -> Logger {
-        let writer = CachedThreadLocal::new();
+        let writer = ThreadLocal::new();
         writer
             .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
         Logger {
