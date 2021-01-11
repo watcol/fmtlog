@@ -2,11 +2,11 @@ use log::{LevelFilter, STATIC_MAX_LEVEL};
 use std::fmt;
 
 #[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 /// A struct to wrap [`log::LevelFilter`](https://docs.rs/log/0.4/log/enum.LevelFilter.html).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", derive(Deserialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 pub enum Level {
     Off,

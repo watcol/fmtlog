@@ -17,11 +17,11 @@ pub use level::Level;
 pub use output::Output;
 
 #[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 /// The logger settings.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
-#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "serde", derive(Deserialize))]
 pub struct Config {
     #[cfg_attr(feature = "serde", serde(default))]
     pub(crate) colorize: Colorize,
@@ -53,22 +53,6 @@ impl Config {
         serde_json::from_str(s.as_ref())
     }
 
-    /// **[conf-json]** Output JSON from the configuration.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use fmtlog::config::Config;
-    ///
-    /// let json = r#"{"colorize":"auto","level":"info","output":{"stream":"stderr"}}"#;
-    ///
-    /// assert_eq!(Config::new().to_json().unwrap(), String::from(json));
-    /// ```
-    #[cfg(feature = "conf-json")]
-    pub fn to_json(&self) -> serde_json::Result<String> {
-        serde_json::to_string(self)
-    }
-
     /// **[conf-yaml]** Create a new instance from YAML.
     ///
     /// # Example
@@ -87,26 +71,6 @@ impl Config {
     #[cfg(feature = "conf-yaml")]
     pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Self> {
         serde_yaml::from_str(s.as_ref())
-    }
-
-    /// **[conf-yaml]** Output YAML from the configuration.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use fmtlog::config::Config;
-    ///
-    /// let yaml = r#"---
-    /// colorize: auto
-    /// level: info
-    /// output:
-    ///   stream: stderr"#;
-    ///
-    /// assert_eq!(Config::new().to_yaml().unwrap(), String::from(yaml));
-    /// ```
-    #[cfg(feature = "conf-yaml")]
-    pub fn to_yaml(&self) -> serde_yaml::Result<String> {
-        serde_yaml::to_string(self)
     }
 
     /// **[conf-toml]** Create a new instance from TOML.
@@ -128,27 +92,6 @@ impl Config {
     #[cfg(feature = "conf-toml")]
     pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Self, toml::de::Error> {
         toml::from_str(s.as_ref())
-    }
-
-    /// **[conf-toml]** Output TOML from the configuration.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use fmtlog::config::Config;
-    ///
-    /// let toml = r#"colorize = "auto"
-    /// level = "info"
-    ///
-    /// [output]
-    /// stream = "stderr"
-    /// "#;
-    ///
-    /// assert_eq!(Config::new().to_toml().unwrap(), String::from(toml));
-    /// ```
-    #[cfg(feature = "conf-toml")]
-    pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
-        toml::to_string(self)
     }
 
     /// Colorize the log.
