@@ -25,17 +25,30 @@ impl Format {
                 res.push(Element::Const(const_str));
             }
 
+            let mut spec = String::new();
+
             match s.next() {
                 Some('%') => match s.next() {
-                    Some('B') => res.push(Element::Special(Kind::Body)),
-                    Some('L') => res.push(Element::Special(Kind::LogLevelUpper)),
-                    Some('l') => res.push(Element::Special(Kind::LogLevelLower)),
                     Some('%') => res.push(Element::Const(String::from("%"))),
-                    _ => Err("Invalid specifier")?
+                    Some('[') => {
+                        while let Some(c) = s.peek() {
+                            if *c != ']' {
+                                spec.push(s.next().unwrap());
+                            }
+                        }
+
+                        if s.next() != Some(']') {
+                            return Err(String::from("Invalid syntax."));
+                        }
+                    }
+                    Some(c) => spec.push(c),
+                    None => return Err(String::from("Invalid syntax."))
                 },
                 None => break,
                 _ => unreachable!(),
             }
+
+            res.push(Element::Special(Kind::from_string(spec)?));
         }
         Ok(Format(res))
     }
@@ -74,6 +87,15 @@ enum Kind {
 }
 
 impl Kind {
+    fn from_string(s: String) -> Result<Self, String> {
+        match s.as_str() {
+            "B" => Ok(Kind::Body),
+            "l" => Ok(Kind::LogLevelLower),
+            "L" => Ok(Kind::LogLevelUpper),
+            _ => Err(String::from("Invalid string.")),
+        }
+    }
+
     fn to_str(&self, record: &Record) -> String {
         match self {
             Self::Body => format!("{}", record.args()),

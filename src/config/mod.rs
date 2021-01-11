@@ -20,7 +20,7 @@ pub use output::Output;
 use serde::Deserialize;
 
 fn default_format() -> String {
-    String::from("%l: %B")
+    String::from("%l: %B\n")
 }
 
 /// The logger settings.
@@ -63,7 +63,7 @@ impl Config {
     ///
     /// let json = r#"{
     ///     "colorize":"auto",
-    ///     "format": "%l: %B",
+    ///     "format": "%l: %B\n",
     ///     "level":"info",
     ///     "output":"stderr"
     /// }"#;
@@ -84,7 +84,7 @@ impl Config {
     ///
     /// let yaml = r#"
     ///     colorize: auto
-    ///     format: "%l: %B"
+    ///     format: "%l: %B\n"
     ///     level: info
     ///     output: stderr
     /// "#;
@@ -105,7 +105,7 @@ impl Config {
     ///
     /// let toml = r#"
     ///     colorize = "auto"
-    ///     format = "%l: %B"
+    ///     format = "%l: %B\n"
     ///     level = "info"
     ///     output = "stderr"
     /// "#;
