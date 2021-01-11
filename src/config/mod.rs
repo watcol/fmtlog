@@ -44,7 +44,11 @@ impl Config {
     /// ```rust
     /// use fmtlog::config::Config;
     ///
-    /// let json = r#"{"colorize":"auto","level":"info","output":{"stream":"stderr"}}"#;
+    /// let json = r#"{
+    ///     "colorize":"auto",
+    ///     "level":"info",
+    ///     "output":"stderr"
+    /// }"#;
     ///
     /// assert_eq!(Config::from_json(json).unwrap(), Config::new());
     /// ```
@@ -60,11 +64,11 @@ impl Config {
     /// ```rust
     /// use fmtlog::config::Config;
     ///
-    /// let yaml = r#"---
-    /// colorize: auto
-    /// level: info
-    /// output:
-    ///   stream: stderr"#;
+    /// let yaml = r#"
+    ///     colorize: auto
+    ///     level: info
+    ///     output: stderr
+    /// "#;
     ///
     /// assert_eq!(Config::from_yaml(yaml).unwrap(), Config::new());
     /// ```
@@ -80,11 +84,10 @@ impl Config {
     /// ```rust
     /// use fmtlog::config::Config;
     ///
-    /// let toml = r#"colorize = "auto"
-    /// level = "info"
-    ///
-    /// [output]
-    /// stream = "stderr"
+    /// let toml = r#"
+    ///     colorize = "auto"
+    ///     level = "info"
+    ///     output = "stderr"
     /// "#;
     ///
     /// assert_eq!(Config::from_toml(toml).unwrap(), Config::new());

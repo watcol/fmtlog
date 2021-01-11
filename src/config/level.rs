@@ -1,13 +1,8 @@
 use log::{LevelFilter, STATIC_MAX_LEVEL};
 use std::fmt;
 
-#[cfg(feature = "serde")]
-use serde::Deserialize;
-
 /// A struct to wrap [`log::LevelFilter`](https://docs.rs/log/0.4/log/enum.LevelFilter.html).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-#[cfg_attr(feature = "serde", derive(Deserialize))]
-#[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 pub enum Level {
     Off,
     Error,
@@ -119,5 +114,42 @@ impl Level {
     /// ```
     pub fn max() -> Self {
         STATIC_MAX_LEVEL.into()
+    }
+}
+
+#[cfg(feature = "serde")]
+use serde::{de, Deserialize};
+
+#[cfg(feature = "serde")]
+struct LevelVisitor;
+
+#[cfg(feature = "serde")]
+impl<'de> de::Visitor<'de> for LevelVisitor {
+    type Value = Level;
+
+    fn expecting(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            fmt,
+            "\"off\", \"error\", \"warn\", \"info\", \"debug\", \"trace\", or \"max\"."
+        )
+    }
+
+    fn visit_str<E>(self, s: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        use std::str::FromStr;
+
+        Level::from_str(s).map_err(|_| de::Error::invalid_value(de::Unexpected::Str(s), &self))
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> Deserialize<'de> for Level {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        deserializer.deserialize_str(LevelVisitor)
     }
 }

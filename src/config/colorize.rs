@@ -1,13 +1,8 @@
 use crate::config::Output;
 use std::fmt;
 
-#[cfg(feature = "serde")]
-use serde::Deserialize;
-
 /// Colorize the output
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-#[cfg_attr(feature = "serde", derive(Deserialize))]
-#[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
 pub enum Colorize {
     /// Never colorize.
     Off,
@@ -69,5 +64,47 @@ impl Colorize {
             },
             Self::On => true,
         }
+    }
+}
+
+#[cfg(feature = "serde")]
+use serde::{de, Deserialize};
+
+#[cfg(feature = "serde")]
+struct ColorizeVisitor;
+
+#[cfg(feature = "serde")]
+impl<'de> de::Visitor<'de> for ColorizeVisitor {
+    type Value = Colorize;
+
+    fn expecting(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "a boolean, \"off\", \"auto\", or \"on\".")
+    }
+
+    fn visit_bool<E>(self, value: bool) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(Colorize::from(value))
+    }
+
+    fn visit_str<E>(self, s: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        use std::str::FromStr;
+
+        Colorize::from_str(s)
+            .map_err(|_| de::Error::invalid_value(de::Unexpected::Str(s), &self))
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> Deserialize<'de> for Colorize {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: de::Deserializer<'de>,
+    {
+        deserializer.deserialize_any(ColorizeVisitor)
     }
 }

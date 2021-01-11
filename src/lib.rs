@@ -49,7 +49,7 @@
 //! fn main() {
 //!     let toml = r#"
 //!         level = "trace"
-//!         output = { stream = "stdout" }
+//!         output = "stdout"
 //!     "#;
 //!
 //!     fmtlog::from_toml(toml).unwrap().set().unwrap();
@@ -70,10 +70,7 @@
 //! {
 //!     "colorize": "auto",
 //!     "level": "info",
-//!     "output": {
-//!         "stream": "file",
-//!         "path": "log.txt"
-//!     }
+//!     "output": "log.txt"
 //! }
 //! ```
 //!
@@ -81,19 +78,14 @@
 //! ```yaml
 //! colorize: auto
 //! level: info
-//! output:
-//!   stream: file
-//!   path: log.txt
+//! output: log.txt
 //! ```
 //!
 //! #### [TOML](https://en.wikipedia.org/wiki/TOML) (Requires feature `conf-toml`)
 //! ```toml
 //! colorize = "auto"
 //! level = "info"
-//!
-//! [output]
-//! stream = "file"
-//! path = "log.txt"
+//! output = "log.txt"
 //! ```
 //!
 //! Available values are there. (If the value is not present, the default will be chosen.)
@@ -101,16 +93,9 @@
 //! ### Data Format
 //! | Key | Default | Value | Description |
 //! |-----|:-------:|-------|-------------|
-//! | [`colorize`](config/enum.Colorize.html) | `auto` | `on`, `auto`, `off` | Colorize the log if the value is `on`. |
+//! | [`colorize`](config/enum.Colorize.html) | `auto` | `on`, `auto`, `off`, `true`, `false` | Colorize the log if the value is `on` (or `true`). |
 //! | [`level`](config/enum.Level.html) | `info` | `off`, `error`, `warn`, `info`, `debug`, `trace` | Specify the log level. See [this](https://docs.rs/log) for the information. |
-//! | [`output`](config/enum.Output.html) | - | The following format | Specify the log destination. |
-//!
-//! - The [`output`](config/enum.Output.html) format
-//!
-//! | Key | Default | Value | Description |
-//! |-----|:-------:|-------|-------------|
-//! | `stream` | `stderr` | `stdout`, `stderr`, `file` | The output stream. |
-//! | `path` | - | Valid file path | Specify the file path when `stream` is `file`. |
+//! | [`output`](config/enum.Output.html) | `stderr` | `stdout`, `stderr`, or a valid file path. | Specify the log destination. |
 //!
 pub mod config;
 mod logger;
@@ -179,10 +164,9 @@ pub fn new(config: Config) -> Logger {
 /// fn main() {
 ///     let json = r#"
 ///         {
+///             "colorize": true,
 ///             "level": "trace",
-///             "output": {
-///                 "stream": "stdout"
-///             }
+///             "output": "stdout"
 ///         }
 ///     "#;
 ///
@@ -209,9 +193,9 @@ pub fn from_json<T: AsRef<str>>(s: T) -> serde_json::Result<Logger> {
 ///
 /// fn main() {
 ///     let yaml = r#"
+///         colorize: true
 ///         level: trace
-///         output:
-///           stream: stdout
+///         output: stdout
 ///     "#;
 ///
 ///     fmtlog::from_yaml(yaml).unwrap().set().unwrap();
@@ -237,8 +221,9 @@ pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Logger> {
 ///
 /// fn main() {
 ///     let toml = r#"
+///         colorize = true
 ///         level = "trace"
-///         output = { stream = "stdout" }
+///         output = "stdout"
 ///     "#;
 ///
 ///     fmtlog::from_toml(toml).unwrap().set().unwrap();
