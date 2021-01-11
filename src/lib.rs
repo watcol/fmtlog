@@ -62,6 +62,16 @@
 //! ```
 //! See also [the following](#text-base-configuration) and [the function `from_toml`](fn.from_toml.html).
 //!
+//! ## Format Specification
+//! The format string is basically a string, but the following specifiers will converted into
+//! another string.
+//!
+//! | Spec. | Example | Description |
+//! |-------|---------|-------------|
+//! | `%l` | `info` | The log level. (lowercase) |
+//! | `%L` | `INFO` | The log level. (uppercase) |
+//! | `%B` | `An error has occured.` | The log body. |
+//!
 //! ## Text-base Configuration
 //! This crate supports configuration by JSON, YAML, and TOML.
 //!
@@ -94,6 +104,7 @@
 //! | Key | Default | Value | Description |
 //! |-----|:-------:|-------|-------------|
 //! | [`colorize`](config/enum.Colorize.html) | `auto` | `on`, `auto`, `off`, `true`, `false` | Colorize the log if the value is `on` (or `true`). |
+//! | `format` | `%l: %B` | A string | Logger format specified in [the previous](#format-specification). |
 //! | [`level`](config/enum.Level.html) | `info` | `off`, `error`, `warn`, `info`, `debug`, `trace` | Specify the log level. See [this](https://docs.rs/log) for the information. |
 //! | [`output`](config/enum.Output.html) | `stderr` | `stdout`, `stderr`, or a valid file path. | Specify the log destination. |
 //!

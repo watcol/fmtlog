@@ -19,16 +19,33 @@ pub use output::Output;
 #[cfg(feature = "serde")]
 use serde::Deserialize;
 
+fn default_format() -> String {
+    String::from("%l: %B")
+}
+
 /// The logger settings.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(Deserialize))]
 pub struct Config {
     #[cfg_attr(feature = "serde", serde(default))]
     pub(crate) colorize: Colorize,
+    #[cfg_attr(feature = "serde", serde(default = "default_format"))]
+    pub(crate) format: String,
     #[cfg_attr(feature = "serde", serde(default))]
     pub(crate) level: Level,
     #[cfg_attr(feature = "serde", serde(default))]
     pub(crate) output: Output,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            colorize: Colorize::default(),
+            format: default_format(),
+            level: Level::default(),
+            output: Output::default(),
+        }
+    }
 }
 
 impl Config {
@@ -46,6 +63,7 @@ impl Config {
     ///
     /// let json = r#"{
     ///     "colorize":"auto",
+    ///     "format": "%l: %B",
     ///     "level":"info",
     ///     "output":"stderr"
     /// }"#;
@@ -66,6 +84,7 @@ impl Config {
     ///
     /// let yaml = r#"
     ///     colorize: auto
+    ///     format: "%l: %B"
     ///     level: info
     ///     output: stderr
     /// "#;
@@ -86,6 +105,7 @@ impl Config {
     ///
     /// let toml = r#"
     ///     colorize = "auto"
+    ///     format = "%l: %B"
     ///     level = "info"
     ///     output = "stderr"
     /// "#;
@@ -108,6 +128,20 @@ impl Config {
     /// ```
     pub fn colorize<T: Into<Colorize>>(mut self, colorize: T) -> Self {
         self.colorize = colorize.into();
+        self
+    }
+
+    /// Set the output format.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::config::Config;
+    ///
+    /// assert_ne!(Config::new(), Config::new().colorize(false));
+    /// ```
+    pub fn format<T: Into<String>>(mut self, format: T) -> Self {
+        self.format = format.into();
         self
     }
 

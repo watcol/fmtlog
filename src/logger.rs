@@ -14,6 +14,7 @@ use thread_local::ThreadLocal;
 /// The body of fmtlog.
 pub struct Logger {
     colorize: bool,
+    _format: String,
     level: log::LevelFilter,
     writer: ThreadLocal<RefCell<Stream>>,
 }
@@ -26,6 +27,7 @@ impl Logger {
             .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
         Logger {
             colorize: config.colorize.colorize(&config.output),
+            _format: config.format,
             level: config.level.into(),
             writer,
         }
