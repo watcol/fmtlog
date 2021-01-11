@@ -111,9 +111,11 @@
 pub mod config;
 mod logger;
 mod stream;
+mod format;
 
 pub use logger::Logger;
 pub(crate) use stream::Stream;
+pub(crate) use format::Format;
 
 use config::Config;
 
