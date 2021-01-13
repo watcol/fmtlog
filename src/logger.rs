@@ -4,8 +4,8 @@ extern crate log;
 extern crate thread_local;
 
 use crate::Config;
-use crate::Stream;
 use crate::Format;
+use crate::Stream;
 
 use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
 use std::cell::RefCell;
@@ -14,7 +14,7 @@ use thread_local::ThreadLocal;
 
 /// The body of fmtlog.
 pub struct Logger {
-    _colorize: bool,
+    colorize: bool,
     color: ThreadLocal<RefCell<Option<colored::Color>>>,
     format: Format,
     level: log::LevelFilter,
@@ -32,7 +32,7 @@ impl Logger {
         color.get_or(|| RefCell::new(None));
 
         Logger {
-            _colorize: config.colorize.colorize(&config.output),
+            colorize: config.colorize.colorize(&config.output),
             color,
             format: Format::parse(config.format).expect("Invalid Format."),
             level: config.level.into(),
@@ -70,7 +70,9 @@ impl Log for Logger {
         let mut writer = self.writer.get().unwrap().borrow_mut();
         let mut color = self.color.get().unwrap().borrow_mut();
 
-        self.format.write(&mut *writer, record, &mut *color).expect("Failed to write.");
+        self.format
+            .write(&mut *writer, record, &mut *color, self.colorize)
+            .expect("Failed to write.");
     }
 
     fn flush(&self) {

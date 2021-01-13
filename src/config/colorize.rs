@@ -94,8 +94,7 @@ impl<'de> de::Visitor<'de> for ColorizeVisitor {
     {
         use std::str::FromStr;
 
-        Colorize::from_str(s)
-            .map_err(|_| de::Error::invalid_value(de::Unexpected::Str(s), &self))
+        Colorize::from_str(s).map_err(|_| de::Error::invalid_value(de::Unexpected::Str(s), &self))
     }
 }
 

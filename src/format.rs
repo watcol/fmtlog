@@ -34,9 +34,10 @@ impl Format {
         writer: &mut W,
         record: &Record,
         color: &mut Option<Color>,
+        colorize: bool,
     ) -> io::Result<()> {
         for elem in self.0.iter() {
-            elem.write(writer, record, color)?;
+            elem.write(writer, record, color, colorize)?;
         }
 
         Ok(())
@@ -55,6 +56,7 @@ impl Element {
         writer: &mut W,
         record: &Record,
         color: &mut Option<Color>,
+        colorize: bool,
     ) -> io::Result<()> {
         let s = match self {
             Self::Const(s) => s.clone(),
@@ -62,7 +64,7 @@ impl Element {
         };
 
         match color {
-            Some(c) => write!(writer, "{}", s.color(*c)),
+            Some(c) if colorize => write!(writer, "{}", s.color(*c)),
             None => write!(writer, "{}", s),
         }
     }
@@ -83,7 +85,7 @@ impl Special {
         Ok(Special { kind })
     }
 
-    fn to_str(&self,record: &Record, color: &mut Option<Color>) -> String {
+    fn to_str(&self, record: &Record, color: &mut Option<Color>) -> String {
         match self.kind {
             Kind::Literal => String::from("%"),
             Kind::Body => record.args().to_string(),

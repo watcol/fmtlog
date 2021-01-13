@@ -110,13 +110,13 @@
 //! | [`output`](config/enum.Output.html) | `stderr` | `stdout`, `stderr`, or a valid file path. | Specify the log destination. |
 //!
 pub mod config;
+mod format;
 mod logger;
 mod stream;
-mod format;
 
+pub(crate) use format::Format;
 pub use logger::Logger;
 pub(crate) use stream::Stream;
-pub(crate) use format::Format;
 
 use config::Config;
 
