@@ -68,9 +68,10 @@
 //!
 //! | Spec. | Example | Description |
 //! |-------|---------|-------------|
+//! | `%%` | `%` | Literal `%`. |
+//! | `%B` | `An error has occured.` | The log body. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
-//! | `%B` | `An error has occured.` | The log body. |
 //!
 //! ## Text-base Configuration
 //! This crate supports configuration by JSON, YAML, and TOML.

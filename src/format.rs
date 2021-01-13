@@ -11,44 +11,24 @@ impl Format {
         let mut s = s.as_ref().chars().peekable();
         let mut res = Vec::new();
 
+        let mut const_str = String::new();
         loop {
-            let mut const_str = String::new();
-            while let Some(c) = s.peek() {
-                if *c != '%' {
-                    const_str.push(s.next().unwrap());
-                } else {
-                    break;
-                }
-            }
-
-            if const_str.len() != 0 {
-                res.push(Element::Const(const_str));
-            }
-
-            let mut spec = String::new();
-
             match s.next() {
                 Some('%') => match s.next() {
-                    Some('%') => res.push(Element::Const(String::from("%"))),
-                    Some('[') => {
-                        while let Some(c) = s.peek() {
-                            if *c != ']' {
-                                spec.push(s.next().unwrap());
-                            }
-                        }
-
-                        if s.next() != Some(']') {
-                            return Err(String::from("Invalid syntax."));
-                        }
-                    }
-                    Some(c) => spec.push(c),
-                    None => return Err(String::from("Invalid syntax."))
+                    Some('%') => const_str.push('%'),
+                    Some(c) => {
+                        res.push(Element::Const(const_str.clone()));
+                        const_str.clear();
+                        res.push(Element::Special(Kind::from_char(c)?));
+                    },
+                    None => return Err(String::from("Unnexpected end.")),
                 },
-                None => break,
-                _ => unreachable!(),
-            }
-
-            res.push(Element::Special(Kind::from_string(spec)?));
+                Some(c) => const_str.push(c),
+                None => {
+                    res.push(Element::Const(const_str));
+                    break;
+                },
+            };
         }
         Ok(Format(res))
     }
@@ -87,12 +67,12 @@ enum Kind {
 }
 
 impl Kind {
-    fn from_string(s: String) -> Result<Self, String> {
-        match s.as_str() {
-            "B" => Ok(Kind::Body),
-            "l" => Ok(Kind::LogLevelLower),
-            "L" => Ok(Kind::LogLevelUpper),
-            _ => Err(String::from("Invalid string.")),
+    fn from_char(c: char) -> Result<Self, String> {
+        match c {
+            'B' => Ok(Kind::Body),
+            'l' => Ok(Kind::LogLevelLower),
+            'L' => Ok(Kind::LogLevelUpper),
+            _ => Err(String::from("Invalid specifier.")),
         }
     }
 
