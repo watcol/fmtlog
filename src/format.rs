@@ -1,3 +1,4 @@
+use colored::{Color, Colorize};
 use log::Record;
 use std::io;
 
@@ -28,9 +29,14 @@ impl Format {
         Ok(Format(res))
     }
 
-    pub(crate) fn write<W: io::Write>(&self, writer: &mut W, record: &Record) -> io::Result<()> {
+    pub(crate) fn write<W: io::Write>(
+        &self,
+        writer: &mut W,
+        record: &Record,
+        color: &mut Option<Color>,
+    ) -> io::Result<()> {
         for elem in self.0.iter() {
-            elem.write(writer, record)?;
+            elem.write(writer, record, color)?;
         }
 
         Ok(())
@@ -44,10 +50,20 @@ enum Element {
 }
 
 impl Element {
-    fn write<W: io::Write>(&self, writer: &mut W, record: &Record) -> io::Result<()> {
-        match self {
-            Self::Const(s) => write!(writer, "{}", s),
-            Self::Special(spec) => spec.write(writer, record),
+    fn write<W: io::Write>(
+        &self,
+        writer: &mut W,
+        record: &Record,
+        color: &mut Option<Color>,
+    ) -> io::Result<()> {
+        let s = match self {
+            Self::Const(s) => s.clone(),
+            Self::Special(spec) => spec.to_str(record, color),
+        };
+
+        match color {
+            Some(c) => write!(writer, "{}", s.color(*c)),
+            None => write!(writer, "{}", s),
         }
     }
 }
@@ -55,7 +71,6 @@ impl Element {
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Special {
     kind: Kind,
-    body: Option<Format>,
 }
 
 impl Special {
@@ -65,41 +80,26 @@ impl Special {
             None => return Err(String::from("Unnexpected end.")),
         };
 
-        match kind {
-            Kind::Green => {}
-            _ => return Ok(Special { kind, body: None }),
-        }
-
-        let body = match s.next() {
-            Some('{') => {
-                let mut format = String::new();
-                loop {
-                    match s.next() {
-                        Some('}') => break,
-                        Some(c) => format.push(c),
-                        None => return Err(String::from("Unnexpected end.")),
-                    }
-                }
-                Format::parse(format)?
-            }
-            _ => return Err(String::from("Missing the body.")),
-        };
-
-        Ok(Special { kind, body: Some(body) })
+        Ok(Special { kind })
     }
 
-    fn write<W: io::Write>(&self, writer: &mut W, record: &Record) -> io::Result<()> {
+    fn to_str(&self,record: &Record, color: &mut Option<Color>) -> String {
         match self.kind {
-            Kind::Literal => write!(writer, "%"),
-            Kind::Body => write!(writer, "{}", record.args()),
-            Kind::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),
-            Kind::LogLevelUpper => write!(writer, "{}", record.level().to_string()),
+            Kind::Literal => String::from("%"),
+            Kind::Body => record.args().to_string(),
+            Kind::LogLevelLower => record.level().to_string().to_lowercase(),
+            Kind::LogLevelUpper => record.level().to_string(),
             Kind::Green => {
-                use colored::Colorize;
-
-                let mut buf = Vec::new();
-                self.body.as_ref().unwrap().write(&mut buf, record)?;
-                write!(writer, "{}", String::from_utf8(buf).unwrap().green())
+                *color = Some(Color::Green);
+                String::new()
+            }
+            Kind::Red => {
+                *color = Some(Color::Red);
+                String::new()
+            }
+            Kind::Plain => {
+                *color = None;
+                String::new()
             }
         }
     }
@@ -112,6 +112,8 @@ enum Kind {
     LogLevelLower,
     LogLevelUpper,
     Green,
+    Red,
+    Plain,
 }
 
 impl Kind {
@@ -122,6 +124,8 @@ impl Kind {
             'l' => Ok(Kind::LogLevelLower),
             'L' => Ok(Kind::LogLevelUpper),
             'G' => Ok(Kind::Green),
+            'R' => Ok(Kind::Red),
+            'P' => Ok(Kind::Plain),
             _ => Err(String::from("Invalid specifier.")),
         }
     }

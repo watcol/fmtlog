@@ -15,6 +15,7 @@ use thread_local::ThreadLocal;
 /// The body of fmtlog.
 pub struct Logger {
     _colorize: bool,
+    color: ThreadLocal<RefCell<Option<colored::Color>>>,
     format: Format,
     level: log::LevelFilter,
     writer: ThreadLocal<RefCell<Stream>>,
@@ -26,8 +27,13 @@ impl Logger {
         let writer = ThreadLocal::new();
         writer
             .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
+
+        let color = ThreadLocal::new();
+        color.get_or(|| RefCell::new(None));
+
         Logger {
             _colorize: config.colorize.colorize(&config.output),
+            color,
             format: Format::parse(config.format).expect("Invalid Format."),
             level: config.level.into(),
             writer,
@@ -62,8 +68,9 @@ impl Log for Logger {
 
     fn log(&self, record: &Record) {
         let mut writer = self.writer.get().unwrap().borrow_mut();
+        let mut color = self.color.get().unwrap().borrow_mut();
 
-        self.format.write(&mut *writer, record).expect("Failed to write.");
+        self.format.write(&mut *writer, record, &mut *color).expect("Failed to write.");
     }
 
     fn flush(&self) {
