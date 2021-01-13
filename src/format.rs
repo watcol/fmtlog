@@ -1,6 +1,5 @@
-use std::io;
 use log::Record;
-use crate::Stream;
+use std::io;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -20,20 +19,20 @@ impl Format {
                         res.push(Element::Const(const_str.clone()));
                         const_str.clear();
                         res.push(Element::Special(Kind::from_char(c)?));
-                    },
+                    }
                     None => return Err(String::from("Unnexpected end.")),
                 },
                 Some(c) => const_str.push(c),
                 None => {
                     res.push(Element::Const(const_str));
                     break;
-                },
+                }
             };
         }
         Ok(Format(res))
     }
 
-    pub(crate) fn write(&self, writer: &mut Stream, record: &Record) -> io::Result<()> {
+    pub(crate) fn write<W: io::Write>(&self, writer: &mut W, record: &Record) -> io::Result<()> {
         for elem in self.0.iter() {
             elem.write(writer, record)?;
         }
@@ -49,17 +48,15 @@ enum Element {
 }
 
 impl Element {
-    fn write(&self, writer: &mut Stream, record: &Record) -> io::Result<()> {
-        use io::Write;
-
+    fn write<W: io::Write>(&self, writer: &mut W, record: &Record) -> io::Result<()> {
         match self {
             Self::Const(s) => write!(writer, "{}", s),
-            Self::Special(kind) => write!(writer, "{}", kind.to_str(record)),
+            Self::Special(kind) => kind.write(writer, record),
         }
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 enum Kind {
     Body,
     LogLevelUpper,
@@ -76,11 +73,11 @@ impl Kind {
         }
     }
 
-    fn to_str(&self, record: &Record) -> String {
+    fn write<W: io::Write>(&self, writer: &mut W, record: &Record) -> io::Result<()> {
         match self {
-            Self::Body => format!("{}", record.args()),
-            Self::LogLevelLower => record.level().to_string().to_lowercase(),
-            Self::LogLevelUpper => record.level().to_string(),
+            Self::Body => write!(writer, "{}", record.args()),
+            Self::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),
+            Self::LogLevelUpper => write!(writer, "{}", record.level().to_string()),
         }
     }
 }
