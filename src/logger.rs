@@ -63,7 +63,7 @@ impl Log for Logger {
     fn log(&self, record: &Record) {
         let mut writer = self.writer.get().unwrap().borrow_mut();
 
-        self.format.write(&mut writer, record).expect("Failed to write.");
+        self.format.write(&mut *writer, record).expect("Failed to write.");
     }
 
     fn flush(&self) {
