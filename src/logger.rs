@@ -12,10 +12,16 @@ use std::cell::RefCell;
 use std::io::Write;
 use thread_local::ThreadLocal;
 
+#[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
+pub(crate) struct Style {
+    pub fg: Option<colored::Color>,
+    pub bg: Option<colored::Color>,
+}
+
 /// The body of fmtlog.
 pub struct Logger {
     colorize: bool,
-    color: ThreadLocal<RefCell<Option<colored::Color>>>,
+    style: ThreadLocal<RefCell<Style>>,
     format: Format,
     level: log::LevelFilter,
     writer: ThreadLocal<RefCell<Stream>>,
@@ -28,12 +34,12 @@ impl Logger {
         writer
             .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
 
-        let color = ThreadLocal::new();
-        color.get_or(|| RefCell::new(None));
+        let style = ThreadLocal::new();
+        style.get_or(|| RefCell::new(Style::default()));
 
         Logger {
             colorize: config.colorize.colorize(&config.output),
-            color,
+            style,
             format: Format::parse(config.format).expect("Invalid Format."),
             level: config.level.into(),
             writer,
@@ -68,10 +74,10 @@ impl Log for Logger {
 
     fn log(&self, record: &Record) {
         let mut writer = self.writer.get().unwrap().borrow_mut();
-        let mut color = self.color.get().unwrap().borrow_mut();
+        let mut style = self.style.get().unwrap().borrow_mut();
 
         self.format
-            .write(&mut *writer, record, &mut *color, self.colorize)
+            .write(&mut *writer, record, &mut *style, self.colorize)
             .expect("Failed to write.");
     }
 

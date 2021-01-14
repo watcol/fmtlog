@@ -72,6 +72,10 @@
 //! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
+//! | `%C(<color>)` | `%C(green)` makes the characters green. | Set the foreground color. |
+//! | `%c` | | Reset the foreground color. |
+//! | `%O(<color>)` | `%O(green)` makes the background green. | Set the background color. |
+//! | `%o` | | Reset the background color. |
 //!
 //! ## Text-base Configuration
 //! This crate supports configuration by JSON, YAML, and TOML.
@@ -117,6 +121,7 @@ mod stream;
 pub(crate) use format::Format;
 pub use logger::Logger;
 pub(crate) use stream::Stream;
+pub(crate) use logger::Style;
 
 use config::Config;
 
