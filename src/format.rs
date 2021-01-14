@@ -63,9 +63,9 @@ impl Element {
             Self::Special(spec) => spec.to_str(record, color),
         };
 
-        match color {
-            Some(c) if colorize => write!(writer, "{}", s.color(*c)),
-            None => write!(writer, "{}", s),
+        match *color {
+            Some(c) if colorize => write!(writer, "{}", s.color(c)),
+            _ => write!(writer, "{}", s),
         }
     }
 }
