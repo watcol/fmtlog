@@ -88,7 +88,7 @@ impl Special {
     fn to_str(&self, record: &Record, color: &mut Option<Color>) -> String {
         match self.kind {
             Kind::Literal => String::from("%"),
-            Kind::Body => record.args().to_string(),
+            Kind::Message => record.args().to_string(),
             Kind::LogLevelLower => record.level().to_string().to_lowercase(),
             Kind::LogLevelUpper => record.level().to_string(),
             Kind::Green => {
@@ -110,7 +110,7 @@ impl Special {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Kind {
     Literal,
-    Body,
+    Message,
     LogLevelLower,
     LogLevelUpper,
     Green,
@@ -122,9 +122,9 @@ impl Kind {
     fn from_char(c: char) -> Result<Self, String> {
         match c {
             '%' => Ok(Kind::Literal),
-            'B' => Ok(Kind::Body),
             'l' => Ok(Kind::LogLevelLower),
             'L' => Ok(Kind::LogLevelUpper),
+            'M' => Ok(Kind::Message),
             'G' => Ok(Kind::Green),
             'R' => Ok(Kind::Red),
             'P' => Ok(Kind::Plain),

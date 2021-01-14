@@ -20,7 +20,7 @@ pub use output::Output;
 use serde::Deserialize;
 
 fn default_format() -> String {
-    String::from("%l: %B\n")
+    String::from("%l: %M\n")
 }
 
 /// The logger settings.

@@ -69,7 +69,7 @@
 //! | Spec. | Example | Description |
 //! |-------|---------|-------------|
 //! | `%%` | `%` | Literal `%`. |
-//! | `%B` | `An error has occured.` | The log body. |
+//! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
 //!
@@ -105,7 +105,7 @@
 //! | Key | Default | Value | Description |
 //! |-----|:-------:|-------|-------------|
 //! | [`colorize`](config/enum.Colorize.html) | `auto` | `on`, `auto`, `off`, `true`, `false` | Colorize the log if the value is `on` (or `true`). |
-//! | `format` | `%l: %B` | A string | Logger format specified in [the previous](#format-specification). |
+//! | `format` | `%l: %M\n` | A string | Logger format specified in [the previous](#format-specification). |
 //! | [`level`](config/enum.Level.html) | `info` | `off`, `error`, `warn`, `info`, `debug`, `trace` | Specify the log level. See [this](https://docs.rs/log) for the information. |
 //! | [`output`](config/enum.Output.html) | `stderr` | `stdout`, `stderr`, or a valid file path. | Specify the log destination. |
 //!
