@@ -71,64 +71,35 @@ impl Element {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-struct Special {
-    kind: Kind,
+enum Special {
+    Literal,
+    Message,
+    LogLevelLower,
+    LogLevelUpper,
 }
 
 impl Special {
     fn parse(s: &mut std::str::Chars) -> Result<Self, String> {
         let kind = match s.next() {
-            Some(c) => Kind::from_char(c)?,
+            Some(c) => c,
             None => return Err(String::from("Unnexpected end.")),
         };
 
-        Ok(Special { kind })
-    }
-
-    fn to_str(&self, record: &Record, color: &mut Option<Color>) -> String {
-        match self.kind {
-            Kind::Literal => String::from("%"),
-            Kind::Message => record.args().to_string(),
-            Kind::LogLevelLower => record.level().to_string().to_lowercase(),
-            Kind::LogLevelUpper => record.level().to_string(),
-            Kind::Green => {
-                *color = Some(Color::Green);
-                String::new()
-            }
-            Kind::Red => {
-                *color = Some(Color::Red);
-                String::new()
-            }
-            Kind::Plain => {
-                *color = None;
-                String::new()
-            }
+        match kind {
+            '%' => Ok(Self::Literal),
+            'l' => Ok(Self::LogLevelLower),
+            'L' => Ok(Self::LogLevelUpper),
+            'M' => Ok(Self::Message),
+            _ => Err(String::from("Invalid specifier.")),
         }
     }
-}
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum Kind {
-    Literal,
-    Message,
-    LogLevelLower,
-    LogLevelUpper,
-    Green,
-    Red,
-    Plain,
-}
-
-impl Kind {
-    fn from_char(c: char) -> Result<Self, String> {
-        match c {
-            '%' => Ok(Kind::Literal),
-            'l' => Ok(Kind::LogLevelLower),
-            'L' => Ok(Kind::LogLevelUpper),
-            'M' => Ok(Kind::Message),
-            'G' => Ok(Kind::Green),
-            'R' => Ok(Kind::Red),
-            'P' => Ok(Kind::Plain),
-            _ => Err(String::from("Invalid specifier.")),
+    fn to_str(&self, record: &Record, _color: &mut Option<Color>) -> String {
+        match self {
+            Self::Literal => String::from("%"),
+            Self::Message => record.args().to_string(),
+            Self::LogLevelLower => record.level().to_string().to_lowercase(),
+            Self::LogLevelUpper => record.level().to_string(),
         }
     }
 }
