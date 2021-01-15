@@ -45,12 +45,15 @@
 //! | Spec. | Example | Description |
 //! |-------|---------|-------------|
 //! | `%%` | `%` | Literal `%`. |
+//! | `%,` | `%` | Literal `,` (use in branching). |
+//! | `%)` | `%` | Literal `)`. (use in branching.) |
+//! | `%(<error>,<warn>,<info>,<debug>,<trace>)` | `%(%C(red),%C(yellow),%C(green),%C(cyan),%C(yellow))` | Branching by the log level. |
 //! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
-//! | `%C(<color>)` | `%C(green)` makes the characters green. | Set the foreground color. |
+//! | `%C(<color>)` | `%C(green)` | Set the foreground color. |
 //! | `%c` | | Reset the foreground color. |
-//! | `%O(<color>)` | `%O(green)` makes the background green. | Set the background color. |
+//! | `%O(<color>)` | `%O(green)` | Set the background color. |
 //! | `%o` | | Reset the background color. |
 //! | `%B` | | Set the character bold. |
 //! | `%b` | | Unset the bold character. |
@@ -96,7 +99,7 @@ impl Logger {
         Logger {
             colorize: config.colorize.colorize(&config.output),
             style,
-            format: Format::parse(config.format).expect("Invalid Format."),
+            format: Format::new(config.format).expect("Invalid Format."),
             level: config.level.into(),
             writer,
         }
@@ -151,6 +154,7 @@ impl Log for Logger {
         }
     }
 }
+
 /// Create a logger by default settings.
 ///
 /// This function wraps [`Config::default`](config/struct.Config.html#impl-Default).

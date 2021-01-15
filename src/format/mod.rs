@@ -11,8 +11,11 @@ pub use style::Style;
 pub(crate) struct Format(Vec<Element>);
 
 impl Format {
-    pub(crate) fn parse<T: AsRef<str>>(s: T) -> Result<Format, String> {
-        let mut s = s.as_ref().chars();
+    pub(crate) fn new<T: AsRef<str>>(s: T) -> Result<Self, String> {
+        Self::parse(&mut s.as_ref().chars())
+    }
+
+    fn parse_until<T: Iterator<Item = char>>(s: &mut T, ch: char) -> Result<Self, String> {
         let mut res = Vec::new();
 
         let mut const_str = String::new();
@@ -21,13 +24,38 @@ impl Format {
                 Some('%') => {
                     res.push(Element::Const(const_str.clone()));
                     const_str.clear();
-                    res.push(Element::Special(Special::parse(&mut s)?));
+                    res.push(Element::Special(Special::parse(s)?));
                 }
-                Some(c) => const_str.push(c),
+                Some(c) if c == ch => {
+                    res.push(Element::Const(const_str));
+                    break;
+                }
                 None => {
                     res.push(Element::Const(const_str));
                     break;
                 }
+                Some(c) => const_str.push(c),
+            };
+        }
+        Ok(Format(res))
+    }
+
+    fn parse<T: Iterator<Item = char>>(s: &mut T) -> Result<Self, String> {
+        let mut res = Vec::new();
+
+        let mut const_str = String::new();
+        loop {
+            match s.next() {
+                Some('%') => {
+                    res.push(Element::Const(const_str.clone()));
+                    const_str.clear();
+                    res.push(Element::Special(Special::parse(s)?));
+                }
+                None => {
+                    res.push(Element::Const(const_str));
+                    break;
+                }
+                Some(c) => const_str.push(c),
             };
         }
         Ok(Format(res))
@@ -95,7 +123,10 @@ impl Element {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum Special {
-    Literal,
+    Percent,
+    Close,
+    Comma,
+    Branch(Format, Format, Format, Format, Format),
     Message,
     LogLevelLower,
     LogLevelUpper,
@@ -110,17 +141,28 @@ enum Special {
 }
 
 impl Special {
-    fn parse(s: &mut std::str::Chars) -> Result<Self, String> {
+    fn parse<T: Iterator<Item = char>>(s: &mut T) -> Result<Self, String> {
         let kind = match s.next() {
             Some(c) => c,
             None => return Err(String::from("Unnexpected end.")),
         };
 
         match kind {
-            '%' => Ok(Self::Literal),
+            '%' => Ok(Self::Percent),
+            ')' => Ok(Self::Close),
+            ',' => Ok(Self::Comma),
+            '(' => {
+                let e = Format::parse_until(s, ',')?;
+                let w = Format::parse_until(s, ',')?;
+                let i = Format::parse_until(s, ',')?;
+                let d = Format::parse_until(s, ',')?;
+                let t = Format::parse_until(s, ')')?;
+
+                Ok(Self::Branch(e, w, i, d, t))
+            }
+            'M' => Ok(Self::Message),
             'l' => Ok(Self::LogLevelLower),
             'L' => Ok(Self::LogLevelUpper),
-            'M' => Ok(Self::Message),
             'C' => {
                 use std::str::FromStr;
 
@@ -173,7 +215,22 @@ impl Special {
 
     fn to_str(&self, record: &Record, style: &mut Style) -> String {
         match self {
-            Self::Literal => String::from("%"),
+            Self::Percent => String::from("%"),
+            Self::Close => String::from(")"),
+            Self::Comma => String::from(","),
+            Self::Branch(e, w, i, d, t) => {
+                use log::Level;
+                let mut buf: Vec<u8> = Vec::new();
+                match record.level() {
+                    Level::Error => e.write(&mut buf, record, style, false),
+                    Level::Warn => w.write(&mut buf, record, style, false),
+                    Level::Info => i.write(&mut buf, record, style, false),
+                    Level::Debug => d.write(&mut buf, record, style, false),
+                    Level::Trace => t.write(&mut buf, record, style, false),
+                }.expect("Failed to write");
+
+                String::from_utf8(buf).unwrap()
+            }
             Self::Message => record.args().to_string(),
             Self::LogLevelLower => record.level().to_string().to_lowercase(),
             Self::LogLevelUpper => record.level().to_string(),
