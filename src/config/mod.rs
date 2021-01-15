@@ -41,7 +41,7 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use fmtlog::config::Config;
+    /// use fmtlog::Config;
     ///
     /// assert_ne!(Config::new(), Config::new().colorize(false));
     /// ```
@@ -50,14 +50,14 @@ impl Config {
         self
     }
 
-    /// Set the output format.
+    /// Set the format string.
     ///
     /// # Example
     ///
     /// ```rust
-    /// use fmtlog::config::Config;
+    /// use fmtlog::Config;
     ///
-    /// assert_ne!(Config::new(), Config::new().colorize(false));
+    /// assert_ne!(Config::new(), Config::new().format("[%L] %M\n"));
     /// ```
     pub fn format<T: Into<String>>(mut self, format: T) -> Self {
         self.format = format.into();
@@ -69,7 +69,7 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use fmtlog::config::{Config, LevelFilter};
+    /// use fmtlog::{Config, LevelFilter};
     ///
     /// assert_eq!(Config::new(), Config::new().level(LevelFilter::Info))
     /// ```
@@ -83,7 +83,7 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use fmtlog::config::Config;
+    /// use fmtlog::Config;
     ///
     /// assert_ne!(Config::new(), Config::new().output("log.txt"))
     /// ```

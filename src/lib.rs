@@ -26,7 +26,7 @@
 //! extern crate log;
 //! extern crate fmtlog;
 //!
-//! use fmtlog::config::{Config, LevelFilter};
+//! use fmtlog::{Config, LevelFilter};
 //!
 //! fn main() {
 //!     fmtlog::new(Config::new().level(LevelFilter::Trace))
@@ -53,17 +53,17 @@
 //! | `%O(<color>)` | `%O(green)` makes the background green. | Set the background color. |
 //! | `%o` | | Reset the background color. |
 //!
-pub mod config;
+mod config;
 mod format;
 mod logger;
 mod stream;
 
 pub(crate) use format::Format;
-pub use logger::Logger;
 pub(crate) use stream::Stream;
 pub(crate) use logger::Style;
 
-use config::Config;
+pub use logger::Logger;
+pub use config::{Config, Colorize, LevelFilter, Output};
 
 /// Create a logger by default settings.
 ///
@@ -97,7 +97,7 @@ pub fn default() -> Logger {
 /// extern crate log;
 /// extern crate fmtlog;
 ///
-/// use fmtlog::config::Config;
+/// use fmtlog::Config;
 ///
 /// fn main() {
 ///     fmtlog::new(Config::new()).set().unwrap();

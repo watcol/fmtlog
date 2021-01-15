@@ -54,7 +54,7 @@ impl Logger {
     /// #[macro_use]
     /// extern crate log;
     ///
-    /// use fmtlog::{Logger, config::Config};
+    /// use fmtlog::{Logger, Config};
     ///
     /// fn main() {
     ///     Logger::new(Config::new()).set().unwrap();
