@@ -53,18 +53,100 @@
 //! | `%O(<color>)` | `%O(green)` makes the background green. | Set the background color. |
 //! | `%o` | | Reset the background color. |
 //!
+extern crate colored;
+extern crate log;
+extern crate thread_local;
+
 mod config;
 mod format;
-mod logger;
 mod stream;
 
-pub(crate) use format::Format;
-pub(crate) use stream::Stream;
-pub(crate) use logger::Style;
+pub use config::*;
 
-pub use logger::Logger;
-pub use config::{Config, Colorize, LevelFilter, Output};
+use format::{Format, Style};
+use stream::Stream;
 
+use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
+use std::cell::RefCell;
+use thread_local::ThreadLocal;
+
+/// The body of fmtlog.
+pub struct Logger {
+    colorize: bool,
+    style: ThreadLocal<RefCell<Style>>,
+    format: Format,
+    level: log::LevelFilter,
+    writer: ThreadLocal<RefCell<Stream>>,
+}
+
+impl Logger {
+    /// Create a new instance.
+    pub fn new(config: Config) -> Logger {
+        let writer = ThreadLocal::new();
+        writer
+            .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
+
+        let style = ThreadLocal::new();
+        style.get_or(|| RefCell::new(Style::default()));
+
+        Logger {
+            colorize: config.colorize.colorize(&config.output),
+            style,
+            format: Format::parse(config.format).expect("Invalid Format."),
+            level: config.level.into(),
+            writer,
+        }
+    }
+
+    /// Set this logger active.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// #[macro_use]
+    /// extern crate log;
+    ///
+    /// use fmtlog::{Logger, Config};
+    ///
+    /// fn main() {
+    ///     Logger::new(Config::new()).set().unwrap();
+    ///     info!("Hello!") // INFO: Hello!
+    /// }
+    /// ```
+    pub fn set(self) -> Result<(), SetLoggerError> {
+        set_max_level(self.level);
+        set_boxed_logger(Box::new(self))
+    }
+}
+
+impl Log for Logger {
+    fn enabled(&self, metadata: &Metadata) -> bool {
+        self.level >= metadata.level()
+    }
+
+    fn log(&self, record: &Record) {
+        let mut writer = self.writer.get().unwrap().borrow_mut();
+        let mut style = self.style.get().unwrap().borrow_mut();
+
+        self.format
+            .write(&mut *writer, record, &mut *style, self.colorize)
+            .expect("Failed to write.");
+    }
+
+    fn flush(&self) {
+        use std::io::Write;
+
+        match self.writer.get() {
+            Some(writer) => {
+                writer
+                    .borrow_mut()
+                    .flush()
+                    .expect("Failed to flush the stream.");
+            }
+            None => {}
+        }
+    }
+}
 /// Create a logger by default settings.
 ///
 /// This function wraps [`Config::default`](config/struct.Config.html#impl-Default).

@@ -2,7 +2,7 @@ use std::{fs, io};
 
 /// Stream
 #[derive(Debug)]
-pub(crate) enum Stream {
+pub enum Stream {
     Stdout(io::Stdout),
     Stderr(io::Stderr),
     File(fs::File),

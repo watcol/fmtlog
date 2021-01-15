@@ -1,4 +1,4 @@
-use crate::config::Output;
+use super::Output;
 use std::fmt;
 
 /// Colorize the output

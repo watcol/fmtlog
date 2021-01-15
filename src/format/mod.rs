@@ -1,8 +1,10 @@
+mod style;
+
 use colored::{Color, Colorize};
 use log::Record;
 use std::io;
 
-use crate::Style;
+pub use style::Style;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
