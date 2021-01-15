@@ -1,10 +1,12 @@
 mod style;
+mod color;
 
-use colored::{Color, Colorize};
+use colored::Colorize;
 use log::Record;
 use std::io;
 
 pub use style::Style;
+use color::Color;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -180,7 +182,7 @@ impl Special {
                 }
 
                 Ok(Self::Color(
-                    Color::from_str(&color).map_err(|_| "Unnexpected color specifier.")?,
+                    Color::from_str(&color)?,
                 ))
             }
             'c' => Ok(Self::NoColor),
@@ -201,7 +203,7 @@ impl Special {
                 }
 
                 Ok(Self::OnColor(
-                    Color::from_str(&color).map_err(|_| "Unnexpected color specifier.")?,
+                    Color::from_str(&color)?,
                 ))
             }
             'o' => Ok(Self::NoOnColor),

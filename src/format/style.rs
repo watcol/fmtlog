@@ -1,4 +1,4 @@
-use colored::Color;
+use super::Color;
 
 #[derive(Clone, Copy, Default, Debug, PartialEq, Eq)]
 pub struct Style {
