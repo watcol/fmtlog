@@ -3,8 +3,8 @@ mod colorize;
 mod output;
 
 pub use colorize::Colorize;
-pub use output::Output;
 pub use log::LevelFilter;
+pub use output::Output;
 
 fn default_format() -> String {
     String::from("%l: %M\n")

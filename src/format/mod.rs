@@ -140,7 +140,7 @@ impl Special {
                 Ok(Self::Color(
                     Color::from_str(&color).map_err(|_| "Unnexpected color specifier.")?,
                 ))
-            },
+            }
             'c' => Ok(Self::NoColor),
             'O' => {
                 use std::str::FromStr;
@@ -161,7 +161,7 @@ impl Special {
                 Ok(Self::OnColor(
                     Color::from_str(&color).map_err(|_| "Unnexpected color specifier.")?,
                 ))
-            },
+            }
             'o' => Ok(Self::NoOnColor),
             'B' => Ok(Self::Bold),
             'b' => Ok(Self::NoBold),
@@ -180,7 +180,7 @@ impl Special {
             Self::Color(c) => {
                 style.fg = Some(*c);
                 String::new()
-            },
+            }
             Self::NoColor => {
                 style.fg = None;
                 String::new()
@@ -188,7 +188,7 @@ impl Special {
             Self::OnColor(c) => {
                 style.bg = Some(*c);
                 String::new()
-            },
+            }
             Self::NoOnColor => {
                 style.bg = None;
                 String::new()
