@@ -36,7 +36,7 @@
 //!     info!("Hello!"); // INFO: Hello!
 //! }
 //! ```
-//! See also [the struct `Config`](config/struct.Config.html).
+//! See also [the struct `Config`](struct.Config.html).
 //!
 //! ## Format Specification
 //! The format string is basically a string, but the following specifiers will converted into
@@ -157,7 +157,7 @@ impl Log for Logger {
 
 /// Create a logger by default settings.
 ///
-/// This function wraps [`Config::default`](config/struct.Config.html#impl-Default).
+/// This function wraps [`Config::default`](struct.Config.html#impl-Default).
 ///
 /// # Example
 ///
