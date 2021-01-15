@@ -26,10 +26,10 @@
 //! extern crate log;
 //! extern crate fmtlog;
 //!
-//! use fmtlog::config::{Config, Level};
+//! use fmtlog::config::{Config, LevelFilter};
 //!
 //! fn main() {
-//!     fmtlog::new(Config::new().level(Level::Trace))
+//!     fmtlog::new(Config::new().level(LevelFilter::Trace))
 //!         .set()
 //!         .unwrap();
 //!

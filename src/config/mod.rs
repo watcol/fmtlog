@@ -1,11 +1,10 @@
 //! Configuration module.
 mod colorize;
-mod level;
 mod output;
 
 pub use colorize::Colorize;
-pub use level::Level;
 pub use output::Output;
+pub use log::LevelFilter;
 
 fn default_format() -> String {
     String::from("%l: %M\n")
@@ -16,7 +15,7 @@ fn default_format() -> String {
 pub struct Config {
     pub(crate) colorize: Colorize,
     pub(crate) format: String,
-    pub(crate) level: Level,
+    pub(crate) level: LevelFilter,
     pub(crate) output: Output,
 }
 
@@ -25,7 +24,7 @@ impl Default for Config {
         Self {
             colorize: Colorize::default(),
             format: default_format(),
-            level: Level::default(),
+            level: LevelFilter::Info,
             output: Output::default(),
         }
     }
@@ -70,11 +69,11 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use fmtlog::config::{Config, Level};
+    /// use fmtlog::config::{Config, LevelFilter};
     ///
-    /// assert_eq!(Config::new(), Config::new().level(Level::Info))
+    /// assert_eq!(Config::new(), Config::new().level(LevelFilter::Info))
     /// ```
-    pub fn level<T: Into<Level>>(mut self, level: T) -> Self {
+    pub fn level<T: Into<LevelFilter>>(mut self, level: T) -> Self {
         self.level = level.into();
         self
     }
