@@ -46,9 +46,11 @@ impl std::str::FromStr for Color {
                 Err(e) => return Err(format!("Failed to parse hex.: {}", e)),
             };
 
-            return Ok(Self(Orig::TrueColor{r, g, b}))
+            return Ok(Self(Orig::TrueColor { r, g, b }));
         }
 
-        Ok(Self(Orig::from_str(s).map_err(|_| String::from("Invalid color."))?))
+        Ok(Self(
+            Orig::from_str(s).map_err(|_| String::from("Invalid color."))?,
+        ))
     }
 }

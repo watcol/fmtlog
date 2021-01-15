@@ -1,12 +1,12 @@
-mod style;
 mod color;
+mod style;
 
 use colored::Colorize;
 use log::Record;
 use std::io;
 
-pub use style::Style;
 use color::Color;
+pub use style::Style;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -181,9 +181,7 @@ impl Special {
                     }
                 }
 
-                Ok(Self::Color(
-                    Color::from_str(&color)?,
-                ))
+                Ok(Self::Color(Color::from_str(&color)?))
             }
             'c' => Ok(Self::NoColor),
             'O' => {
@@ -202,9 +200,7 @@ impl Special {
                     }
                 }
 
-                Ok(Self::OnColor(
-                    Color::from_str(&color)?,
-                ))
+                Ok(Self::OnColor(Color::from_str(&color)?))
             }
             'o' => Ok(Self::NoOnColor),
             'B' => Ok(Self::Bold),
@@ -229,7 +225,8 @@ impl Special {
                     Level::Info => i.write(&mut buf, record, style, false),
                     Level::Debug => d.write(&mut buf, record, style, false),
                     Level::Trace => t.write(&mut buf, record, style, false),
-                }.expect("Failed to write");
+                }
+                .expect("Failed to write");
 
                 String::from_utf8(buf).unwrap()
             }
