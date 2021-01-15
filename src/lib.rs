@@ -38,30 +38,6 @@
 //! ```
 //! See also [the struct `Config`](config/struct.Config.html).
 //!
-//! #### Configure Using TOML (Requires feature `conf-toml`)
-//!
-//! ```rust
-//! #[macro_use]
-//! extern crate log;
-//! extern crate fmtlog;
-//!
-//! # #[cfg(feature = "conf-toml")]
-//! fn main() {
-//!     let toml = r#"
-//!         level = "trace"
-//!         output = "stdout"
-//!     "#;
-//!
-//!     fmtlog::from_toml(toml).unwrap().set().unwrap();
-//!
-//!     info!("Hello!"); // INFO: Hello!
-//! }
-//! #
-//! # #[cfg(not(feature = "conf-toml"))]
-//! # fn main() {}
-//! ```
-//! See also [the following](#text-base-configuration) and [the function `from_toml`](fn.from_toml.html).
-//!
 //! ## Format Specification
 //! The format string is basically a string, but the following specifiers will converted into
 //! another string.
@@ -76,42 +52,6 @@
 //! | `%c` | | Reset the foreground color. |
 //! | `%O(<color>)` | `%O(green)` makes the background green. | Set the background color. |
 //! | `%o` | | Reset the background color. |
-//!
-//! ## Text-base Configuration
-//! This crate supports configuration by JSON, YAML, and TOML.
-//!
-//! #### [JSON](https://en.wikipedia.org/wiki/JSON) (Requires feature `conf-json`)
-//! ```json
-//! {
-//!     "colorize": "auto",
-//!     "level": "info",
-//!     "output": "log.txt"
-//! }
-//! ```
-//!
-//! #### [YAML](https://en.wikipedia.org/wiki/YAML) (Requires feature `conf-yaml`)
-//! ```yaml
-//! colorize: auto
-//! level: info
-//! output: log.txt
-//! ```
-//!
-//! #### [TOML](https://en.wikipedia.org/wiki/TOML) (Requires feature `conf-toml`)
-//! ```toml
-//! colorize = "auto"
-//! level = "info"
-//! output = "log.txt"
-//! ```
-//!
-//! Available values are there. (If the value is not present, the default will be chosen.)
-//!
-//! ### Data Format
-//! | Key | Default | Value | Description |
-//! |-----|:-------:|-------|-------------|
-//! | [`colorize`](config/enum.Colorize.html) | `auto` | `on`, `auto`, `off`, `true`, `false` | Colorize the log if the value is `on` (or `true`). |
-//! | `format` | `%l: %M\n` | A string | Logger format specified in [the previous](#format-specification). |
-//! | [`level`](config/enum.Level.html) | `info` | `off`, `error`, `warn`, `info`, `debug`, `trace` | Specify the log level. See [this](https://docs.rs/log) for the information. |
-//! | [`output`](config/enum.Output.html) | `stderr` | `stdout`, `stderr`, or a valid file path. | Specify the log destination. |
 //!
 pub mod config;
 mod format;
@@ -167,90 +107,4 @@ pub fn default() -> Logger {
 /// ```
 pub fn new(config: Config) -> Logger {
     Logger::new(config)
-}
-
-/// **[conf-json]** Create a logger from JSON file.
-///
-/// This function wraps [`Config::from_json`](config/struct.Config.html#method.from_json).
-///
-/// # Example
-///
-/// ```rust
-/// #[macro_use]
-/// extern crate log;
-/// extern crate fmtlog;
-///
-/// fn main() {
-///     let json = r#"
-///         {
-///             "colorize": true,
-///             "level": "trace",
-///             "output": "stdout"
-///         }
-///     "#;
-///
-///     fmtlog::from_json(json).unwrap().set().unwrap();
-///
-///     info!("Hello!"); // INFO: Hello!
-/// }
-/// ```
-#[cfg(feature = "conf-json")]
-pub fn from_json<T: AsRef<str>>(s: T) -> serde_json::Result<Logger> {
-    Ok(Logger::new(Config::from_json(s)?))
-}
-
-/// **[conf-yaml]** Create a logger from YAML file.
-///
-/// This function wraps [`Config::from_yaml`](config/struct.Config.html#method.from_yaml).
-///
-/// # Example
-///
-/// ```rust
-/// #[macro_use]
-/// extern crate log;
-/// extern crate fmtlog;
-///
-/// fn main() {
-///     let yaml = r#"
-///         colorize: true
-///         level: trace
-///         output: stdout
-///     "#;
-///
-///     fmtlog::from_yaml(yaml).unwrap().set().unwrap();
-///
-///     info!("Hello!"); // INFO: Hello!
-/// }
-/// ```
-#[cfg(feature = "conf-yaml")]
-pub fn from_yaml<T: AsRef<str>>(s: T) -> serde_yaml::Result<Logger> {
-    Ok(Logger::new(Config::from_yaml(s)?))
-}
-
-/// **[conf-toml]** Create a logger from TOML file.
-///
-/// This function wraps [`Config::from_toml`](config/struct.Config.html#method.from_toml).
-///
-/// # Example
-///
-/// ```rust
-/// #[macro_use]
-/// extern crate log;
-/// extern crate fmtlog;
-///
-/// fn main() {
-///     let toml = r#"
-///         colorize = true
-///         level = "trace"
-///         output = "stdout"
-///     "#;
-///
-///     fmtlog::from_toml(toml).unwrap().set().unwrap();
-///
-///     info!("Hello!"); // INFO: Hello!
-/// }
-/// ```
-#[cfg(feature = "conf-toml")]
-pub fn from_toml<T: AsRef<str>>(s: T) -> Result<Logger, toml::de::Error> {
-    Ok(Logger::new(Config::from_toml(s)?))
 }

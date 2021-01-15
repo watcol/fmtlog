@@ -66,37 +66,3 @@ impl Output {
         })
     }
 }
-
-#[cfg(feature = "serde")]
-use serde::{de, Deserialize};
-
-#[cfg(feature = "serde")]
-struct OutputVisitor;
-
-#[cfg(feature = "serde")]
-impl<'de> de::Visitor<'de> for OutputVisitor {
-    type Value = Output;
-
-    fn expecting(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "\"stdout\", \"stderr\", or a valid path.")
-    }
-
-    fn visit_str<E>(self, s: &str) -> Result<Self::Value, E>
-    where
-        E: de::Error,
-    {
-        use std::str::FromStr;
-
-        Output::from_str(s).map_err(|_| de::Error::invalid_value(de::Unexpected::Str(s), &self))
-    }
-}
-
-#[cfg(feature = "serde")]
-impl<'de> Deserialize<'de> for Output {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: de::Deserializer<'de>,
-    {
-        deserializer.deserialize_str(OutputVisitor)
-    }
-}
