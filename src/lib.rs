@@ -52,6 +52,10 @@
 //! | `%c` | | Reset the foreground color. |
 //! | `%O(<color>)` | `%O(green)` makes the background green. | Set the background color. |
 //! | `%o` | | Reset the background color. |
+//! | `%B` | | Set the character bold. |
+//! | `%b` | | Unset the bold character. |
+//! | `%U` | | Enable underline. |
+//! | `%u` | | Disable underline. |
 //!
 extern crate colored;
 extern crate log;
