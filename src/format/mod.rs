@@ -81,6 +81,14 @@ impl Element {
             s = s.on_color(c);
         }
 
+        if style.bold {
+            s = s.bold();
+        }
+
+        if style.underline {
+            s = s.underline();
+        }
+
         write!(writer, "{}", s)
     }
 }
@@ -95,6 +103,10 @@ enum Special {
     NoColor,
     OnColor(Color),
     NoOnColor,
+    Bold,
+    NoBold,
+    Underline,
+    NoUnderline,
 }
 
 impl Special {
@@ -151,6 +163,10 @@ impl Special {
                 ))
             },
             'o' => Ok(Self::NoOnColor),
+            'B' => Ok(Self::Bold),
+            'b' => Ok(Self::NoBold),
+            'U' => Ok(Self::Underline),
+            'u' => Ok(Self::NoUnderline),
             _ => Err(String::from("Invalid specifier.")),
         }
     }
@@ -175,6 +191,22 @@ impl Special {
             },
             Self::NoOnColor => {
                 style.bg = None;
+                String::new()
+            }
+            Self::Bold => {
+                style.bold = true;
+                String::new()
+            }
+            Self::NoBold => {
+                style.bold = false;
+                String::new()
+            }
+            Self::Underline => {
+                style.underline = true;
+                String::new()
+            }
+            Self::NoUnderline => {
+                style.underline = false;
                 String::new()
             }
         }
