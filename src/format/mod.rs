@@ -1,10 +1,12 @@
 mod color;
+mod pallet;
 
 use colored::Colorize;
-use log::{Level, Record};
+use log::Record;
 use std::io;
 
 use color::Color;
+use pallet::Pallet;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -109,9 +111,9 @@ enum Special {
     LogLevelLower,
     LogLevelUpper,
     FgColor(Color, Format),
-    FgColorBranch(Color, Color, Color, Color, Color, Format),
+    FgColorBranch(Pallet, Format),
     BgColor(Color, Format),
-    BgColorBranch(Color, Color, Color, Color, Color, Format),
+    BgColorBranch(Pallet, Format),
     Bold(Format),
     Underline(Format),
 }
@@ -161,7 +163,7 @@ impl Special {
 
                     let format = Format::parse_until(s, '}')?;
 
-                    Ok(Self::FgColorBranch(error, warn, info, debug, trace, format))
+                    Ok(Self::FgColorBranch(Pallet {error, warn, info, debug, trace}, format))
                 } else {
                     if s.next() != Some('{') {
                         return Err(String::from("Missing the body."));
@@ -205,7 +207,7 @@ impl Special {
 
                     let format = Format::parse_until(s, '}')?;
 
-                    Ok(Self::BgColorBranch(error, warn, info, debug, trace, format))
+                    Ok(Self::BgColorBranch(Pallet {error, warn, info, debug, trace}, format))
                 } else {
                     if s.next() != Some('{') {
                         return Err(String::from("Missing the body."));
@@ -255,19 +257,11 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
-            Self::FgColorBranch(e, w, i, d, t, format) => {
+            Self::FgColorBranch(pallet, format) => {
                 let s = format.to_str(record, colorize)?;
 
-                let color = *match record.level() {
-                    Level::Error => e,
-                    Level::Warn => w,
-                    Level::Info => i,
-                    Level::Debug => d,
-                    Level::Trace => t,
-                };
-
                 if colorize {
-                    write!(writer, "{}", s.color(color))
+                    write!(writer, "{}", s.color(pallet.select(record.level())))
                 } else {
                     write!(writer, "{}", s)
                 }
@@ -281,19 +275,11 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
-            Self::BgColorBranch(e, w, i, d, t, format) => {
+            Self::BgColorBranch(pallet, format) => {
                 let s = format.to_str(record, colorize)?;
 
-                let color = *match record.level() {
-                    Level::Error => e,
-                    Level::Warn => w,
-                    Level::Info => i,
-                    Level::Debug => d,
-                    Level::Trace => t,
-                };
-
                 if colorize {
-                    write!(writer, "{}", s.on_color(color))
+                    write!(writer, "{}", s.on_color(pallet.select(record.level())))
                 } else {
                     write!(writer, "{}", s)
                 }
