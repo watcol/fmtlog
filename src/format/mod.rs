@@ -1,12 +1,10 @@
 mod color;
-mod style;
 
 use colored::Colorize;
-use log::Record;
+use log::{Level, Record};
 use std::io;
 
 use color::Color;
-pub use style::Style;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -67,14 +65,19 @@ impl Format {
         &self,
         writer: &mut W,
         record: &Record,
-        style: &mut Style,
         colorize: bool,
     ) -> io::Result<()> {
         for elem in self.0.iter() {
-            elem.write(writer, record, style, colorize)?;
+            elem.write(writer, record, colorize)?;
         }
 
         Ok(())
+    }
+
+    fn to_str(&self, record: &Record, colorize: bool) -> io::Result<String> {
+        let mut buf: Vec<u8> = Vec::new();
+        self.write(&mut buf, record, colorize)?;
+        Ok(String::from_utf8(buf).unwrap())
     }
 }
 
@@ -89,37 +92,12 @@ impl Element {
         &self,
         writer: &mut W,
         record: &Record,
-        style: &mut Style,
         colorize: bool,
     ) -> io::Result<()> {
-        let s = match self {
-            Self::Const(s) => s.clone(),
-            Self::Special(spec) => spec.to_str(record, style),
-        };
-
-        if !colorize {
-            return write!(writer, "{}", s);
+        match self {
+            Self::Const(s) => write!(writer, "{}", s),
+            Self::Special(spec) => spec.write(writer, record, colorize),
         }
-
-        let mut s = colored::ColoredString::from(s.as_ref());
-
-        if let Some(c) = style.fg {
-            s = s.color(c);
-        }
-
-        if let Some(c) = style.bg {
-            s = s.on_color(c);
-        }
-
-        if style.bold {
-            s = s.bold();
-        }
-
-        if style.underline {
-            s = s.underline();
-        }
-
-        write!(writer, "{}", s)
     }
 }
 
@@ -127,19 +105,15 @@ impl Element {
 enum Special {
     Percent,
     Close,
-    Comma,
-    Branch(Format, Format, Format, Format, Format),
     Message,
     LogLevelLower,
     LogLevelUpper,
-    Color(Color),
-    NoColor,
-    OnColor(Color),
-    NoOnColor,
-    Bold,
-    NoBold,
-    Underline,
-    NoUnderline,
+    FgColor(Color, Format),
+    FgColorBranch(Color, Color, Color, Color, Color, Format),
+    BgColor(Color, Format),
+    BgColorBranch(Color, Color, Color, Color, Color, Format),
+    Bold(Format),
+    Underline(Format),
 }
 
 impl Special {
@@ -151,119 +125,176 @@ impl Special {
 
         match kind {
             '%' => Ok(Self::Percent),
-            ')' => Ok(Self::Close),
-            ',' => Ok(Self::Comma),
-            '(' => {
-                let e = Format::parse_until(s, ',')?;
-                let w = Format::parse_until(s, ',')?;
-                let i = Format::parse_until(s, ',')?;
-                let d = Format::parse_until(s, ',')?;
-                let t = Format::parse_until(s, ')')?;
-
-                Ok(Self::Branch(e, w, i, d, t))
-            }
+            '}' => Ok(Self::Close),
             'M' => Ok(Self::Message),
             'l' => Ok(Self::LogLevelLower),
             'L' => Ok(Self::LogLevelUpper),
-            'C' => {
-                use std::str::FromStr;
-
+            'f' => {
                 if s.next() != Some('(') {
                     return Err(String::from("Missing color specifier."));
                 }
 
-                let mut color = String::new();
-                loop {
-                    match s.next() {
-                        Some(')') => break,
-                        Some(c) => color.push(c),
-                        None => return Err(String::from("Unnexpected end.")),
-                    }
+                let color = Color::parse_until(s, ')')?;
+
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
                 }
 
-                Ok(Self::Color(Color::from_str(&color)?))
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::FgColor(color, format))
             }
-            'c' => Ok(Self::NoColor),
+            'F' => {
+                if s.next() != Some('(') {
+                    return Err(String::from("Missing color specifier."));
+                }
+
+                let e = Color::parse_until(s, ',')?;
+                let w = Color::parse_until(s, ',')?;
+                let i = Color::parse_until(s, ',')?;
+                let d = Color::parse_until(s, ',')?;
+                let t = Color::parse_until(s, ')')?;
+
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::FgColorBranch(e, w, i, d, t, format))
+            }
+            'b' => {
+                if s.next() != Some('(') {
+                    return Err(String::from("Missing color specifier."));
+                }
+
+                let color = Color::parse_until(s, ')')?;
+
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::BgColor(color, format))
+            }
+            'B' => {
+                if s.next() != Some('(') {
+                    return Err(String::from("Missing color specifier."));
+                }
+
+                let e = Color::parse_until(s, ',')?;
+                let w = Color::parse_until(s, ',')?;
+                let i = Color::parse_until(s, ',')?;
+                let d = Color::parse_until(s, ',')?;
+                let t = Color::parse_until(s, ')')?;
+
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::BgColorBranch(e, w, i, d, t, format))
+            }
             'O' => {
-                use std::str::FromStr;
-
-                if s.next() != Some('(') {
-                    return Err(String::from("Missing color specifier."));
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
                 }
 
-                let mut color = String::new();
-                loop {
-                    match s.next() {
-                        Some(')') => break,
-                        Some(c) => color.push(c),
-                        None => return Err(String::from("Unnexpected end.")),
-                    }
-                }
+                let format = Format::parse_until(s, '}')?;
 
-                Ok(Self::OnColor(Color::from_str(&color)?))
+                Ok(Self::Bold(format))
             }
-            'o' => Ok(Self::NoOnColor),
-            'B' => Ok(Self::Bold),
-            'b' => Ok(Self::NoBold),
-            'U' => Ok(Self::Underline),
-            'u' => Ok(Self::NoUnderline),
+            'U' => {
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::Underline(format))
+            }
             _ => Err(String::from("Invalid specifier.")),
         }
     }
 
-    fn to_str(&self, record: &Record, style: &mut Style) -> String {
+    fn write<W: io::Write>(&self, writer: &mut W, record: &Record, colorize: bool) -> io::Result<()> {
         match self {
-            Self::Percent => String::from("%"),
-            Self::Close => String::from(")"),
-            Self::Comma => String::from(","),
-            Self::Branch(e, w, i, d, t) => {
-                use log::Level;
-                let mut buf: Vec<u8> = Vec::new();
-                match record.level() {
-                    Level::Error => e.write(&mut buf, record, style, false),
-                    Level::Warn => w.write(&mut buf, record, style, false),
-                    Level::Info => i.write(&mut buf, record, style, false),
-                    Level::Debug => d.write(&mut buf, record, style, false),
-                    Level::Trace => t.write(&mut buf, record, style, false),
-                }
-                .expect("Failed to write");
+            Self::Percent => write!(writer, "%"),
+            Self::Close => write!(writer, "}}"),
+            Self::Message => write!(writer, "{}", record.args()),
+            Self::LogLevelUpper => write!(writer, "{}", record.level()),
+            Self::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),
+            Self::FgColor(color, format) => {
+                let s = format.to_str(record, colorize)?;
 
-                String::from_utf8(buf).unwrap()
+                if colorize  {
+                    write!(writer, "{}", s.color(*color))
+                } else {
+                    write!(writer, "{}", s)
+                }
             }
-            Self::Message => record.args().to_string(),
-            Self::LogLevelLower => record.level().to_string().to_lowercase(),
-            Self::LogLevelUpper => record.level().to_string(),
-            Self::Color(c) => {
-                style.fg = Some(*c);
-                String::new()
+            Self::FgColorBranch(e, w, i, d, t, format) => {
+                let s = format.to_str(record, colorize)?;
+
+                let color = *match record.level() {
+                    Level::Error => e,
+                    Level::Warn => w,
+                    Level::Info => i,
+                    Level::Debug => d,
+                    Level::Trace => t,
+                };
+
+                if colorize {
+                    write!(writer, "{}", s.color(color))
+                } else {
+                    write!(writer, "{}", s)
+                }
             }
-            Self::NoColor => {
-                style.fg = None;
-                String::new()
+            Self::BgColor(color, format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize  {
+                    write!(writer, "{}", s.on_color(*color))
+                } else {
+                    write!(writer, "{}", s)
+                }
             }
-            Self::OnColor(c) => {
-                style.bg = Some(*c);
-                String::new()
+            Self::BgColorBranch(e, w, i, d, t, format) => {
+                let s = format.to_str(record, colorize)?;
+
+                let color = *match record.level() {
+                    Level::Error => e,
+                    Level::Warn => w,
+                    Level::Info => i,
+                    Level::Debug => d,
+                    Level::Trace => t,
+                };
+
+                if colorize {
+                    write!(writer, "{}", s.on_color(color))
+                } else {
+                    write!(writer, "{}", s)
+                }
             }
-            Self::NoOnColor => {
-                style.bg = None;
-                String::new()
+            Self::Bold(format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize  {
+                    write!(writer, "{}", s.bold())
+                } else {
+                    write!(writer, "{}", s)
+                }
             }
-            Self::Bold => {
-                style.bold = true;
-                String::new()
-            }
-            Self::NoBold => {
-                style.bold = false;
-                String::new()
-            }
-            Self::Underline => {
-                style.underline = true;
-                String::new()
-            }
-            Self::NoUnderline => {
-                style.underline = false;
-                String::new()
+            Self::Underline(format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize  {
+                    write!(writer, "{}", s.underline())
+                } else {
+                    write!(writer, "{}", s)
+                }
             }
         }
     }

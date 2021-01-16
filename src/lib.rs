@@ -44,21 +44,17 @@
 //!
 //! | Spec. | Example | Description |
 //! |-------|---------|-------------|
-//! | `%%` | `%` | Literal `%`. |
-//! | `%,` | `%` | Literal `,` (use in branching). |
-//! | `%)` | `%` | Literal `)`. (use in branching.) |
-//! | `%(<error>,<warn>,<info>,<debug>,<trace>)` | `%(%C(red),%C(yellow),%C(green),%C(cyan),%C(yellow))` | Branching by the log level. |
+//! | `%%` | | Literal `%`. |
+//! | `%}` | | Literal `}`. (use in `{}`.) |
 //! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
-//! | `%C(<color>)` | `%C(green)` | Set the foreground color. |
-//! | `%c` | | Reset the foreground color. |
-//! | `%O(<color>)` | `%O(green)` | Set the background color. |
-//! | `%o` | | Reset the background color. |
-//! | `%B` | | Set the character bold. |
-//! | `%b` | | Unset the bold character. |
-//! | `%U` | | Enable underline. |
-//! | `%u` | | Disable underline. |
+//! | `%f(<color>){...}` | | Set the foreground color. |
+//! | `%F(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the foreground color. (Branch by the log level.) |
+//! | `%b(<color>){...}` | | Set the background color. |
+//! | `%B(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the background color. (Branch by the log level.) |
+//! | `%O{...}` | | Bold the text. |
+//! | `%U{...}` | | Underline the text. |
 //!
 //! ### Supported Color
 //! All supported color used by `%C` and `%O` is here.
@@ -90,7 +86,7 @@ mod stream;
 
 pub use config::*;
 
-use format::{Format, Style};
+use format::Format;
 use stream::Stream;
 
 use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
@@ -100,7 +96,6 @@ use thread_local::ThreadLocal;
 /// The body of fmtlog.
 pub struct Logger {
     colorize: bool,
-    style: ThreadLocal<RefCell<Style>>,
     format: Format,
     level: log::LevelFilter,
     writer: ThreadLocal<RefCell<Stream>>,
@@ -113,12 +108,8 @@ impl Logger {
         writer
             .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
 
-        let style = ThreadLocal::new();
-        style.get_or(|| RefCell::new(Style::default()));
-
         Logger {
             colorize: config.colorize.colorize(&config.output),
-            style,
             format: Format::new(config.format).expect("Invalid Format."),
             level: config.level.into(),
             writer,
@@ -153,10 +144,9 @@ impl Log for Logger {
 
     fn log(&self, record: &Record) {
         let mut writer = self.writer.get().unwrap().borrow_mut();
-        let mut style = self.style.get().unwrap().borrow_mut();
 
         self.format
-            .write(&mut *writer, record, &mut *style, self.colorize)
+            .write(&mut *writer, record, self.colorize)
             .expect("Failed to write.");
     }
 
