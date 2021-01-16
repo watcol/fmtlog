@@ -129,75 +129,95 @@ impl Special {
             'M' => Ok(Self::Message),
             'l' => Ok(Self::LogLevelLower),
             'L' => Ok(Self::LogLevelUpper),
-            'f' => {
-                if s.next() != Some('(') {
-                    return Err(String::from("Missing color specifier."));
-                }
-
-                let color = Color::parse_until(s, ')')?;
-
-                if s.next() != Some('{') {
-                    return Err(String::from("Missing the body."));
-                }
-
-                let format = Format::parse_until(s, '}')?;
-
-                Ok(Self::FgColor(color, format))
-            }
             'F' => {
+                use std::str::FromStr;
+
                 if s.next() != Some('(') {
                     return Err(String::from("Missing color specifier."));
                 }
 
-                let e = Color::parse_until(s, ',')?;
-                let w = Color::parse_until(s, ',')?;
-                let i = Color::parse_until(s, ',')?;
-                let d = Color::parse_until(s, ',')?;
-                let t = Color::parse_until(s, ')')?;
+                let mut color = String::new();
+                let branch = loop {
+                    match s.next() {
+                    Some(')') => break false,
+                    Some(',') => break true,
+                    Some(c) => color.push(c),
+                    None => return Err(String::from("Unnexpected end.")),
+                    }
+                };
 
-                if s.next() != Some('{') {
-                    return Err(String::from("Missing the body."));
+                let color = Color::from_str(&color)?;
+
+                if branch {
+                    let error = color;
+                    let warn = Color::parse_until(s, ',')?;
+                    let info = Color::parse_until(s, ',')?;
+                    let debug = Color::parse_until(s, ',')?;
+                    let trace = Color::parse_until(s, ')')?;
+
+                    if s.next() != Some('{') {
+                        return Err(String::from("Missing the body."));
+                    }
+
+                    let format = Format::parse_until(s, '}')?;
+
+                    Ok(Self::FgColorBranch(error, warn, info, debug, trace, format))
+                } else {
+                    if s.next() != Some('{') {
+                        return Err(String::from("Missing the body."));
+                    }
+
+                    let format = Format::parse_until(s, '}')?;
+
+                    Ok(Self::FgColor(color, format))
                 }
 
-                let format = Format::parse_until(s, '}')?;
-
-                Ok(Self::FgColorBranch(e, w, i, d, t, format))
-            }
-            'b' => {
-                if s.next() != Some('(') {
-                    return Err(String::from("Missing color specifier."));
-                }
-
-                let color = Color::parse_until(s, ')')?;
-
-                if s.next() != Some('{') {
-                    return Err(String::from("Missing the body."));
-                }
-
-                let format = Format::parse_until(s, '}')?;
-
-                Ok(Self::BgColor(color, format))
             }
             'B' => {
+                use std::str::FromStr;
+
                 if s.next() != Some('(') {
                     return Err(String::from("Missing color specifier."));
                 }
 
-                let e = Color::parse_until(s, ',')?;
-                let w = Color::parse_until(s, ',')?;
-                let i = Color::parse_until(s, ',')?;
-                let d = Color::parse_until(s, ',')?;
-                let t = Color::parse_until(s, ')')?;
+                let mut color = String::new();
+                let branch = loop {
+                    match s.next() {
+                    Some(')') => break false,
+                    Some(',') => break true,
+                    Some(c) => color.push(c),
+                    None => return Err(String::from("Unnexpected end.")),
+                    }
+                };
 
-                if s.next() != Some('{') {
-                    return Err(String::from("Missing the body."));
+                let color = Color::from_str(&color)?;
+
+                if branch {
+                    let error = color;
+                    let warn = Color::parse_until(s, ',')?;
+                    let info = Color::parse_until(s, ',')?;
+                    let debug = Color::parse_until(s, ',')?;
+                    let trace = Color::parse_until(s, ')')?;
+
+                    if s.next() != Some('{') {
+                        return Err(String::from("Missing the body."));
+                    }
+
+                    let format = Format::parse_until(s, '}')?;
+
+                    Ok(Self::BgColorBranch(error, warn, info, debug, trace, format))
+                } else {
+                    if s.next() != Some('{') {
+                        return Err(String::from("Missing the body."));
+                    }
+
+                    let format = Format::parse_until(s, '}')?;
+
+                    Ok(Self::BgColor(color, format))
                 }
 
-                let format = Format::parse_until(s, '}')?;
-
-                Ok(Self::BgColorBranch(e, w, i, d, t, format))
             }
-            'O' => {
+            'b' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
                 }
@@ -206,7 +226,7 @@ impl Special {
 
                 Ok(Self::Bold(format))
             }
-            'U' => {
+            'u' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
                 }

@@ -49,12 +49,12 @@
 //! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
-//! | `%f(<color>){...}` | | Set the foreground color. |
+//! | `%F(<color>){...}` | | Set the foreground color. |
 //! | `%F(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the foreground color. (Branch by the log level.) |
-//! | `%b(<color>){...}` | | Set the background color. |
+//! | `%B(<color>){...}` | | Set the background color. |
 //! | `%B(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the background color. (Branch by the log level.) |
-//! | `%O{...}` | | Bold the text. |
-//! | `%U{...}` | | Underline the text. |
+//! | `%b{...}` | | Bold the text. |
+//! | `%u{...}` | | Underline the text. |
 //!
 //! ### Supported Color
 //! All supported color used by `%C` and `%O` is here.
