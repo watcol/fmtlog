@@ -1,8 +1,8 @@
 mod color;
 mod pallet;
 
-use colored::Colorize;
 use chrono::{Local, Utc};
+use colored::Colorize;
 use log::Record;
 use std::io;
 
@@ -338,9 +338,9 @@ impl Special {
             Self::SourceFileWithLine => match record.file() {
                 Some(s) => match record.line() {
                     Some(l) => write!(writer, "{}:{}", s, l),
-                    None => write!(writer, "{}", s)
+                    None => write!(writer, "{}", s),
                 },
-                None => Ok(())
+                None => Ok(()),
             },
             Self::Message => write!(writer, "{}", record.args()),
             Self::LogLevelUpper => write!(writer, "{}", record.level()),
