@@ -115,7 +115,11 @@ enum Special {
     BgColor(Color, Format),
     BgColorBranch(Pallet, Format),
     Bold(Format),
+    Dimmed(Format),
+    Italic(Format),
+    Reversed(Format),
     Underline(Format),
+    StrikeThrough(Format),
 }
 
 impl Special {
@@ -244,6 +248,33 @@ impl Special {
 
                 Ok(Self::Bold(format))
             }
+            'd' => {
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::Dimmed(format))
+            }
+            'i' => {
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::Italic(format))
+            }
+            'r' => {
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::Reversed(format))
+            }
             'u' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -252,6 +283,15 @@ impl Special {
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::Underline(format))
+            }
+            's' => {
+                if s.next() != Some('{') {
+                    return Err(String::from("Missing the body."));
+                }
+
+                let format = Format::parse_until(s, '}')?;
+
+                Ok(Self::StrikeThrough(format))
             }
             _ => Err(String::from("Invalid specifier.")),
         }
@@ -314,11 +354,47 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            Self::Dimmed(format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize {
+                    write!(writer, "{}", s.dimmed())
+                } else {
+                    write!(writer, "{}", s)
+                }
+            }
+            Self::Italic(format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize {
+                    write!(writer, "{}", s.italic())
+                } else {
+                    write!(writer, "{}", s)
+                }
+            }
+            Self::Reversed(format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize {
+                    write!(writer, "{}", s.reversed())
+                } else {
+                    write!(writer, "{}", s)
+                }
+            }
             Self::Underline(format) => {
                 let s = format.to_str(record, colorize)?;
 
                 if colorize {
                     write!(writer, "{}", s.underline())
+                } else {
+                    write!(writer, "{}", s)
+                }
+            }
+            Self::StrikeThrough(format) => {
+                let s = format.to_str(record, colorize)?;
+
+                if colorize {
+                    write!(writer, "{}", s.strikethrough())
                 } else {
                     write!(writer, "{}", s)
                 }

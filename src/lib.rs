@@ -54,7 +54,11 @@
 //! | `%B(<color>){...}` | | Set the background color. |
 //! | `%B(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the background color. (Branch by the log level.) |
 //! | `%b{...}` | | Bold the text. |
+//! | `%d{...}` | | Dim the text color. |
+//! | `%i{...}` | | Print the text in italics. |
+//! | `%r{...}` | | Reverse the foreground and background color. |
 //! | `%u{...}` | | Underline the text. |
+//! | `%s{...}` | | Strikethrough the text. |
 //!
 //! ### Supported Color
 //! All supported color used by `%C` and `%O` is here.
