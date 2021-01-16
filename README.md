@@ -11,7 +11,7 @@ A simple configurable logger with format specification.
 - [x] Format Specification
 - [ ] Module-level Logging
 - [ ] Timestamp Support
-- [ ] Colorized Log
+- [x] Colorized Log
 - [x] Logging to the File
 
 ## Documents
