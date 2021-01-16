@@ -141,10 +141,10 @@ impl Special {
                 let mut color = String::new();
                 let branch = loop {
                     match s.next() {
-                    Some(')') => break false,
-                    Some(',') => break true,
-                    Some(c) => color.push(c),
-                    None => return Err(String::from("Unnexpected end.")),
+                        Some(')') => break false,
+                        Some(',') => break true,
+                        Some(c) => color.push(c),
+                        None => return Err(String::from("Unnexpected end.")),
                     }
                 };
 
@@ -163,7 +163,16 @@ impl Special {
 
                     let format = Format::parse_until(s, '}')?;
 
-                    Ok(Self::FgColorBranch(Pallet {error, warn, info, debug, trace}, format))
+                    Ok(Self::FgColorBranch(
+                        Pallet {
+                            error,
+                            warn,
+                            info,
+                            debug,
+                            trace,
+                        },
+                        format,
+                    ))
                 } else {
                     if s.next() != Some('{') {
                         return Err(String::from("Missing the body."));
@@ -173,7 +182,6 @@ impl Special {
 
                     Ok(Self::FgColor(color, format))
                 }
-
             }
             'B' => {
                 use std::str::FromStr;
@@ -185,10 +193,10 @@ impl Special {
                 let mut color = String::new();
                 let branch = loop {
                     match s.next() {
-                    Some(')') => break false,
-                    Some(',') => break true,
-                    Some(c) => color.push(c),
-                    None => return Err(String::from("Unnexpected end.")),
+                        Some(')') => break false,
+                        Some(',') => break true,
+                        Some(c) => color.push(c),
+                        None => return Err(String::from("Unnexpected end.")),
                     }
                 };
 
@@ -207,7 +215,16 @@ impl Special {
 
                     let format = Format::parse_until(s, '}')?;
 
-                    Ok(Self::BgColorBranch(Pallet {error, warn, info, debug, trace}, format))
+                    Ok(Self::BgColorBranch(
+                        Pallet {
+                            error,
+                            warn,
+                            info,
+                            debug,
+                            trace,
+                        },
+                        format,
+                    ))
                 } else {
                     if s.next() != Some('{') {
                         return Err(String::from("Missing the body."));
@@ -217,7 +234,6 @@ impl Special {
 
                     Ok(Self::BgColor(color, format))
                 }
-
             }
             'b' => {
                 if s.next() != Some('{') {
@@ -241,7 +257,12 @@ impl Special {
         }
     }
 
-    fn write<W: io::Write>(&self, writer: &mut W, record: &Record, colorize: bool) -> io::Result<()> {
+    fn write<W: io::Write>(
+        &self,
+        writer: &mut W,
+        record: &Record,
+        colorize: bool,
+    ) -> io::Result<()> {
         match self {
             Self::Percent => write!(writer, "%"),
             Self::Close => write!(writer, "}}"),
@@ -251,7 +272,7 @@ impl Special {
             Self::FgColor(color, format) => {
                 let s = format.to_str(record, colorize)?;
 
-                if colorize  {
+                if colorize {
                     write!(writer, "{}", s.color(*color))
                 } else {
                     write!(writer, "{}", s)
@@ -269,7 +290,7 @@ impl Special {
             Self::BgColor(color, format) => {
                 let s = format.to_str(record, colorize)?;
 
-                if colorize  {
+                if colorize {
                     write!(writer, "{}", s.on_color(*color))
                 } else {
                     write!(writer, "{}", s)
@@ -287,7 +308,7 @@ impl Special {
             Self::Bold(format) => {
                 let s = format.to_str(record, colorize)?;
 
-                if colorize  {
+                if colorize {
                     write!(writer, "{}", s.bold())
                 } else {
                     write!(writer, "{}", s)
@@ -296,7 +317,7 @@ impl Special {
             Self::Underline(format) => {
                 let s = format.to_str(record, colorize)?;
 
-                if colorize  {
+                if colorize {
                     write!(writer, "{}", s.underline())
                 } else {
                     write!(writer, "{}", s)
