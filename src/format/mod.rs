@@ -108,6 +108,9 @@ impl Element {
 enum Special {
     Percent,
     Close,
+    Name,
+    SourceFile,
+    SourceFileWithLine,
     Message,
     LogLevelLower,
     LogLevelUpper,
@@ -135,6 +138,9 @@ impl Special {
         match kind {
             '%' => Ok(Self::Percent),
             '}' => Ok(Self::Close),
+            'N' => Ok(Self::Name),
+            'f' => Ok(Self::SourceFile),
+            'S' => Ok(Self::SourceFileWithLine),
             'M' => Ok(Self::Message),
             'l' => Ok(Self::LogLevelLower),
             'L' => Ok(Self::LogLevelUpper),
@@ -327,6 +333,15 @@ impl Special {
         match self {
             Self::Percent => write!(writer, "%"),
             Self::Close => write!(writer, "}}"),
+            Self::Name => write!(writer, "{}", record.target()),
+            Self::SourceFile => write!(writer, "{}", record.file().unwrap_or_default()),
+            Self::SourceFileWithLine => match record.file() {
+                Some(s) => match record.line() {
+                    Some(l) => write!(writer, "{}:{}", s, l),
+                    None => write!(writer, "{}", s)
+                },
+                None => Ok(())
+            },
             Self::Message => write!(writer, "{}", record.args()),
             Self::LogLevelUpper => write!(writer, "{}", record.level()),
             Self::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),

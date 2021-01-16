@@ -46,6 +46,9 @@
 //! |-------|---------|-------------|
 //! | `%%` | | Literal `%`. |
 //! | `%}` | | Literal `}`. (use in `{}`.) |
+//! | `%N` | `hyper` | The target of the log. |
+//! | `%f` | `main.rs` | The file that the log defined. |
+//! | `%S` | `main.rs:15` | The file and line that the log defined. |
 //! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
