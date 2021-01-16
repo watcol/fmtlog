@@ -10,7 +10,7 @@ A simple configurable logger with format specification.
 ## Features
 - [x] Format Specification
 - [ ] Module-level Logging
-- [ ] Timestamp Support
+- [x] Timestamp Support
 - [x] Colorized Log
 - [x] Logging to the File
 

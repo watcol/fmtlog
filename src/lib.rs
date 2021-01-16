@@ -49,6 +49,8 @@
 //! | `%M` | `An error has occured.` | The log message. |
 //! | `%l` | `info` | The log level. (lowercase) |
 //! | `%L` | `INFO` | The log level. (uppercase) |
+//! | `%T(<format>)` | `%T(%D %T)` -> `01/01/21 12:00:00` | The local time. (see [chrono's format specification](https://docs.rs/chrono/0.4/chrono/format/strftime)). |
+//! | `%U(<format>)` | `%T(%D %T)` -> `01/01/21 12:00:00` | The UTC time. (see [chrono's format specification](https://docs.rs/chrono/0.4/chrono/format/strftime)). |
 //! | `%F(<color>){...}` | | Set the foreground color. |
 //! | `%F(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the foreground color. (Branch by the log level.) |
 //! | `%B(<color>){...}` | | Set the background color. |

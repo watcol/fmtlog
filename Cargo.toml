@@ -21,6 +21,7 @@ include = [
 log = { version = "0.4.11", features = ["std"] }
 thread_local = "1.1"
 colored = "2.0"
+chrono = "0.4"
 
 [package.metadata.docs.rs]
 all-features = true

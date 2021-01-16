@@ -2,6 +2,7 @@ mod color;
 mod pallet;
 
 use colored::Colorize;
+use chrono::{Local, Utc};
 use log::Record;
 use std::io;
 
@@ -110,6 +111,8 @@ enum Special {
     Message,
     LogLevelLower,
     LogLevelUpper,
+    Time(String),
+    UtcTime(String),
     FgColor(Color, Format),
     FgColorBranch(Pallet, Format),
     BgColor(Color, Format),
@@ -135,6 +138,24 @@ impl Special {
             'M' => Ok(Self::Message),
             'l' => Ok(Self::LogLevelLower),
             'L' => Ok(Self::LogLevelUpper),
+            'T' => {
+                if s.next() != Some('(') {
+                    return Err(String::from("Missing time format."));
+                }
+
+                let format = s.take_while(|c| *c != ')').collect();
+
+                Ok(Self::Time(format))
+            }
+            'U' => {
+                if s.next() != Some('(') {
+                    return Err(String::from("Missing time format."));
+                }
+
+                let format = s.take_while(|c| *c != ')').collect();
+
+                Ok(Self::UtcTime(format))
+            }
             'F' => {
                 use std::str::FromStr;
 
@@ -309,6 +330,8 @@ impl Special {
             Self::Message => write!(writer, "{}", record.args()),
             Self::LogLevelUpper => write!(writer, "{}", record.level()),
             Self::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),
+            Self::Time(format) => write!(writer, "{}", Local::now().format(format)),
+            Self::UtcTime(format) => write!(writer, "{}", Utc::now().format(format)),
             Self::FgColor(color, format) => {
                 let s = format.to_str(record, colorize)?;
 
