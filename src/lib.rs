@@ -89,6 +89,8 @@ extern crate colored;
 extern crate log;
 extern crate thread_local;
 
+pub mod formats;
+
 mod config;
 mod format;
 mod module;
