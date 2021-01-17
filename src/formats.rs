@@ -214,6 +214,29 @@
 //! <font color="cyan">2021-01-01T12:00:00+09:00 - DEBUG - Example Message</font>
 //! <font color="blue">2021-01-01T12:00:00+09:00 - TRACE - Example Message</font>
 //! </pre>
+//!
+//! # FLEXI_LOGGER
+//! The default format of [`flexi_logger`](https://docs.rs/flexi_logger) with timestamps.
+//!
+//! <pre>
+//! <font color="red"><b>ERROR</b></font> [fmtlog::module] <font color="red"><b>Example Message</b></font>
+//! <font color="yellow"><b>WARN</b></font> [fmtlog::module] <font color="yellow"><b>Example Message</b></font>
+//! <font color="white"><b>INFO</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
+//! <font color="white"><b>DEBUG</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
+//! <font color="black"><b>TRACE</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
+//! </pre>
+//!
+//! # FLEXI_LOGGER2
+//! The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
+//!
+//! <pre>
+//! <font color="red"><b>2021-01-01 12:00:00:00.000000 +09:00 ERROR</b></font> [fmtlog::module] src/main.rs:10: <font color="red"><b>Example Message</b></font>
+//! <font color="yellow"><b>2021-01-01 12:00:00:00.000000 +09:00 WARN</b></font> [fmtlog::module] src/main.rs:20: <font color="yellow"><b>Example Message</b></font>
+//! <font color="white"><b>2021-01-01 12:00:00:00.000000 +09:00 INFO</b></font> [fmtlog::module] src/main.rs:30: <font color="white"><b>Example Message</b></font>
+//! <font color="white"><b>2021-01-01 12:00:00:00.000000 +09:00 DEBUG</b></font> [fmtlog::module] src/main.rs:40: <font color="white"><b>Example Message</b></font>
+//! <font color="black"><b>2021-01-01 12:00:00:00.000000 +09:00 TRACE</b></font> [fmtlog::module] src/main.rs:50: <font color="white"><b>Example Message</b></font>
+//! </pre>
+//!
 
 pub const SIMPLE1: &str = "%F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
 pub const SIMPLE1_LOWER: &str = "%F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
@@ -241,3 +264,5 @@ pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
 pub const PRETTY_ENV_LOGGER: &str = " %F(red,yellow,green,blue,purple){%L} %b{%N} > %M\n";
 pub const STDERRLOG: &str = "%F(red,purple,yellow,cyan,blue){%L - %M}\n";
 pub const STDERRLOG2: &str = "%F(red,purple,yellow,cyan,blue){%T(%Y-%m-%dT%T%:z) - %L - %M}\n";
+pub const FLEXI_LOGGER: &str = "%F(red,yellow,white,white,black){%b{%L}} [%m] %F(red,yellow,white,white,black){%b{%M}}\n";
+pub const FLEXI_LOGGER2: &str = "%F(red,yellow,white,white,black){%b{%T(%Y-%m-%d %T%.6f %:z) %L}} [%m] %S: %F(red,yellow,white,white,black){%b{%M}}\n";
