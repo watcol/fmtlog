@@ -88,22 +88,22 @@
 //! A detailed version of [`SIMPLE2`](#simple2).
 //!
 //! <pre>
-//! [<font color="red"><b>ERROR</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="yellow"><b>WARN</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="green"><b>INFO</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="cyan"><b>DEBUG</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="blue"><b>TRACE</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
+//! [<font color="red"><b>ERROR</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="yellow"><b>WARN</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="green"><b>INFO</b></font>] Example Message (at  Jan 01 12:00:00 in fmtlog)
+//! [<font color="cyan"><b>DEBUG</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="blue"><b>TRACE</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 //! </pre>
 //!
 //! ## DETAIL2_LOWER
 //! A detailed version of [`SIMPLE2_LOWER`](#simple2-lower).
 //!
 //! <pre>
-//! [<font color="red"><b>error</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="yellow"><b>warn</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="green"><b>info</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="cyan"><b>debug</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
-//! [<font color="blue"><b>trace</b></font>] Example Message (at 2021/01/01 12:00:00 in fmtlog)
+//! [<font color="red"><b>error</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="yellow"><b>warn</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="green"><b>info</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="cyan"><b>debug</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
+//! [<font color="blue"><b>trace</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 //! </pre>
 //!
 //! ## DEBUG1
@@ -157,24 +157,16 @@ pub const SIMPLE1_LOWER: &str = "%F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
 pub const SIMPLE2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M\n";
 pub const SIMPLE2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M\n";
 
-
-pub const DETAIL1: &str =
-    "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
-pub const DETAIL1_LOWER: &str =
-    "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
+pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
+pub const DETAIL1_LOWER: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
 
 pub const DETAIL2: &str =
-    "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %T(%Y/%m/%d %T) in %N))\n";
+    "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
 pub const DETAIL2_LOWER: &str =
-    "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %T(%Y/%m/%d %T) in %N))\n";
+    "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %T(%b %d %T) in %N)\n";
 
+pub const DEBUG1: &str = "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
+pub const DEBUG1_LOWER: &str = "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
 
-pub const DEBUG1: &str =
-    "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
-pub const DEBUG1_LOWER: &str =
-    "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
-
-pub const DEBUG2: &str =
-    "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %S in %N))\n";
-pub const DEBUG2_LOWER: &str =
-    "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %S in %N))\n";
+pub const DEBUG2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %S in %N))\n";
+pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %S in %N))\n";
