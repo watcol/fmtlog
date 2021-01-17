@@ -6,7 +6,7 @@
 //! # Usage
 //! ```rust
 //! use fmtlog::Config;
-//! use fmtlog::formats::SIMPLE1; // the format to use.
+//! use fmtlog::formats::SIMPLE1; // A format to use.
 //!
 //! fmtlog::new(Config::new().format(SIMPLE1)).set().unwrap();
 //!
