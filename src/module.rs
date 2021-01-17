@@ -21,7 +21,7 @@ impl Modules {
         Self::default()
     }
 
-    fn append<T: Into<Module> + Clone >(self, module: T) -> Self {
+    fn append<T: Into<Module> + Clone>(self, module: T) -> Self {
         if self.0.iter().any(|m| m.is_parent(&module)) {
             return self;
         }

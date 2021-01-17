@@ -91,14 +91,14 @@ extern crate thread_local;
 
 mod config;
 mod format;
-mod stream;
 mod module;
+mod stream;
 
 pub use config::*;
 
 use format::Format;
-use stream::Stream;
 use module::Modules;
+use stream::Stream;
 
 use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
 use std::cell::RefCell;
