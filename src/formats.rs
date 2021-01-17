@@ -150,6 +150,70 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 //! </pre>
 //!
+//! ## ENV_LOGGER
+//! The default format of [`env_logger`](https://docs.rs/env_logger).
+//!
+//! <pre>
+//! <font color="black">[</font>2021-01-01T12:00:00Z <font color="red">ERROR</font> fmtlog<font color="black">]</font> Example Message
+//! <font color="black">[</font>2021-01-01T12:00:00Z <font color="yellow">WARN</font> fmtlog<font color="black">]</font> Example Message
+//! <font color="black">[</font>2021-01-01T12:00:00Z <font color="green">INFO</font> fmtlog<font color="black">]</font> Example Message
+//! <font color="black">[</font>2021-01-01T12:00:00Z <font color="blue">DEBUG</font> fmtlog<font color="black">]</font> Example Message
+//! <font color="black">[</font>2021-01-01T12:00:00Z <font color="cyan">TRACE</font> fmtlog<font color="black">]</font> Example Message
+//! </pre>
+//! ## SIMPLE_LOGGER
+//! The default format of [`simple_logger`](https://docs.rs/simple_logger).
+//!
+//! <pre>
+//! 2021-01-01 12:00:00 <font color="red">ERROR</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 <font color="yellow">WARN</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 <font color ="cyan">INFO</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 <font color="purple">DEBUG</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 TRACE [fmtlog] Example Message
+//! </pre>
+//!
+//! ## SIMPLELOG
+//! The default format of [`simplelog`](https://docs.rs/simplelog).
+//!
+//! ```text
+//! 12:00:00 [ERROR] Example Message
+//! 12:00:00 [WARN] Example Message
+//! 12:00:00 [INFO] Example Message
+//! 12:00:00 [DEBUG] Example Message
+//! 12:00:00 [TRACE] Example Message
+//! ```
+//!
+//! ## PRETTY_ENV_LOGGER
+//! The default format of [`pretty_env_logger`](https://docs.rs/pretty_env_logger).
+//!
+//! <pre>
+//!  <font color="red">ERROR</font> <b>fmtlog</b> > Example Message
+//!  <font color="yellow">WARN</font> <b>fmtlog</b> > Example Message
+//!  <font color="green">INFO</font> <b>fmtlog</b> > Example Message
+//!  <font color="blue">DEBUG</font> <b>fmtlog</b> > Example Message
+//!  <font color="purple">TRACE</font> <b>fmtlog</b> > Example Message
+//! </pre>
+//!
+//! # STDERRLOG
+//! The default format of [`stderrlog`](https://docs.rs/stderrlog).
+//!
+//! <pre>
+//! <font color="red">ERROR - Example Message</font>
+//! <font color="purple">WARN - Example Message</font>
+//! <font color="yellow">INFO - Example Message</font>
+//! <font color="cyan">DEBUG - Example Message</font>
+//! <font color="blue">TRACE - Example Message</font>
+//! </pre>
+//!
+//! # STDERRLOG2
+//! The default format of [`stderrlog`](https://docs.rs/stderrlog) with timestamps.
+//!
+//! <pre>
+//! <font color="red">2021-01-01T12:00:00+09:00 - ERROR - Example Message</font>
+//! <font color="purple">2021-01-01T12:00:00+09:00 - WARN - Example Message</font>
+//! <font color="yellow">2021-01-01T12:00:00+09:00 - INFO - Example Message</font>
+//! <font color="cyan">2021-01-01T12:00:00+09:00 - DEBUG - Example Message</font>
+//! <font color="blue">2021-01-01T12:00:00+09:00 - TRACE - Example Message</font>
+//! </pre>
 
 pub const SIMPLE1: &str = "%F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
 pub const SIMPLE1_LOWER: &str = "%F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
@@ -160,8 +224,7 @@ pub const SIMPLE2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M\n";
 pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
 pub const DETAIL1_LOWER: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
 
-pub const DETAIL2: &str =
-    "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
+pub const DETAIL2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
 pub const DETAIL2_LOWER: &str =
     "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %T(%b %d %T) in %N)\n";
 
@@ -170,3 +233,11 @@ pub const DEBUG1_LOWER: &str = "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%l}}
 
 pub const DEBUG2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %S in %N))\n";
 pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %S in %N))\n";
+
+pub const ENV_LOGGER: &str =
+    "%F(bright black){[}%T(%Y-%m-%dT%TZ) %F(red,yellow,green,blue,cyan){%L} %N%F(bright black){]} %M\n";
+pub const SIMPLE_LOGGER: &str = "%T(%Y-%m-%d %T) %F(red,yellow,cyan,purple,white){%L} [%N] %M\n";
+pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
+pub const PRETTY_ENV_LOGGER: &str = " %F(red,yellow,green,blue,purple){%L} %b{%N} > %M\n";
+pub const STDERRLOG: &str = "%F(red,purple,yellow,cyan,blue){%L - %M}\n";
+pub const STDERRLOG2: &str = "%F(red,purple,yellow,cyan,blue){%T(%Y-%m-%dT%T%:z) - %L - %M}\n";
