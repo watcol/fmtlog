@@ -1,4 +1,4 @@
-# [WIP] fmtlog
+# fmtlog
 [![crates.io](https://img.shields.io/crates/v/fmtlog)](https://crates.io/crates/fmtlog)
 [![docs.rs](https://docs.rs/fmtlog/badge.svg)](https://docs.rs/fmtlog)
 [![Downloads](https://img.shields.io/crates/d/fmtlog)](https://crates.io/crates/fmtlog)
@@ -15,7 +15,7 @@ A simple configurable logger with format specification.
 - [x] Logging to the File
 
 ## Documents
-API Documents are **NOT** available on [docs.rs](https://docs.rs/fmtlog) yet. Please wait.
+API Documents are available on [docs.rs](https://docs.rs/fmtlog).
 
 ## License
 This program is licensed under the MIT license.
