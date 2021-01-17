@@ -16,6 +16,7 @@ pub struct Config {
     pub(crate) colorize: Colorize,
     pub(crate) format: String,
     pub(crate) level: LevelFilter,
+    pub(crate) modules: Vec<String>,
     pub(crate) output: Output,
 }
 
@@ -25,6 +26,7 @@ impl Default for Config {
             colorize: Colorize::default(),
             format: default_format(),
             level: LevelFilter::Info,
+            modules: Vec::new(),
             output: Output::default(),
         }
     }
@@ -75,6 +77,37 @@ impl Config {
     /// ```
     pub fn level<T: Into<LevelFilter>>(mut self, level: T) -> Self {
         self.level = level.into();
+        self
+    }
+
+    /// Set modules that enable the logger.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::{Config, LevelFilter};
+    ///
+    /// assert_eq!(Config::new(), Config::new().level(LevelFilter::Info))
+    /// ```
+    pub fn modules<T: IntoIterator>(mut self, modules: T) -> Self
+    where
+        T::Item: Into<String>,
+    {
+        self.modules = modules.into_iter().map(|x| x.into()).collect();
+        self
+    }
+
+    /// Add a module that enables the logger.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::{Config, LevelFilter};
+    ///
+    /// assert_eq!(Config::new(), Config::new().level(LevelFilter::Info))
+    /// ```
+    pub fn module<T: Into<String>>(mut self, module: T) -> Self {
+        self.modules.push(module.into());
         self
     }
 

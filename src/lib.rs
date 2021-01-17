@@ -92,11 +92,13 @@ extern crate thread_local;
 mod config;
 mod format;
 mod stream;
+mod module;
 
 pub use config::*;
 
 use format::Format;
 use stream::Stream;
+use module::Modules;
 
 use log::{set_boxed_logger, set_max_level, Log, Metadata, Record, SetLoggerError};
 use std::cell::RefCell;
@@ -107,6 +109,7 @@ pub struct Logger {
     colorize: bool,
     format: Format,
     level: log::LevelFilter,
+    modules: Modules,
     writer: ThreadLocal<RefCell<Stream>>,
 }
 
@@ -121,6 +124,7 @@ impl Logger {
             colorize: config.colorize.colorize(&config.output),
             format: Format::new(config.format).expect("Invalid Format."),
             level: config.level.into(),
+            modules: Modules::from(config.modules),
             writer,
         }
     }
@@ -152,6 +156,16 @@ impl Log for Logger {
     }
 
     fn log(&self, record: &Record) {
+        if !self.enabled(record.metadata()) {
+            return;
+        }
+
+        if let Some(m) = record.module_path() {
+            if !self.modules.contains(&m) {
+                return;
+            }
+        }
+
         let mut writer = self.writer.get().unwrap().borrow_mut();
 
         self.format
