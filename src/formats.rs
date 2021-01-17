@@ -18,7 +18,8 @@
 //! ```
 //!
 //! # Collection
-//! ## SIMPLE1
+//! ## Original
+//! ### SIMPLE1
 //! A simplest format.
 //!
 //! <pre>
@@ -29,7 +30,7 @@
 //! <font color="blue"><b>TRACE</b></font>: Example Message
 //! </pre>
 //!
-//! ## SIMPLE1_LOWER
+//! ### SIMPLE1_LOWER
 //! A simplest format. (lowercase version)
 //!
 //! <pre>
@@ -40,7 +41,7 @@
 //! <font color="blue"><b>trace</b></font>: Example Message
 //! </pre>
 //!
-//! ## SIMPLE2
+//! ### SIMPLE2
 //! A simplest format. (bracket version)
 //!
 //! <pre>
@@ -51,7 +52,7 @@
 //! [<font color="blue"><b>TRACE</b></font>] Example Message
 //! </pre>
 //!
-//! ## SIMPLE2_LOWER
+//! ### SIMPLE2_LOWER
 //! A simplest format. (bracket lowercase version)
 //!
 //! <pre>
@@ -62,7 +63,7 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message
 //! </pre>
 //!
-//! ## DETAIL1
+//! ### DETAIL1
 //! A detailed version of [`SIMPLE1`](#simple1).
 //!
 //! <pre>
@@ -73,7 +74,7 @@
 //! [2021/01/01 12:00:00 fmtlog] <font color="blue"><b>TRACE</b></font>: Example Message
 //! </pre>
 //!
-//! ## DETAIL1_LOWER
+//! ### DETAIL1_LOWER
 //! A detailed version of [`SIMPLE1_LOWER`](#simple1-lower).
 //!
 //! <pre>
@@ -84,7 +85,7 @@
 //! [2021/01/01 12:00:00 fmtlog] <font color="blue"><b>trace</b></font>: Example Message
 //! </pre>
 //!
-//! ## DETAIL2
+//! ### DETAIL2
 //! A detailed version of [`SIMPLE2`](#simple2).
 //!
 //! <pre>
@@ -95,7 +96,7 @@
 //! [<font color="blue"><b>TRACE</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 //! </pre>
 //!
-//! ## DETAIL2_LOWER
+//! ### DETAIL2_LOWER
 //! A detailed version of [`SIMPLE2_LOWER`](#simple2-lower).
 //!
 //! <pre>
@@ -106,7 +107,7 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 //! </pre>
 //!
-//! ## DEBUG1
+//! ### DEBUG1
 //! A debug-specialized version of [`SIMPLE1`](#simple1).
 //!
 //! <pre>
@@ -117,7 +118,7 @@
 //! [fmtlog (src/main/rs:50)] <font color="blue"><b>TRACE</b></font>: Example Message
 //! </pre>
 //!
-//! ## DEBUG1_LOWER
+//! ### DEBUG1_LOWER
 //! A debug-specialized version of [`SIMPLE1_LOWER`](#simple1-lower).
 //!
 //! <pre>
@@ -128,7 +129,7 @@
 //! [fmtlog (src/main/rs:50)] <font color="blue"><b>trace</b></font>: Example Message
 //! </pre>
 //!
-//! ## DEBUG2
+//! ### DEBUG2
 //! A debug-specialized version of [`SIMPLE2`](#simple2).
 //!
 //! <pre>
@@ -139,7 +140,7 @@
 //! [<font color="blue"><b>TRACE</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 //! </pre>
 //!
-//! ## DEBUG2_LOWER
+//! ### DEBUG2_LOWER
 //! A debug-specialized version of [`SIMPLE2_LOWER`](#simple2-lower).
 //!
 //! <pre>
@@ -150,7 +151,8 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 //! </pre>
 //!
-//! ## ENV_LOGGER
+//! ## Inspired from other loggers.
+//! ### ENV_LOGGER
 //! The default format of [`env_logger`](https://docs.rs/env_logger).
 //!
 //! <pre>
@@ -160,29 +162,8 @@
 //! <font color="black">[</font>2021-01-01T12:00:00Z <font color="blue">DEBUG</font> fmtlog<font color="black">]</font> Example Message
 //! <font color="black">[</font>2021-01-01T12:00:00Z <font color="cyan">TRACE</font> fmtlog<font color="black">]</font> Example Message
 //! </pre>
-//! ## SIMPLE_LOGGER
-//! The default format of [`simple_logger`](https://docs.rs/simple_logger).
 //!
-//! <pre>
-//! 2021-01-01 12:00:00 <font color="red">ERROR</font> [fmtlog] Example Message
-//! 2021-01-01 12:00:00 <font color="yellow">WARN</font> [fmtlog] Example Message
-//! 2021-01-01 12:00:00 <font color ="cyan">INFO</font> [fmtlog] Example Message
-//! 2021-01-01 12:00:00 <font color="purple">DEBUG</font> [fmtlog] Example Message
-//! 2021-01-01 12:00:00 TRACE [fmtlog] Example Message
-//! </pre>
-//!
-//! ## SIMPLELOG
-//! The default format of [`simplelog`](https://docs.rs/simplelog).
-//!
-//! ```text
-//! 12:00:00 [ERROR] Example Message
-//! 12:00:00 [WARN] Example Message
-//! 12:00:00 [INFO] Example Message
-//! 12:00:00 [DEBUG] Example Message
-//! 12:00:00 [TRACE] Example Message
-//! ```
-//!
-//! ## PRETTY_ENV_LOGGER
+//! ### PRETTY_ENV_LOGGER
 //! The default format of [`pretty_env_logger`](https://docs.rs/pretty_env_logger).
 //!
 //! <pre>
@@ -193,29 +174,7 @@
 //!  <font color="purple">TRACE</font> <b>fmtlog</b> > Example Message
 //! </pre>
 //!
-//! # STDERRLOG
-//! The default format of [`stderrlog`](https://docs.rs/stderrlog).
-//!
-//! <pre>
-//! <font color="red">ERROR - Example Message</font>
-//! <font color="purple">WARN - Example Message</font>
-//! <font color="yellow">INFO - Example Message</font>
-//! <font color="cyan">DEBUG - Example Message</font>
-//! <font color="blue">TRACE - Example Message</font>
-//! </pre>
-//!
-//! # STDERRLOG2
-//! The default format of [`stderrlog`](https://docs.rs/stderrlog) with timestamps.
-//!
-//! <pre>
-//! <font color="red">2021-01-01T12:00:00+09:00 - ERROR - Example Message</font>
-//! <font color="purple">2021-01-01T12:00:00+09:00 - WARN - Example Message</font>
-//! <font color="yellow">2021-01-01T12:00:00+09:00 - INFO - Example Message</font>
-//! <font color="cyan">2021-01-01T12:00:00+09:00 - DEBUG - Example Message</font>
-//! <font color="blue">2021-01-01T12:00:00+09:00 - TRACE - Example Message</font>
-//! </pre>
-//!
-//! # FLEXI_LOGGER
+//! ### FLEXI_LOGGER
 //! The default format of [`flexi_logger`](https://docs.rs/flexi_logger) with timestamps.
 //!
 //! <pre>
@@ -226,7 +185,7 @@
 //! <font color="black"><b>TRACE</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
 //! </pre>
 //!
-//! # FLEXI_LOGGER2
+//! ### FLEXI_LOGGER2
 //! The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
 //!
 //! <pre>
@@ -235,6 +194,50 @@
 //! <font color="white"><b>2021-01-01 12:00:00:00.000000 +09:00 INFO</b></font> [fmtlog::module] src/main.rs:30: <font color="white"><b>Example Message</b></font>
 //! <font color="white"><b>2021-01-01 12:00:00:00.000000 +09:00 DEBUG</b></font> [fmtlog::module] src/main.rs:40: <font color="white"><b>Example Message</b></font>
 //! <font color="black"><b>2021-01-01 12:00:00:00.000000 +09:00 TRACE</b></font> [fmtlog::module] src/main.rs:50: <font color="white"><b>Example Message</b></font>
+//! </pre>
+//!
+//! ### SIMPLE_LOGGER
+//! The default format of [`simple_logger`](https://docs.rs/simple_logger).
+//!
+//! <pre>
+//! 2021-01-01 12:00:00 <font color="red">ERROR</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 <font color="yellow">WARN</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 <font color ="cyan">INFO</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 <font color="purple">DEBUG</font> [fmtlog] Example Message
+//! 2021-01-01 12:00:00 TRACE [fmtlog] Example Message
+//! </pre>
+//!
+//! ### SIMPLELOG
+//! The default format of [`simplelog`](https://docs.rs/simplelog).
+//!
+//! ```text
+//! 12:00:00 [ERROR] Example Message
+//! 12:00:00 [WARN] Example Message
+//! 12:00:00 [INFO] Example Message
+//! 12:00:00 [DEBUG] Example Message
+//! 12:00:00 [TRACE] Example Message
+//! ```
+//!
+//! ### STDERRLOG
+//! The default format of [`stderrlog`](https://docs.rs/stderrlog).
+//!
+//! <pre>
+//! <font color="red">ERROR - Example Message</font>
+//! <font color="purple">WARN - Example Message</font>
+//! <font color="yellow">INFO - Example Message</font>
+//! <font color="cyan">DEBUG - Example Message</font>
+//! <font color="blue">TRACE - Example Message</font>
+//! </pre>
+//!
+//! ### STDERRLOG2
+//! The default format of [`stderrlog`](https://docs.rs/stderrlog) with timestamps.
+//!
+//! <pre>
+//! <font color="red">2021-01-01T12:00:00+09:00 - ERROR - Example Message</font>
+//! <font color="purple">2021-01-01T12:00:00+09:00 - WARN - Example Message</font>
+//! <font color="yellow">2021-01-01T12:00:00+09:00 - INFO - Example Message</font>
+//! <font color="cyan">2021-01-01T12:00:00+09:00 - DEBUG - Example Message</font>
+//! <font color="blue">2021-01-01T12:00:00+09:00 - TRACE - Example Message</font>
 //! </pre>
 //!
 
@@ -259,10 +262,10 @@ pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at 
 
 pub const ENV_LOGGER: &str =
     "%F(bright black){[}%T(%Y-%m-%dT%TZ) %F(red,yellow,green,blue,cyan){%L} %N%F(bright black){]} %M\n";
-pub const SIMPLE_LOGGER: &str = "%T(%Y-%m-%d %T) %F(red,yellow,cyan,purple,white){%L} [%N] %M\n";
-pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
 pub const PRETTY_ENV_LOGGER: &str = " %F(red,yellow,green,blue,purple){%L} %b{%N} > %M\n";
-pub const STDERRLOG: &str = "%F(red,purple,yellow,cyan,blue){%L - %M}\n";
-pub const STDERRLOG2: &str = "%F(red,purple,yellow,cyan,blue){%T(%Y-%m-%dT%T%:z) - %L - %M}\n";
 pub const FLEXI_LOGGER: &str = "%F(red,yellow,white,white,black){%b{%L}} [%m] %F(red,yellow,white,white,black){%b{%M}}\n";
 pub const FLEXI_LOGGER2: &str = "%F(red,yellow,white,white,black){%b{%T(%Y-%m-%d %T%.6f %:z) %L}} [%m] %S: %F(red,yellow,white,white,black){%b{%M}}\n";
+pub const SIMPLE_LOGGER: &str = "%T(%Y-%m-%d %T) %F(red,yellow,cyan,purple,white){%L} [%N] %M\n";
+pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
+pub const STDERRLOG: &str = "%F(red,purple,yellow,cyan,blue){%L - %M}\n";
+pub const STDERRLOG2: &str = "%F(red,purple,yellow,cyan,blue){%T(%Y-%m-%dT%T%:z) - %L - %M}\n";
