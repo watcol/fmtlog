@@ -6,10 +6,6 @@ pub use colorize::Colorize;
 pub use log::LevelFilter;
 pub use output::Output;
 
-fn default_format() -> String {
-    String::from("%l: %M\n")
-}
-
 /// The logger settings.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Config {
@@ -24,7 +20,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             colorize: Colorize::default(),
-            format: default_format(),
+            format: String::from(crate::formats::DETAIL1),
             level: LevelFilter::Info,
             modules: Vec::new(),
             output: Output::default(),
