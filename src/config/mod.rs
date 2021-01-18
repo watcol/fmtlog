@@ -34,6 +34,20 @@ impl Config {
         Self::default()
     }
 
+    /// Colorize the log.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::Config;
+    ///
+    /// assert_ne!(Config::new(), Config::new().colorize(false));
+    /// ```
+    pub fn colorize<T: Into<Colorize>>(mut self, colorize: T) -> Self {
+        self.colorize = colorize.into();
+        self
+    }
+
     /// Set the format string.
     ///
     /// # Example
