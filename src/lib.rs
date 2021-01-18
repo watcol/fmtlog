@@ -108,22 +108,34 @@ use thread_local::ThreadLocal;
 
 /// The body of fmtlog.
 pub struct Logger {
-    colorize: bool,
     format: Format,
     level: log::LevelFilter,
     modules: Modules,
-    writer: ThreadLocal<RefCell<Stream>>,
+    writer: ThreadLocal<RefCell<Vec<(Stream, bool)>>>,
 }
 
 impl Logger {
     /// Create a new instance.
     pub fn new(config: Config) -> Logger {
         let writer = ThreadLocal::new();
-        writer
-            .get_or(|| RefCell::new(config.output.to_stream().expect("Failed to open the file.")));
+
+        let outputs = config.output;
+        let colorize = config.colorize;
+        writer.get_or(|| {
+            RefCell::new(
+                outputs
+                    .into_iter()
+                    .map(|o| {
+                        (
+                            o.to_stream().expect("Failed to open the file."),
+                            colorize.colorize(&o),
+                        )
+                    })
+                    .collect(),
+            )
+        });
 
         Logger {
-            colorize: config.colorize.colorize(&config.output),
             format: Format::new(config.format).expect("Invalid Format."),
             level: config.level.into(),
             modules: Modules::from(config.modules),
@@ -170,9 +182,11 @@ impl Log for Logger {
 
         let mut writer = self.writer.get().unwrap().borrow_mut();
 
-        self.format
-            .write(&mut *writer, record, self.colorize)
-            .expect("Failed to write.");
+        writer
+            .iter_mut()
+            .map(|w| self.format.write(&mut w.0, record, w.1))
+            .collect::<Result<Vec<_>, _>>()
+            .expect("Failed to write");
     }
 
     fn flush(&self) {
@@ -182,7 +196,9 @@ impl Log for Logger {
             Some(writer) => {
                 writer
                     .borrow_mut()
-                    .flush()
+                    .iter_mut()
+                    .map(|w| w.0.flush())
+                    .collect::<Result<Vec<_>, _>>()
                     .expect("Failed to flush the stream.");
             }
             None => {}

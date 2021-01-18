@@ -13,7 +13,7 @@ pub struct Config {
     pub(crate) format: String,
     pub(crate) level: LevelFilter,
     pub(crate) modules: Vec<String>,
-    pub(crate) output: Output,
+    pub(crate) output: Vec<Output>,
 }
 
 impl Default for Config {
@@ -23,7 +23,7 @@ impl Default for Config {
             format: String::from(crate::formats::DETAIL1),
             level: LevelFilter::Info,
             modules: Vec::new(),
-            output: Output::default(),
+            output: vec![Output::default()],
         }
     }
 }
@@ -32,20 +32,6 @@ impl Config {
     /// Create a new instance.
     pub fn new() -> Self {
         Self::default()
-    }
-
-    /// Colorize the log.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use fmtlog::Config;
-    ///
-    /// assert_ne!(Config::new(), Config::new().colorize(false));
-    /// ```
-    pub fn colorize<T: Into<Colorize>>(mut self, colorize: T) -> Self {
-        self.colorize = colorize.into();
-        self
     }
 
     /// Set the format string.
@@ -117,7 +103,40 @@ impl Config {
     /// assert_ne!(Config::new(), Config::new().output("log.txt"))
     /// ```
     pub fn output<T: Into<Output>>(mut self, output: T) -> Self {
-        self.output = output.into();
+        self.output = vec![output.into()];
+        self
+    }
+
+    /// Append the output stream.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::{Config, Output};
+    ///
+    /// assert_eq!(
+    ///     Config::new(),
+    ///     Config::new().outputs(Vec::<Output>::new()).add_output(Output::Stderr));
+    /// ```
+    pub fn add_output<T: Into<Output>>(mut self, output: T) -> Self {
+        self.output.push(output.into());
+        self
+    }
+
+    /// Set the output streams.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use fmtlog::{Config, Output};
+    ///
+    /// assert_eq!(Config::new(), Config::new().outputs(vec![Output::Stderr]))
+    /// ```
+    pub fn outputs<T: IntoIterator>(mut self, outputs: T) -> Self
+    where
+        T::Item: Into<Output>,
+    {
+        self.output = outputs.into_iter().map(|x| x.into()).collect();
         self
     }
 }
