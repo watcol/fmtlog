@@ -151,6 +151,68 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 //! </pre>
 //!
+//! ### TOML
+//! Output logs as TOML format.
+//!
+//! ```toml
+//! [2021-01-01T12:00:00.123456789+09:00]
+//! target = "fmtlog"
+//! level = "ERROR"
+//! info = "Example Message"
+//!
+//! [2021-01-01T12:00:00.123456789+09:00]
+//! target = "fmtlog"
+//! level = "WARN"
+//! info = "Example Message"
+//!
+//! [2021-01-01T12:00:00.123456789+09:00]
+//! target = "fmtlog"
+//! level = "INFO"
+//! info = "Example Message"
+//!
+//! [2021-01-01T12:00:00.123456789+09:00]
+//! target = "fmtlog"
+//! level = "DEBUG"
+//! info = "Example Message"
+//!
+//! [2021-01-01T12:00:00.123456789+09:00]
+//! target = "fmtlog"
+//! level = "TRACE"
+//! info = "Example Message"
+//!
+//! ```
+//!
+//! ### YAML
+//! Output logs as YAML format.
+//!
+//! ```yaml
+//! - date: 2021-01-01T12:00:00.123456789+09:00
+//!   target: fmtlog
+//!   level: ERROR
+//!   info: Example Message
+//!
+//! - date: 2021-01-01T12:00:00.123456789+09:00
+//!   target: fmtlog
+//!   level: WARN
+//!   info: Example Message
+//!
+//! - date: 2021-01-01T12:00:00.123456789+09:00
+//!   target: fmtlog
+//!   level: INFO
+//!   info: Example Message
+//!
+//! - date: 2021-01-01T12:00:00.123456789+09:00
+//!   target: fmtlog
+//!   level: DEBUG
+//!   info: Example Message
+//!
+//! - date: 2021-01-01T12:00:00.123456789+09:00
+//!   target: fmtlog
+//!   level: TRACE
+//!   info: Example Message
+//!
+//! ```
+//!
 //! ## Inspired from other loggers.
 //! ### ENV_LOGGER
 //! The default format of [`env_logger`](https://docs.rs/env_logger).
@@ -259,6 +321,9 @@ pub const DEBUG1_LOWER: &str = "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%l}}
 
 pub const DEBUG2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %S in %N))\n";
 pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %S in %N))\n";
+
+pub const TOML: &str = "[%T(%+)]\ntarget = \"%N\"\nlevel = \"%L\"\ninfo = \"%M\"\n\n";
+pub const YAML: &str = "- date: %T(%+)\n  target: %N\n  level: %L\n  info: %M\n\n";
 
 pub const ENV_LOGGER: &str =
     "%F(bright black){[}%T(%Y-%m-%dT%TZ) %F(red,yellow,green,blue,cyan){%L} %N%F(bright black){]} %M\n";
