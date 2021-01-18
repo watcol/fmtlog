@@ -303,24 +303,24 @@
 //! </pre>
 //!
 
-pub const SIMPLE1: &str = "%F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
-pub const SIMPLE1_LOWER: &str = "%F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
+pub const SIMPLE1: &str = "%F(red,yellow,green,purple,blue){%b{%L}}: %M\n";
+pub const SIMPLE1_LOWER: &str = "%F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
 
-pub const SIMPLE2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M\n";
-pub const SIMPLE2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M\n";
+pub const SIMPLE2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M\n";
+pub const SIMPLE2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M\n";
 
-pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
-pub const DETAIL1_LOWER: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
+pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%L}}: %M\n";
+pub const DETAIL1_LOWER: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
 
-pub const DETAIL2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
+pub const DETAIL2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
 pub const DETAIL2_LOWER: &str =
-    "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %T(%b %d %T) in %N)\n";
+    "[%F(red,yellow,green,purple,blue){%b{%l}}] %M (at %T(%b %d %T) in %N)\n";
 
-pub const DEBUG1: &str = "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%L}}: %M\n";
-pub const DEBUG1_LOWER: &str = "[%N (%S)] %F(red,yellow,green,cyan,blue){%b{%l}}: %M\n";
+pub const DEBUG1: &str = "[%N (%S)] %F(red,yellow,green,purple,blue){%b{%L}}: %M\n";
+pub const DEBUG1_LOWER: &str = "[%N (%S)] %F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
 
-pub const DEBUG2: &str = "[%F(red,yellow,green,cyan,blue){%b{%L}}] %M (at %S in %N))\n";
-pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,cyan,blue){%b{%l}}] %M (at %S in %N))\n";
+pub const DEBUG2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %S in %N))\n";
+pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M (at %S in %N))\n";
 
 pub const TOML: &str = "[%T(%+)]\ntarget = \"%N\"\nlevel = \"%L\"\ninfo = \"%M\"\n\n";
 pub const YAML: &str = "- date: %T(%+)\n  target: %N\n  level: %L\n  info: %M\n\n";
