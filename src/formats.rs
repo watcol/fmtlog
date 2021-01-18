@@ -310,7 +310,8 @@ pub const SIMPLE2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M\n";
 pub const SIMPLE2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M\n";
 
 pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%L}}: %M\n";
-pub const DETAIL1_LOWER: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
+pub const DETAIL1_LOWER: &str =
+    "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
 
 pub const DETAIL2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
 pub const DETAIL2_LOWER: &str =
@@ -328,7 +329,8 @@ pub const YAML: &str = "- date: %T(%+)\n  target: %N\n  level: %L\n  info: %M\n\
 pub const ENV_LOGGER: &str =
     "%F(bright black){[}%T(%Y-%m-%dT%TZ) %F(red,yellow,green,blue,cyan){%L} %N%F(bright black){]} %M\n";
 pub const PRETTY_ENV_LOGGER: &str = " %F(red,yellow,green,blue,purple){%L} %b{%N} > %M\n";
-pub const FLEXI_LOGGER: &str = "%F(red,yellow,white,white,black){%b{%L}} [%m] %F(red,yellow,white,white,black){%b{%M}}\n";
+pub const FLEXI_LOGGER: &str =
+    "%F(red,yellow,white,white,black){%b{%L}} [%m] %F(red,yellow,white,white,black){%b{%M}}\n";
 pub const FLEXI_LOGGER2: &str = "%F(red,yellow,white,white,black){%b{%T(%Y-%m-%d %T%.6f %:z) %L}} [%m] %S: %F(red,yellow,white,white,black){%b{%M}}\n";
 pub const SIMPLE_LOGGER: &str = "%T(%Y-%m-%d %T) %F(red,yellow,cyan,purple,white){%L} [%N] %M\n";
 pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
