@@ -72,7 +72,7 @@
 //! - `green`
 //! - `yellow`
 //! - `blue`
-//! - `magenta`
+//! - `magenta` (= `purple`)
 //! - `cyan`
 //! - `white`
 //! - `bright black`
