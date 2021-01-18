@@ -1,9 +1,8 @@
 [package]
 name = "fmtlog"
-version = "0.1.0"
+version = "0.1.1"
 description = "A simple configurable logger with format specification."
 authors = ["watcol <potfman@gmail.com>"]
-homepage = "https://github.com/watcol/fmtlog"
 repository = "https://github.com/watcol/fmtlog"
 keywords = ["log", "logger", "format"]
 categories = ["development-tools::debugging"]
@@ -22,6 +21,3 @@ log = { version = "0.4", features = ["std"] }
 thread_local = "1.0"
 colored = "2.0"
 chrono = "0.4"
-
-[package.metadata.docs.rs]
-all-features = true

@@ -13,6 +13,7 @@ A simple configurable logger with format specification.
 - [x] Timestamp Support
 - [x] Colorized Log
 - [x] Logging to the File
+- [x] Multiple log target
 
 ## Documents
 API Documents are available on [docs.rs](https://docs.rs/fmtlog).
