@@ -111,35 +111,26 @@ pub struct Logger {
     format: Format,
     level: log::LevelFilter,
     modules: Modules,
+    streams: Vec<(Output, bool)>,
     writer: ThreadLocal<RefCell<Vec<(Stream, bool)>>>,
 }
 
 impl Logger {
     /// Create a new instance.
     pub fn new(config: Config) -> Logger {
-        let writer = ThreadLocal::new();
-
         let outputs = config.output;
         let colorize = config.colorize;
-        writer.get_or(|| {
-            RefCell::new(
-                outputs
-                    .into_iter()
-                    .map(|o| {
-                        (
-                            o.to_stream().expect("Failed to open the file."),
-                            colorize.colorize(&o),
-                        )
-                    })
-                    .collect(),
-            )
-        });
+        let streams = outputs
+            .into_iter()
+            .map(|o| (o.clone(), colorize.colorize(&o)))
+            .collect();
 
         Logger {
             format: Format::new(config.format).expect("Invalid Format."),
             level: config.level.into(),
             modules: Modules::from(config.modules),
-            writer,
+            streams,
+            writer: ThreadLocal::new(),
         }
     }
 
@@ -180,7 +171,17 @@ impl Log for Logger {
             }
         }
 
-        let mut writer = self.writer.get().unwrap().borrow_mut();
+        let mut writer = self
+            .writer
+            .get_or(|| {
+                RefCell::new(
+                    self.streams
+                        .iter()
+                        .map(|s| (s.0.to_stream().expect("Failed to open the file."), s.1))
+                        .collect(),
+                )
+            })
+            .borrow_mut();
 
         writer
             .iter_mut()
