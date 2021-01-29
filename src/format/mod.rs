@@ -1,13 +1,19 @@
+#[cfg(feature = "colored")]
 mod color;
+#[cfg(feature = "colored")]
 mod pallet;
 
-use chrono::{Local, Utc};
+
+#[cfg(feature = "colored")]
 use colored::Colorize;
+#[cfg(feature = "colored")]
+use color::Color;
+#[cfg(feature = "colored")]
+use pallet::Pallet;
+
+use chrono::{Local, Utc};
 use log::Record;
 use std::io;
-
-use color::Color;
-use pallet::Pallet;
 
 /// The format structure.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -18,6 +24,7 @@ impl Format {
         Self::parse(&mut s.as_ref().chars())
     }
 
+    #[allow(dead_code)]
     fn parse_until<T: Iterator<Item = char>>(s: &mut T, ch: char) -> Result<Self, String> {
         let mut res = Vec::new();
 
@@ -64,6 +71,7 @@ impl Format {
         Ok(Format(res))
     }
 
+    #[allow(unused_variables)]
     pub(crate) fn write<W: io::Write>(
         &self,
         writer: &mut W,
@@ -77,6 +85,8 @@ impl Format {
         Ok(())
     }
 
+    #[allow(unused_variables)]
+    #[allow(dead_code)]
     fn to_str(&self, record: &Record, colorize: bool) -> io::Result<String> {
         let mut buf: Vec<u8> = Vec::new();
         self.write(&mut buf, record, colorize)?;
@@ -91,6 +101,7 @@ enum Element {
 }
 
 impl Element {
+    #[allow(unused_variables)]
     fn write<W: io::Write>(
         &self,
         writer: &mut W,
@@ -117,15 +128,26 @@ enum Special {
     LogLevelUpper,
     Time(String),
     UtcTime(String),
+
+    #[cfg(feature = "colored")]
     FgColor(Color, Format),
+    #[cfg(feature = "colored")]
     FgColorBranch(Pallet, Format),
+    #[cfg(feature = "colored")]
     BgColor(Color, Format),
+    #[cfg(feature = "colored")]
     BgColorBranch(Pallet, Format),
+    #[cfg(feature = "colored")]
     Bold(Format),
+    #[cfg(feature = "colored")]
     Dimmed(Format),
+    #[cfg(feature = "colored")]
     Italic(Format),
+    #[cfg(feature = "colored")]
     Reversed(Format),
+    #[cfg(feature = "colored")]
     Underline(Format),
+    #[cfg(feature = "colored")]
     StrikeThrough(Format),
 }
 
@@ -164,6 +186,8 @@ impl Special {
 
                 Ok(Self::UtcTime(format))
             }
+
+            #[cfg(feature = "colored")]
             'F' => {
                 use std::str::FromStr;
 
@@ -216,6 +240,7 @@ impl Special {
                     Ok(Self::FgColor(color, format))
                 }
             }
+            #[cfg(feature = "colored")]
             'B' => {
                 use std::str::FromStr;
 
@@ -268,6 +293,7 @@ impl Special {
                     Ok(Self::BgColor(color, format))
                 }
             }
+            #[cfg(feature = "colored")]
             'b' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -277,6 +303,7 @@ impl Special {
 
                 Ok(Self::Bold(format))
             }
+            #[cfg(feature = "colored")]
             'd' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -286,6 +313,7 @@ impl Special {
 
                 Ok(Self::Dimmed(format))
             }
+            #[cfg(feature = "colored")]
             'i' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -295,6 +323,7 @@ impl Special {
 
                 Ok(Self::Italic(format))
             }
+            #[cfg(feature = "colored")]
             'r' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -304,6 +333,7 @@ impl Special {
 
                 Ok(Self::Reversed(format))
             }
+            #[cfg(feature = "colored")]
             'u' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -313,6 +343,7 @@ impl Special {
 
                 Ok(Self::Underline(format))
             }
+            #[cfg(feature = "colored")]
             's' => {
                 if s.next() != Some('{') {
                     return Err(String::from("Missing the body."));
@@ -326,6 +357,7 @@ impl Special {
         }
     }
 
+    #[allow(unused_variables)]
     fn write<W: io::Write>(
         &self,
         writer: &mut W,
@@ -350,6 +382,8 @@ impl Special {
             Self::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),
             Self::Time(format) => write!(writer, "{}", Local::now().format(format)),
             Self::UtcTime(format) => write!(writer, "{}", Utc::now().format(format)),
+
+            #[cfg(feature = "colored")]
             Self::FgColor(color, format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -359,6 +393,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::FgColorBranch(pallet, format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -368,6 +403,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::BgColor(color, format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -377,6 +413,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::BgColorBranch(pallet, format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -386,6 +423,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::Bold(format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -395,6 +433,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::Dimmed(format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -404,6 +443,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::Italic(format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -413,6 +453,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::Reversed(format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -422,6 +463,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::Underline(format) => {
                 let s = format.to_str(record, colorize)?;
 
@@ -431,6 +473,7 @@ impl Special {
                     write!(writer, "{}", s)
                 }
             }
+            #[cfg(feature = "colored")]
             Self::StrikeThrough(format) => {
                 let s = format.to_str(record, colorize)?;
 

@@ -54,18 +54,18 @@
 //! | `%L` | `INFO` | The log level. (uppercase) |
 //! | `%T(<format>)` | `%T(%D %T)` -> `01/01/21 12:00:00` | The local time. (see [chrono's format specification](https://docs.rs/chrono/0.4/chrono/format/strftime)). |
 //! | `%U(<format>)` | `%T(%D %T)` -> `01/01/21 12:00:00` | The UTC time. (see [chrono's format specification](https://docs.rs/chrono/0.4/chrono/format/strftime)). |
-//! | `%F(<color>){...}` | | Set the foreground color. |
-//! | `%F(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the foreground color. (Branch by the log level.) |
-//! | `%B(<color>){...}` | | Set the background color. |
-//! | `%B(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the background color. (Branch by the log level.) |
-//! | `%b{...}` | | Bold the text. |
-//! | `%d{...}` | | Dim the text color. |
-//! | `%i{...}` | | Print the text in italics. |
-//! | `%r{...}` | | Reverse the foreground and background color. |
-//! | `%u{...}` | | Underline the text. |
-//! | `%s{...}` | | Strikethrough the text. |
+//! | `%F(<color>){...}` | | Set the foreground color. **Requires feature: `colored`** |
+//! | `%F(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the foreground color. (Branch by the log level.) **Requires feature: `colored`** |
+//! | `%B(<color>){...}` | | Set the background color. **Requires feature: `colored`** |
+//! | `%B(<error>,<warn>,<info>,<debug>,<trace>){...}` | | Set the background color. (Branch by the log level.) **Requires feature: `colored`** |
+//! | `%b{...}` | | Bold the text. **Requires feature: `colored`** |
+//! | `%d{...}` | | Dim the text color. **Requires feature: `colored`** |
+//! | `%i{...}` | | Print the text in italics. **Requires feature: `colored`** |
+//! | `%r{...}` | | Reverse the foreground and background color. **Requires feature: `colored`** |
+//! | `%u{...}` | | Underline the text. **Requires feature: `colored`** |
+//! | `%s{...}` | | Strikethrough the text. **Requires feature: `colored`** |
 //!
-//! ### Supported Color
+//! ### Supported Color (Requires feature: `colored`)
 //! All supported color used by `%C` and `%O` is here.
 //! - `black`
 //! - `red`
@@ -85,9 +85,11 @@
 //! - `bright white`
 //! - `#ffffff` (Hexadecimal RGB)
 //!
-extern crate colored;
 extern crate log;
 extern crate thread_local;
+
+#[cfg(feature = "colored")]
+extern crate colored;
 
 pub mod formats;
 
@@ -119,10 +121,20 @@ impl Logger {
     /// Create a new instance.
     pub fn new(config: Config) -> Logger {
         let outputs = config.output;
-        let colorize = config.colorize;
+
+        #[cfg(feature = "colored")]
+        let streams = {
+            let colorize = config.colorize;
+            outputs
+                .into_iter()
+                .map(|o| (o.clone(), colorize.colorize(&o)))
+                .collect()
+        };
+
+        #[cfg(not(feature = "colored"))]
         let streams = outputs
             .into_iter()
-            .map(|o| (o.clone(), colorize.colorize(&o)))
+            .map(|o| (o, false))
             .collect();
 
         Logger {

@@ -1,14 +1,18 @@
 //! Configuration module.
+#[cfg(feature = "colored")]
 mod colorize;
 mod output;
 
-pub use colorize::Colorize;
 pub use log::LevelFilter;
 pub use output::Output;
+
+#[cfg(feature = "colored")]
+pub use colorize::Colorize;
 
 /// The logger settings.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Config {
+    #[cfg(feature = "colored")]
     pub(crate) colorize: Colorize,
     pub(crate) format: String,
     pub(crate) level: LevelFilter,
@@ -19,7 +23,9 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
+            #[cfg(feature = "colored")]
             colorize: Colorize::default(),
+
             format: String::from(crate::formats::DETAIL1),
             level: LevelFilter::Info,
             modules: Vec::new(),
@@ -34,7 +40,7 @@ impl Config {
         Self::default()
     }
 
-    /// Colorize the log.
+    /// [**colored**] Colorize the log.
     ///
     /// # Example
     ///
@@ -43,6 +49,7 @@ impl Config {
     ///
     /// assert_ne!(Config::new(), Config::new().colorize(false));
     /// ```
+    #[cfg(feature = "colored")]
     pub fn colorize<T: Into<Colorize>>(mut self, colorize: T) -> Self {
         self.colorize = colorize.into();
         self

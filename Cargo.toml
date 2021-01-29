@@ -16,8 +16,11 @@ include = [
   "src/**/*.rs"
 ]
 
+[features]
+default = ["colored"]
+
 [dependencies]
 log = { version = "0.4", features = ["std"] }
 thread_local = "1.0"
-colored = "2.0"
-chrono = "0.4"
+colored = { version = "2.0", optional = true }
+chrono = { version = "0.4" }
