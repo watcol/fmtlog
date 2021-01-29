@@ -63,7 +63,7 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message
 //! </pre>
 //!
-//! ### DETAIL1
+//! ### **`chrono`** DETAIL1
 //! A detailed version of [`SIMPLE1`](#simple1).
 //!
 //! <pre>
@@ -74,7 +74,7 @@
 //! [2021/01/01 12:00:00 fmtlog] <font color="blue"><b>TRACE</b></font>: Example Message
 //! </pre>
 //!
-//! ### DETAIL1_LOWER
+//! ### **`chrono`** DETAIL1_LOWER
 //! A detailed version of [`SIMPLE1_LOWER`](#simple1-lower).
 //!
 //! <pre>
@@ -85,7 +85,7 @@
 //! [2021/01/01 12:00:00 fmtlog] <font color="blue"><b>trace</b></font>: Example Message
 //! </pre>
 //!
-//! ### DETAIL2
+//! ### **`chrono`** DETAIL2
 //! A detailed version of [`SIMPLE2`](#simple2).
 //!
 //! <pre>
@@ -96,7 +96,7 @@
 //! [<font color="blue"><b>TRACE</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 //! </pre>
 //!
-//! ### DETAIL2_LOWER
+//! ### **`chrono`** DETAIL2_LOWER
 //! A detailed version of [`SIMPLE2_LOWER`](#simple2-lower).
 //!
 //! <pre>
@@ -151,7 +151,7 @@
 //! [<font color="blue"><b>trace</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 //! </pre>
 //!
-//! ### TOML
+//! ### **`chrono`** TOML
 //! Output logs as TOML format.
 //!
 //! ```toml
@@ -182,7 +182,7 @@
 //!
 //! ```
 //!
-//! ### YAML
+//! ### **`chrono`** YAML
 //! Output logs as YAML format.
 //!
 //! ```yaml
@@ -214,7 +214,7 @@
 //! ```
 //!
 //! ## Inspired from other loggers.
-//! ### ENV_LOGGER
+//! ### **`chrono`** ENV_LOGGER
 //! The default format of [`env_logger`](https://docs.rs/env_logger).
 //!
 //! <pre>
@@ -247,7 +247,7 @@
 //! <font color="black"><b>TRACE</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
 //! </pre>
 //!
-//! ### FLEXI_LOGGER2
+//! ### **`chrono`** FLEXI_LOGGER2
 //! The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
 //!
 //! <pre>
@@ -258,7 +258,7 @@
 //! <font color="black"><b>2021-01-01 12:00:00:00.000000 +09:00 TRACE</b></font> [fmtlog::module] src/main.rs:50: <font color="white"><b>Example Message</b></font>
 //! </pre>
 //!
-//! ### SIMPLE_LOGGER
+//! ### **`chrono`** SIMPLE_LOGGER
 //! The default format of [`simple_logger`](https://docs.rs/simple_logger).
 //!
 //! <pre>
@@ -269,7 +269,7 @@
 //! 2021-01-01 12:00:00 TRACE [fmtlog] Example Message
 //! </pre>
 //!
-//! ### SIMPLELOG
+//! ### **`chrono`** SIMPLELOG
 //! The default format of [`simplelog`](https://docs.rs/simplelog).
 //!
 //! ```text
@@ -291,7 +291,7 @@
 //! <font color="blue">TRACE - Example Message</font>
 //! </pre>
 //!
-//! ### STDERRLOG2
+//! ### **`chrono`** STDERRLOG2
 //! The default format of [`stderrlog`](https://docs.rs/stderrlog) with timestamps.
 //!
 //! <pre>
@@ -303,7 +303,9 @@
 //! </pre>
 //!
 
+#[cfg(feature = "chrono")]
 pub const TOML: &str = "[%T(%+)]\ntarget = \"%N\"\nlevel = \"%L\"\ninfo = \"%M\"\n\n";
+#[cfg(feature = "chrono")]
 pub const YAML: &str = "- date: %T(%+)\n  target: %N\n  level: %L\n  info: %M\n\n";
 
 #[cfg(feature = "colored")]
@@ -319,10 +321,14 @@ mod normal {
     pub const SIMPLE2: &str = "[%L] %M\n";
     pub const SIMPLE2_LOWER: &str = "[%l] %M\n";
 
+    #[cfg(feature = "chrono")]
     pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %L: %M\n";
+    #[cfg(feature = "chrono")]
     pub const DETAIL1_LOWER: &str = "[%T(%Y/%m/%d %T) %N] %l: %M\n";
 
+    #[cfg(feature = "chrono")]
     pub const DETAIL2: &str = "[%L] %M (at %T(%b %d %T) in %N)\n";
+    #[cfg(feature = "chrono")]
     pub const DETAIL2_LOWER: &str = "[%l] %M (at %T(%b %d %T) in %N)\n";
 
     pub const DEBUG1: &str = "[%N (%S)] %L: %M\n";
@@ -331,13 +337,19 @@ mod normal {
     pub const DEBUG2: &str = "[%L] %M (at %S in %N))\n";
     pub const DEBUG2_LOWER: &str = "[%l] %M (at %S in %N))\n";
 
-    pub const ENV_LOGGER: &str = "[%T(%Y-%m-%dT%TZ) %L %N] %M\n";
     pub const PRETTY_ENV_LOGGER: &str = " %L %N > %M\n";
     pub const FLEXI_LOGGER: &str = "%L [%m] %M\n";
-    pub const FLEXI_LOGGER2: &str = "%T(%Y-%m-%d %T%.6f %:z) %L [%m] %S: %M\n";
-    pub const SIMPLE_LOGGER: &str = "%T(%Y-%m-%d %T) %L [%N] %M\n";
-    pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
     pub const STDERRLOG: &str = "%L - %M\n";
+
+    #[cfg(feature = "chrono")]
+    pub const ENV_LOGGER: &str = "[%T(%Y-%m-%dT%TZ) %L %N] %M\n";
+    #[cfg(feature = "chrono")]
+    pub const FLEXI_LOGGER2: &str = "%T(%Y-%m-%d %T%.6f %:z) %L [%m] %S: %M\n";
+    #[cfg(feature = "chrono")]
+    pub const SIMPLE_LOGGER: &str = "%T(%Y-%m-%d %T) %L [%N] %M\n";
+    #[cfg(feature = "chrono")]
+    pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
+    #[cfg(feature = "chrono")]
     pub const STDERRLOG2: &str = "%T(%Y-%m-%dT%T%:z) - %L - %M\n";
 }
 
@@ -349,12 +361,16 @@ mod colored {
     pub const SIMPLE2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M\n";
     pub const SIMPLE2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M\n";
 
+    #[cfg(feature = "chrono")]
     pub const DETAIL1: &str = "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%L}}: %M\n";
+    #[cfg(feature = "chrono")]
     pub const DETAIL1_LOWER: &str =
         "[%T(%Y/%m/%d %T) %N] %F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
 
+    #[cfg(feature = "chrono")]
     pub const DETAIL2: &str =
         "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %T(%b %d %T) in %N)\n";
+    #[cfg(feature = "chrono")]
     pub const DETAIL2_LOWER: &str =
         "[%F(red,yellow,green,purple,blue){%b{%l}}] %M (at %T(%b %d %T) in %N)\n";
 
@@ -364,15 +380,21 @@ mod colored {
     pub const DEBUG2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %S in %N))\n";
     pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M (at %S in %N))\n";
 
-    pub const ENV_LOGGER: &str =
-        "%F(bright black){[}%T(%Y-%m-%dT%TZ) %F(red,yellow,green,blue,cyan){%L} %N%F(bright black){]} %M\n";
     pub const PRETTY_ENV_LOGGER: &str = " %F(red,yellow,green,blue,purple){%L} %b{%N} > %M\n";
     pub const FLEXI_LOGGER: &str =
         "%F(red,yellow,white,white,black){%b{%L}} [%m] %F(red,yellow,white,white,black){%b{%M}}\n";
+    pub const STDERRLOG: &str = "%F(red,purple,yellow,cyan,blue){%L - %M}\n";
+
+    #[cfg(feature = "chrono")]
+    pub const ENV_LOGGER: &str =
+        "%F(bright black){[}%T(%Y-%m-%dT%TZ) %F(red,yellow,green,blue,cyan){%L} %N%F(bright black){]} %M\n";
+    #[cfg(feature = "chrono")]
     pub const FLEXI_LOGGER2: &str = "%F(red,yellow,white,white,black){%b{%T(%Y-%m-%d %T%.6f %:z) %L}} [%m] %S: %F(red,yellow,white,white,black){%b{%M}}\n";
+    #[cfg(feature = "chrono")]
     pub const SIMPLE_LOGGER: &str =
         "%T(%Y-%m-%d %T) %F(red,yellow,cyan,purple,white){%L} [%N] %M\n";
+    #[cfg(feature = "chrono")]
     pub const SIMPLELOG: &str = "%T(%T) [%L] %M\n";
-    pub const STDERRLOG: &str = "%F(red,purple,yellow,cyan,blue){%L - %M}\n";
+    #[cfg(feature = "chrono")]
     pub const STDERRLOG2: &str = "%F(red,purple,yellow,cyan,blue){%T(%Y-%m-%dT%T%:z) - %L - %M}\n";
 }

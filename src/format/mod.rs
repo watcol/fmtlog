@@ -11,7 +11,9 @@ use color::Color;
 #[cfg(feature = "colored")]
 use pallet::Pallet;
 
+#[cfg(feature = "chrono")]
 use chrono::{Local, Utc};
+
 use log::Record;
 use std::io;
 
@@ -126,7 +128,10 @@ enum Special {
     Message,
     LogLevelLower,
     LogLevelUpper,
+
+    #[cfg(feature = "chrono")]
     Time(String),
+    #[cfg(feature = "chrono")]
     UtcTime(String),
 
     #[cfg(feature = "colored")]
@@ -168,6 +173,8 @@ impl Special {
             'M' => Ok(Self::Message),
             'l' => Ok(Self::LogLevelLower),
             'L' => Ok(Self::LogLevelUpper),
+
+            #[cfg(feature = "chrono")]
             'T' => {
                 if s.next() != Some('(') {
                     return Err(String::from("Missing time format."));
@@ -177,6 +184,8 @@ impl Special {
 
                 Ok(Self::Time(format))
             }
+
+            #[cfg(feature = "chrono")]
             'U' => {
                 if s.next() != Some('(') {
                     return Err(String::from("Missing time format."));
@@ -380,7 +389,10 @@ impl Special {
             Self::Message => write!(writer, "{}", record.args()),
             Self::LogLevelUpper => write!(writer, "{}", record.level()),
             Self::LogLevelLower => write!(writer, "{}", record.level().to_string().to_lowercase()),
+
+            #[cfg(feature = "chrono")]
             Self::Time(format) => write!(writer, "{}", Local::now().format(format)),
+            #[cfg(feature = "chrono")]
             Self::UtcTime(format) => write!(writer, "{}", Utc::now().format(format)),
 
             #[cfg(feature = "colored")]

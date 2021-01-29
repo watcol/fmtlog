@@ -26,7 +26,11 @@ impl Default for Config {
             #[cfg(feature = "colored")]
             colorize: Colorize::default(),
 
+            #[cfg(feature = "chrono")]
             format: String::from(crate::formats::DETAIL1),
+            #[cfg(not(feature = "chrono"))]
+            format: String::from(crate::formats::SIMPLE1),
+
             level: LevelFilter::Info,
             modules: Vec::new(),
             output: vec![Output::default()],
