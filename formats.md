@@ -20,282 +20,109 @@ log::trace!("Example Message");
 ## SIMPLE1
 A simplest format.
 
-<pre>
-<font color="red"><b>ERROR</b></font>: Example Message
-<font color="yellow"><b>WARN</b></font>: Example Message
-<font color="green"><b>INFO</b></font>: Example Message
-<font color="cyan"><b>DEBUG</b></font>: Example Message
-<font color="blue"><b>TRACE</b></font>: Example Message
-</pre>
+![simple1](images/simple1.png)
 
 ## SIMPLE1_LOWER
 A simplest format. (lowercase version)
 
-<pre>
-<font color="red"><b>error</b></font>: Example Message
-<font color="yellow"><b>warn</b></font>: Example Message
-<font color="green"><b>info</b></font>: Example Message
-<font color="cyan"><b>debug</b></font>: Example Message
-<font color="blue"><b>trace</b></font>: Example Message
-</pre>
+![simple1-lower](images/simple1-lower.png)
 
 ## SIMPLE2
 A simplest format. (bracket version)
 
-<pre>
-[<font color="red"><b>ERROR</b></font>] Example Message
-[<font color="yellow"><b>WARN</b></font>] Example Message
-[<font color="green"><b>INFO</b></font>] Example Message
-[<font color="cyan"><b>DEBUG</b></font>] Example Message
-[<font color="blue"><b>TRACE</b></font>] Example Message
-</pre>
+![simple2](images/simple2.png)
 
 ## SIMPLE2_LOWER
 A simplest format. (bracket lowercase version)
 
-<pre>
-[<font color="red"><b>error</b></font>] Example Message
-[<font color="yellow"><b>warn</b></font>] Example Message
-[<font color="green"><b>info</b></font>] Example Message
-[<font color="cyan"><b>debug</b></font>] Example Message
-[<font color="blue"><b>trace</b></font>] Example Message
-</pre>
+![simple2-lower](images/simple2-lower.png)
 
 ## DETAIL1 (Requires feature: `chrono`)
 A detailed version of [`SIMPLE1`](#simple1).
 
-<pre>
-[2021/01/01 12:00:00 fmtlog] <font color="red"><b>ERROR</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="yellow"><b>WARN</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="green"><b>INFO</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="cyan"><b>DEBUG</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="blue"><b>TRACE</b></font>: Example Message
-</pre>
+![detail1](images/detail1.png)
 
 ## DETAIL1_LOWER (Requires feature: `chrono`)
 A detailed version of [`SIMPLE1_LOWER`](#simple1-lower).
 
-<pre>
-[2021/01/01 12:00:00 fmtlog] <font color="red"><b>error</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="yellow"><b>warn</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="green"><b>info</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="cyan"><b>debug</b></font>: Example Message
-[2021/01/01 12:00:00 fmtlog] <font color="blue"><b>trace</b></font>: Example Message
-</pre>
+![detail1-lower](images/detail1-lower.png)
 
 ## DETAIL2 (Requires feature: `chrono`)
 A detailed version of [`SIMPLE2`](#simple2).
 
-<pre>
-[<font color="red"><b>ERROR</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="yellow"><b>WARN</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="green"><b>INFO</b></font>] Example Message (at  Jan 01 12:00:00 in fmtlog)
-[<font color="cyan"><b>DEBUG</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="blue"><b>TRACE</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-</pre>
+![detail2](images/detail2.png)
 
 ## DETAIL2_LOWER (Requires feature: `chrono`)
 A detailed version of [`SIMPLE2_LOWER`](#simple2-lower).
 
-<pre>
-[<font color="red"><b>error</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="yellow"><b>warn</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="green"><b>info</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="cyan"><b>debug</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-[<font color="blue"><b>trace</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
-</pre>
+![detail2-lower](images/detail2-lower.png)
 
 ## DEBUG1
 A debug-specialized version of [`SIMPLE1`](#simple1).
 
-<pre>
-[fmtlog (src/main.rs:10)] <font color="red"><b>ERROR</b></font>: Example Message
-[fmtlog (src/main.rs:20)] <font color="yellow"><b>WARN</b></font>: Example Message
-[fmtlog (src/main.rs:30)] <font color="green"><b>INFO</b></font>: Example Message
-[fmtlog (src/main.rs:40)] <font color="cyan"><b>DEBUG</b></font>: Example Message
-[fmtlog (src/main/rs:50)] <font color="blue"><b>TRACE</b></font>: Example Message
-</pre>
+![debug1](images/debug1.png)
 
 ## DEBUG1_LOWER
 A debug-specialized version of [`SIMPLE1_LOWER`](#simple1-lower).
 
-<pre>
-[fmtlog (src/main.rs:10)] <font color="red"><b>error</b></font>: Example Message
-[fmtlog (src/main.rs:20)] <font color="yellow"><b>warn</b></font>: Example Message
-[fmtlog (src/main.rs:30)] <font color="green"><b>info</b></font>: Example Message
-[fmtlog (src/main.rs:40)] <font color="cyan"><b>debug</b></font>: Example Message
-[fmtlog (src/main/rs:50)] <font color="blue"><b>trace</b></font>: Example Message
-</pre>
+![debug1-lower](images/debug1-lower.png)
 
 ## DEBUG2
 A debug-specialized version of [`SIMPLE2`](#simple2).
 
-<pre>
-[<font color="red"><b>ERROR</b></font>] Example Message (at src/main.rs:10 in fmtlog)
-[<font color="yellow"><b>WARN</b></font>] Example Message (at src/main.rs:20 in fmtlog)
-[<font color="green"><b>INFO</b></font>] Example Message (at src/main.rs:30 in fmtlog)
-[<font color="cyan"><b>DEBUG</b></font>] Example Message (at src/main.rs:40 in fmtlog)
-[<font color="blue"><b>TRACE</b></font>] Example Message (at src/main.rs:50 in fmtlog)
-</pre>
+![debug2](images/debug2.png)
 
 ## DEBUG2_LOWER
 A debug-specialized version of [`SIMPLE2_LOWER`](#simple2-lower).
 
-<pre>
-[<font color="red"><b>error</b></font>] Example Message (at src/main.rs:10 in fmtlog)
-[<font color="yellow"><b>warn</b></font>] Example Message (at src/main.rs:20 in fmtlog)
-[<font color="green"><b>info</b></font>] Example Message (at src/main.rs:30 in fmtlog)
-[<font color="cyan"><b>debug</b></font>] Example Message (at src/main.rs:40 in fmtlog)
-[<font color="blue"><b>trace</b></font>] Example Message (at src/main.rs:50 in fmtlog)
-</pre>
+![debug2-lower](images/debug2-lower.png)
 
 ## TOML (Requires feature: `chrono`)
 Output logs as TOML format.
 
-```toml
-[2021-01-01T12:00:00.123456789+09:00]
-target = "fmtlog"
-level = "ERROR"
-info = "Example Message"
-
-[2021-01-01T12:00:00.123456789+09:00]
-target = "fmtlog"
-level = "WARN"
-info = "Example Message"
-
-[2021-01-01T12:00:00.123456789+09:00]
-target = "fmtlog"
-level = "INFO"
-info = "Example Message"
-
-[2021-01-01T12:00:00.123456789+09:00]
-target = "fmtlog"
-level = "DEBUG"
-info = "Example Message"
-
-[2021-01-01T12:00:00.123456789+09:00]
-target = "fmtlog"
-level = "TRACE"
-info = "Example Message"
-
-```
+![toml](images/toml.png)
 
 ## YAML (Requires feature: `chrono`)
 Output logs as YAML format.
 
-```yaml
-- date: 2021-01-01T12:00:00.123456789+09:00
-  target: fmtlog
-  level: ERROR
-  info: Example Message
-
-- date: 2021-01-01T12:00:00.123456789+09:00
-  target: fmtlog
-  level: WARN
-  info: Example Message
-
-- date: 2021-01-01T12:00:00.123456789+09:00
-  target: fmtlog
-  level: INFO
-  info: Example Message
-
-- date: 2021-01-01T12:00:00.123456789+09:00
-  target: fmtlog
-  level: DEBUG
-  info: Example Message
-
-- date: 2021-01-01T12:00:00.123456789+09:00
-  target: fmtlog
-  level: TRACE
-  info: Example Message
-
-```
+![yaml](images/yaml.png)
 
 ### ENV_LOGGER (Requires feature: `chrono`)
 The default format of [`env_logger`](https://docs.rs/env_logger).
 
-<pre>
-<font color="black">[</font>2021-01-01T12:00:00Z <font color="red">ERROR</font> fmtlog<font color="black">]</font> Example Message
-<font color="black">[</font>2021-01-01T12:00:00Z <font color="yellow">WARN</font> fmtlog<font color="black">]</font> Example Message
-<font color="black">[</font>2021-01-01T12:00:00Z <font color="green">INFO</font> fmtlog<font color="black">]</font> Example Message
-<font color="black">[</font>2021-01-01T12:00:00Z <font color="blue">DEBUG</font> fmtlog<font color="black">]</font> Example Message
-<font color="black">[</font>2021-01-01T12:00:00Z <font color="cyan">TRACE</font> fmtlog<font color="black">]</font> Example Message
-</pre>
+![env-logger](images/env-logger.png)
 
 ### PRETTY_ENV_LOGGER
 The default format of [`pretty_env_logger`](https://docs.rs/pretty_env_logger).
 
-<pre>
- <font color="red">ERROR</font> <b>fmtlog</b> > Example Message
- <font color="yellow">WARN</font> <b>fmtlog</b> > Example Message
- <font color="green">INFO</font> <b>fmtlog</b> > Example Message
- <font color="blue">DEBUG</font> <b>fmtlog</b> > Example Message
- <font color="purple">TRACE</font> <b>fmtlog</b> > Example Message
-</pre>
+![pretty-env-logger](images/pretty-env-logger.png)
 
 ### FLEXI_LOGGER
 The default format of [`flexi_logger`](https://docs.rs/flexi_logger) with timestamps.
 
-<pre>
-<font color="red"><b>ERROR</b></font> [fmtlog::module] <font color="red"><b>Example Message</b></font>
-<font color="yellow"><b>WARN</b></font> [fmtlog::module] <font color="yellow"><b>Example Message</b></font>
-<font color="white"><b>INFO</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
-<font color="white"><b>DEBUG</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
-<font color="black"><b>TRACE</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
-</pre>
+![flexi-logger](images/flexi-logger.png)
 
 ### FLEXI_LOGGER2 (Requires feature: `chrono`)
 The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
 
-<pre>
-<font color="red"><b>2021-01-01 12:00:00:00.000000 +09:00 ERROR</b></font> [fmtlog::module] src/main.rs:10: <font color="red"><b>Example Message</b></font>
-<font color="yellow"><b>2021-01-01 12:00:00:00.000000 +09:00 WARN</b></font> [fmtlog::module] src/main.rs:20: <font color="yellow"><b>Example Message</b></font>
-<font color="white"><b>2021-01-01 12:00:00:00.000000 +09:00 INFO</b></font> [fmtlog::module] src/main.rs:30: <font color="white"><b>Example Message</b></font>
-<font color="white"><b>2021-01-01 12:00:00:00.000000 +09:00 DEBUG</b></font> [fmtlog::module] src/main.rs:40: <font color="white"><b>Example Message</b></font>
-<font color="black"><b>2021-01-01 12:00:00:00.000000 +09:00 TRACE</b></font> [fmtlog::module] src/main.rs:50: <font color="white"><b>Example Message</b></font>
-</pre>
+![flexi-logger2](images/flexi-logger.png)
 
 ### SIMPLE_LOGGER (Requires feature: `chrono`)
 The default format of [`simple_logger`](https://docs.rs/simple_logger).
 
-<pre>
-2021-01-01 12:00:00 <font color="red">ERROR</font> [fmtlog] Example Message
-2021-01-01 12:00:00 <font color="yellow">WARN</font> [fmtlog] Example Message
-2021-01-01 12:00:00 <font color ="cyan">INFO</font> [fmtlog] Example Message
-2021-01-01 12:00:00 <font color="purple">DEBUG</font> [fmtlog] Example Message
-2021-01-01 12:00:00 TRACE [fmtlog] Example Message
-</pre>
+![simple-logger](images/simple-logger.png)
 
 ### SIMPLELOG (Requires feature: `chrono`)
 The default format of [`simplelog`](https://docs.rs/simplelog).
 
-```text
-12:00:00 [ERROR] Example Message
-12:00:00 [WARN] Example Message
-12:00:00 [INFO] Example Message
-12:00:00 [DEBUG] Example Message
-12:00:00 [TRACE] Example Message
-```
+![simplelog](images/simplelog.png)
 
 ### STDERRLOG
 The default format of [`stderrlog`](https://docs.rs/stderrlog).
 
-<pre>
-<font color="red">ERROR - Example Message</font>
-<font color="purple">WARN - Example Message</font>
-<font color="yellow">INFO - Example Message</font>
-<font color="cyan">DEBUG - Example Message</font>
-<font color="blue">TRACE - Example Message</font>
-</pre>
+![stderrlog](images/stderrlog.png)
 
 ### STDERRLOG2 (Requires feature: `chrono`)
 The default format of [`stderrlog`](https://docs.rs/stderrlog) with timestamps.
 
-<pre>
-<font color="red">2021-01-01T12:00:00+09:00 - ERROR - Example Message</font>
-<font color="purple">2021-01-01T12:00:00+09:00 - WARN - Example Message</font>
-<font color="yellow">2021-01-01T12:00:00+09:00 - INFO - Example Message</font>
-<font color="cyan">2021-01-01T12:00:00+09:00 - DEBUG - Example Message</font>
-<font color="blue">2021-01-01T12:00:00+09:00 - TRACE - Example Message</font>
-</pre>
-
+![stderrlog2](images/stderrlog2.png)

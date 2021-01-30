@@ -7,7 +7,7 @@
 
 A simple configurable logger with format specification.
 
-[image]
+![detail1](https://github.com/watcol/fmtlog/blob/main/images/detail1.png)
 
 For more formats, see [the Formats Collection](formats.md).
 
