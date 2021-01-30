@@ -7,7 +7,7 @@
 
 A simple configurable logger with format specification.
 
-![detail1](https://github.com/watcol/fmtlog/blob/main/images/detail1.png)
+![detail1](https://raw.githubusercontent.com/watcol/fmtlog/main/images/detail1.png)
 
 For more formats, see [the Formats Collection](formats.md).
 
@@ -66,7 +66,7 @@ For advanced usage, read [the API document](https://docs.rs/fmtlog).
 API Documents are available on [docs.rs](https://docs.rs/fmtlog).
 
 ## Author
-- ![watcol](https://github.com/watcol/icons/blob/main/32/normal.png) Watcol <<potfman@gmail.com>>
+- ![watcol](https://raw.githubusercontent.com/watcol/icons/main/32/normal.png) Watcol <<potfman@gmail.com>>
 
 ## License
 This program is licensed under the MIT license.
