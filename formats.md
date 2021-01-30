@@ -17,10 +17,7 @@ log::debug!("Example Message");
 log::trace!("Example Message");
 ```
 
-## Original
-Original-designed formats of fmtlog.
-
-### SIMPLE1
+## SIMPLE1
 A simplest format.
 
 <pre>
@@ -31,7 +28,7 @@ A simplest format.
 <font color="blue"><b>TRACE</b></font>: Example Message
 </pre>
 
-### SIMPLE1_LOWER
+## SIMPLE1_LOWER
 A simplest format. (lowercase version)
 
 <pre>
@@ -42,7 +39,7 @@ A simplest format. (lowercase version)
 <font color="blue"><b>trace</b></font>: Example Message
 </pre>
 
-### SIMPLE2
+## SIMPLE2
 A simplest format. (bracket version)
 
 <pre>
@@ -53,7 +50,7 @@ A simplest format. (bracket version)
 [<font color="blue"><b>TRACE</b></font>] Example Message
 </pre>
 
-### SIMPLE2_LOWER
+## SIMPLE2_LOWER
 A simplest format. (bracket lowercase version)
 
 <pre>
@@ -64,7 +61,7 @@ A simplest format. (bracket lowercase version)
 [<font color="blue"><b>trace</b></font>] Example Message
 </pre>
 
-### [**chrono**] DETAIL1
+## DETAIL1 (Requires feature: `chrono`)
 A detailed version of [`SIMPLE1`](#simple1).
 
 <pre>
@@ -75,7 +72,7 @@ A detailed version of [`SIMPLE1`](#simple1).
 [2021/01/01 12:00:00 fmtlog] <font color="blue"><b>TRACE</b></font>: Example Message
 </pre>
 
-### [**chrono**] DETAIL1_LOWER
+## DETAIL1_LOWER (Requires feature: `chrono`)
 A detailed version of [`SIMPLE1_LOWER`](#simple1-lower).
 
 <pre>
@@ -86,7 +83,7 @@ A detailed version of [`SIMPLE1_LOWER`](#simple1-lower).
 [2021/01/01 12:00:00 fmtlog] <font color="blue"><b>trace</b></font>: Example Message
 </pre>
 
-### [**chrono**] DETAIL2
+## DETAIL2 (Requires feature: `chrono`)
 A detailed version of [`SIMPLE2`](#simple2).
 
 <pre>
@@ -97,7 +94,7 @@ A detailed version of [`SIMPLE2`](#simple2).
 [<font color="blue"><b>TRACE</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 </pre>
 
-### [**chrono**] DETAIL2_LOWER
+## DETAIL2_LOWER (Requires feature: `chrono`)
 A detailed version of [`SIMPLE2_LOWER`](#simple2-lower).
 
 <pre>
@@ -108,7 +105,7 @@ A detailed version of [`SIMPLE2_LOWER`](#simple2-lower).
 [<font color="blue"><b>trace</b></font>] Example Message (at Jan 01 12:00:00 in fmtlog)
 </pre>
 
-### DEBUG1
+## DEBUG1
 A debug-specialized version of [`SIMPLE1`](#simple1).
 
 <pre>
@@ -119,7 +116,7 @@ A debug-specialized version of [`SIMPLE1`](#simple1).
 [fmtlog (src/main/rs:50)] <font color="blue"><b>TRACE</b></font>: Example Message
 </pre>
 
-### DEBUG1_LOWER
+## DEBUG1_LOWER
 A debug-specialized version of [`SIMPLE1_LOWER`](#simple1-lower).
 
 <pre>
@@ -130,7 +127,7 @@ A debug-specialized version of [`SIMPLE1_LOWER`](#simple1-lower).
 [fmtlog (src/main/rs:50)] <font color="blue"><b>trace</b></font>: Example Message
 </pre>
 
-### DEBUG2
+## DEBUG2
 A debug-specialized version of [`SIMPLE2`](#simple2).
 
 <pre>
@@ -141,7 +138,7 @@ A debug-specialized version of [`SIMPLE2`](#simple2).
 [<font color="blue"><b>TRACE</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 </pre>
 
-### DEBUG2_LOWER
+## DEBUG2_LOWER
 A debug-specialized version of [`SIMPLE2_LOWER`](#simple2-lower).
 
 <pre>
@@ -152,7 +149,7 @@ A debug-specialized version of [`SIMPLE2_LOWER`](#simple2-lower).
 [<font color="blue"><b>trace</b></font>] Example Message (at src/main.rs:50 in fmtlog)
 </pre>
 
-### [**chrono**] TOML
+## TOML (Requires feature: `chrono`)
 Output logs as TOML format.
 
 ```toml
@@ -183,7 +180,7 @@ info = "Example Message"
 
 ```
 
-### [**chrono**] YAML
+## YAML (Requires feature: `chrono`)
 Output logs as YAML format.
 
 ```yaml
@@ -214,10 +211,7 @@ Output logs as YAML format.
 
 ```
 
-## Inspired
-The formats inspired from the other loggers like `env_logger`.
-
-### [**chrono**] ENV_LOGGER
+### ENV_LOGGER (Requires feature: `chrono`)
 The default format of [`env_logger`](https://docs.rs/env_logger).
 
 <pre>
@@ -250,7 +244,7 @@ The default format of [`flexi_logger`](https://docs.rs/flexi_logger) with timest
 <font color="black"><b>TRACE</b></font> [fmtlog::module] <font color="white"><b>Example Message</b></font>
 </pre>
 
-### [**chrono**] FLEXI_LOGGER2
+### FLEXI_LOGGER2 (Requires feature: `chrono`)
 The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
 
 <pre>
@@ -261,7 +255,7 @@ The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
 <font color="black"><b>2021-01-01 12:00:00:00.000000 +09:00 TRACE</b></font> [fmtlog::module] src/main.rs:50: <font color="white"><b>Example Message</b></font>
 </pre>
 
-### [**chrono**] SIMPLE_LOGGER
+### SIMPLE_LOGGER (Requires feature: `chrono`)
 The default format of [`simple_logger`](https://docs.rs/simple_logger).
 
 <pre>
@@ -272,7 +266,7 @@ The default format of [`simple_logger`](https://docs.rs/simple_logger).
 2021-01-01 12:00:00 TRACE [fmtlog] Example Message
 </pre>
 
-### [**chrono**] SIMPLELOG
+### SIMPLELOG (Requires feature: `chrono`)
 The default format of [`simplelog`](https://docs.rs/simplelog).
 
 ```text
@@ -294,7 +288,7 @@ The default format of [`stderrlog`](https://docs.rs/stderrlog).
 <font color="blue">TRACE - Example Message</font>
 </pre>
 
-### [**chrono**] STDERRLOG2
+### STDERRLOG2 (Requires feature: `chrono`)
 The default format of [`stderrlog`](https://docs.rs/stderrlog) with timestamps.
 
 <pre>
