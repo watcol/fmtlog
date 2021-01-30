@@ -7,6 +7,10 @@
 
 A simple configurable logger with format specification.
 
+[image]
+
+For more formats, see [the Formats Collection](formats.md).
+
 ## Usage
 Add to your `Cargo.toml`:
 ```toml
@@ -48,7 +52,7 @@ fn main() {
 }
 ```
 
-For advanced usage, read [the API document](https://docs.rs/fmtlog)
+For advanced usage, read [the API document](https://docs.rs/fmtlog).
 
 ## Features
 - [x] Format Specification
