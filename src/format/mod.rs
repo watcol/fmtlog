@@ -3,11 +3,10 @@ mod color;
 #[cfg(feature = "colored")]
 mod pallet;
 
-
-#[cfg(feature = "colored")]
-use colored::Colorize;
 #[cfg(feature = "colored")]
 use color::Color;
+#[cfg(feature = "colored")]
+use colored::Colorize;
 #[cfg(feature = "colored")]
 use pallet::Pallet;
 

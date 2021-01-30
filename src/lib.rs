@@ -132,10 +132,7 @@ impl Logger {
         };
 
         #[cfg(not(feature = "colored"))]
-        let streams = outputs
-            .into_iter()
-            .map(|o| (o, false))
-            .collect();
+        let streams = outputs.into_iter().map(|o| (o, false)).collect();
 
         Logger {
             format: Format::new(config.format).expect("Invalid Format."),
