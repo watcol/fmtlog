@@ -50,6 +50,7 @@ impl<T: Into<path::PathBuf>> From<T> for Output {
 }
 
 fn new_file(path: path::PathBuf) -> io::Result<fs::File> {
+    // Append to an existing file or create a new file.
     fs::OpenOptions::new()
         .append(true)
         .open(path.clone())

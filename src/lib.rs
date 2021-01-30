@@ -113,7 +113,9 @@ pub struct Logger {
     format: Format,
     level: log::LevelFilter,
     modules: Modules,
+    // (Output, Colorize)
     streams: Vec<(Output, bool)>,
+    // (Stream, Colorize)
     writer: ThreadLocal<RefCell<Vec<(Stream, bool)>>>,
 }
 
@@ -180,6 +182,7 @@ impl Log for Logger {
             }
         }
 
+        // Get a writer or create new writer.
         let mut writer = self
             .writer
             .get_or(|| {
@@ -192,6 +195,7 @@ impl Log for Logger {
             })
             .borrow_mut();
 
+        // Write to all writers.
         writer
             .iter_mut()
             .map(|w| self.format.write(&mut w.0, record, w.1))
@@ -204,6 +208,7 @@ impl Log for Logger {
 
         match self.writer.get() {
             Some(writer) => {
+                // Flush all writers.
                 writer
                     .borrow_mut()
                     .iter_mut()

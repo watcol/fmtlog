@@ -21,6 +21,7 @@ impl Modules {
         Self::default()
     }
 
+    // Append a module when it is not duplicate existing module.
     fn append<T: Into<Module> + Clone>(self, module: T) -> Self {
         if self.0.iter().any(|m| m.is_parent(&module)) {
             return self;
@@ -37,6 +38,7 @@ impl Modules {
     }
 
     pub fn contains<T: Into<Module> + Clone>(&self, module: &T) -> bool {
+        // When no module is specified, always return "true".
         if self.0.len() == 0 {
             return true;
         }

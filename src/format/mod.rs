@@ -25,27 +25,36 @@ impl Format {
         Self::parse(&mut s.as_ref().chars())
     }
 
+    // This function is not used when feature "colored" is disabled.
     #[allow(dead_code)]
     fn parse_until<T: Iterator<Item = char>>(s: &mut T, ch: char) -> Result<Self, String> {
         let mut res = Vec::new();
 
+        // Temporary string holder.
         let mut const_str = String::new();
+
+        // Parse until end or "ch".
         loop {
             match s.next() {
                 Some('%') => {
+                    // Add "const_str" to "res" and clear "const_str".
                     res.push(Element::Const(const_str.clone()));
                     const_str.clear();
+                    // Parse an specifier.
                     res.push(Element::Special(Special::parse(s)?));
                 }
                 Some(c) if c == ch => {
+                    // Add "const_str" to "res".
                     res.push(Element::Const(const_str));
                     break;
                 }
-                None => {
-                    res.push(Element::Const(const_str));
-                    break;
-                }
+                // Add a character to "const_str".
                 Some(c) => const_str.push(c),
+                None => {
+                    // Add "const_str" to "res".
+                    res.push(Element::Const(const_str));
+                    break;
+                }
             };
         }
         Ok(Format(res))
@@ -54,25 +63,31 @@ impl Format {
     fn parse<T: Iterator<Item = char>>(s: &mut T) -> Result<Self, String> {
         let mut res = Vec::new();
 
+        // Temporary string holder.
         let mut const_str = String::new();
+
+        // Parse until end.
         loop {
             match s.next() {
                 Some('%') => {
+                    // Add "const_str" to "res" and clear "const_str".
                     res.push(Element::Const(const_str.clone()));
                     const_str.clear();
+                    // Parse an specifier.
                     res.push(Element::Special(Special::parse(s)?));
                 }
+                // Add a character to "const_str".
+                Some(c) => const_str.push(c),
                 None => {
+                    // Add "const_str" to "res".
                     res.push(Element::Const(const_str));
                     break;
                 }
-                Some(c) => const_str.push(c),
             };
         }
         Ok(Format(res))
     }
 
-    #[allow(unused_variables)]
     pub(crate) fn write<W: io::Write>(
         &self,
         writer: &mut W,
@@ -80,29 +95,32 @@ impl Format {
         colorize: bool,
     ) -> io::Result<()> {
         for elem in self.0.iter() {
+            // Write each elements.
             elem.write(writer, record, colorize)?;
         }
 
         Ok(())
     }
 
-    #[allow(unused_variables)]
     #[allow(dead_code)]
     fn to_str(&self, record: &Record, colorize: bool) -> io::Result<String> {
+        // Write to Vec<u8>
         let mut buf: Vec<u8> = Vec::new();
         self.write(&mut buf, record, colorize)?;
+        // Convert to UTF-8
         Ok(String::from_utf8(buf).unwrap())
     }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum Element {
+    /// A Const String
     Const(String),
+    /// A Specifier
     Special(Special),
 }
 
 impl Element {
-    #[allow(unused_variables)]
     fn write<W: io::Write>(
         &self,
         writer: &mut W,
@@ -110,7 +128,9 @@ impl Element {
         colorize: bool,
     ) -> io::Result<()> {
         match self {
+            // Write the string.
             Self::Const(s) => write!(writer, "{}", s),
+            // Process the specifier.
             Self::Special(spec) => spec.write(writer, record, colorize),
         }
     }
@@ -157,6 +177,7 @@ enum Special {
 
 impl Special {
     fn parse<T: Iterator<Item = char>>(s: &mut T) -> Result<Self, String> {
+        // Detect the specifier type.
         let kind = match s.next() {
             Some(c) => c,
             None => return Err(String::from("Unnexpected end.")),
@@ -203,6 +224,7 @@ impl Special {
                     return Err(String::from("Missing color specifier."));
                 }
 
+                // Parse the first color and detect color numbers.
                 let mut color = String::new();
                 let branch = loop {
                     match s.next() {
@@ -216,6 +238,7 @@ impl Special {
                 let color = Color::from_str(&color)?;
 
                 if branch {
+                    // Read five colors.
                     let error = color;
                     let warn = Color::parse_until(s, ',')?;
                     let info = Color::parse_until(s, ',')?;
@@ -226,6 +249,7 @@ impl Special {
                         return Err(String::from("Missing the body."));
                     }
 
+                    // Parse the body.
                     let format = Format::parse_until(s, '}')?;
 
                     Ok(Self::FgColorBranch(
@@ -243,6 +267,7 @@ impl Special {
                         return Err(String::from("Missing the body."));
                     }
 
+                    // Parse the body.
                     let format = Format::parse_until(s, '}')?;
 
                     Ok(Self::FgColor(color, format))
@@ -256,6 +281,7 @@ impl Special {
                     return Err(String::from("Missing color specifier."));
                 }
 
+                // Parse the first color and detect color numbers.
                 let mut color = String::new();
                 let branch = loop {
                     match s.next() {
@@ -269,6 +295,7 @@ impl Special {
                 let color = Color::from_str(&color)?;
 
                 if branch {
+                    // Read five colors.
                     let error = color;
                     let warn = Color::parse_until(s, ',')?;
                     let info = Color::parse_until(s, ',')?;
@@ -279,6 +306,7 @@ impl Special {
                         return Err(String::from("Missing the body."));
                     }
 
+                    // Parse the body.
                     let format = Format::parse_until(s, '}')?;
 
                     Ok(Self::BgColorBranch(
@@ -296,6 +324,7 @@ impl Special {
                         return Err(String::from("Missing the body."));
                     }
 
+                    // Parse the body.
                     let format = Format::parse_until(s, '}')?;
 
                     Ok(Self::BgColor(color, format))
@@ -307,6 +336,7 @@ impl Special {
                     return Err(String::from("Missing the body."));
                 }
 
+                // Parse the body.
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::Bold(format))
@@ -317,6 +347,7 @@ impl Special {
                     return Err(String::from("Missing the body."));
                 }
 
+                // Parse the body.
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::Dimmed(format))
@@ -327,6 +358,7 @@ impl Special {
                     return Err(String::from("Missing the body."));
                 }
 
+                // Parse the body.
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::Italic(format))
@@ -337,6 +369,7 @@ impl Special {
                     return Err(String::from("Missing the body."));
                 }
 
+                // Parse the body.
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::Reversed(format))
@@ -347,6 +380,7 @@ impl Special {
                     return Err(String::from("Missing the body."));
                 }
 
+                // Parse the body.
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::Underline(format))
@@ -357,6 +391,7 @@ impl Special {
                     return Err(String::from("Missing the body."));
                 }
 
+                // Parse the body.
                 let format = Format::parse_until(s, '}')?;
 
                 Ok(Self::StrikeThrough(format))
@@ -365,6 +400,7 @@ impl Special {
         }
     }
 
+    // Argument "colorize" is not used when feature "colored" is disabled.
     #[allow(unused_variables)]
     fn write<W: io::Write>(
         &self,
