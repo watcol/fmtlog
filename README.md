@@ -41,9 +41,9 @@ fn main() {
     fmtlog::default()
         .set()
         .unwrap();
-    
+
     error!("Something has failed.");
-    
+
     // ...
 }
 ```
