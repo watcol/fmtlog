@@ -342,8 +342,8 @@ mod normal {
     pub const DEBUG1: &str = "[%N (%S)] %L: %M\n";
     pub const DEBUG1_LOWER: &str = "[%N (%S)] %l: %M\n";
 
-    pub const DEBUG2: &str = "[%L] %M (at %S in %N))\n";
-    pub const DEBUG2_LOWER: &str = "[%l] %M (at %S in %N))\n";
+    pub const DEBUG2: &str = "[%L] %M (at %S in %N)\n";
+    pub const DEBUG2_LOWER: &str = "[%l] %M (at %S in %N)\n";
 
     pub const PRETTY_ENV_LOGGER: &str = " %L %N > %M\n";
     pub const FLEXI_LOGGER: &str = "%L [%m] %M\n";
@@ -385,8 +385,8 @@ mod colored {
     pub const DEBUG1: &str = "[%N (%S)] %F(red,yellow,green,purple,blue){%b{%L}}: %M\n";
     pub const DEBUG1_LOWER: &str = "[%N (%S)] %F(red,yellow,green,purple,blue){%b{%l}}: %M\n";
 
-    pub const DEBUG2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %S in %N))\n";
-    pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M (at %S in %N))\n";
+    pub const DEBUG2: &str = "[%F(red,yellow,green,purple,blue){%b{%L}}] %M (at %S in %N)\n";
+    pub const DEBUG2_LOWER: &str = "[%F(red,yellow,green,purple,blue){%b{%l}}] %M (at %S in %N)\n";
 
     pub const PRETTY_ENV_LOGGER: &str = " %F(red,yellow,green,blue,purple){%L} %b{%N} > %M\n";
     pub const FLEXI_LOGGER: &str =
