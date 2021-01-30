@@ -66,7 +66,7 @@ For advanced usage, read [the API document](https://docs.rs/fmtlog).
 API Documents are available on [docs.rs](https://docs.rs/fmtlog).
 
 ## Author
-- watcol <<potfman@gmail.com>>
+- ![watcol](https://github.com/watcol/icons/blob/main/32/normal.png) watcol <<potfman@gmail.com>>
 
 ## License
 This program is licensed under the MIT license.
