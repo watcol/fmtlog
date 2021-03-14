@@ -23,34 +23,38 @@ impl std::str::FromStr for Color {
                 return Err(String::from("Invalid color."));
             }
 
-            let r = match s.get(1..3) {
+            let red = match s.get(1..3) {
                 Some(s) => s,
                 None => return Err(String::from("Failed to parse hex.")),
             };
-            let r = match u8::from_str_radix(r, 16) {
+            let red = match u8::from_str_radix(red, 16) {
                 Ok(i) => i,
                 Err(e) => return Err(format!("Failed to parse hex.: {}", e)),
             };
 
-            let g = match s.get(3..5) {
+            let green = match s.get(3..5) {
                 Some(s) => s,
                 None => return Err(String::from("Failed to parse hex.")),
             };
-            let g = match u8::from_str_radix(g, 16) {
+            let green = match u8::from_str_radix(green, 16) {
                 Ok(i) => i,
                 Err(e) => return Err(format!("Failed to parse hex.: {}", e)),
             };
 
-            let b = match s.get(5..7) {
+            let blue = match s.get(5..7) {
                 Some(s) => s,
                 None => return Err(String::from("Failed to parse hex.")),
             };
-            let b = match u8::from_str_radix(b, 16) {
+            let blue = match u8::from_str_radix(blue, 16) {
                 Ok(i) => i,
                 Err(e) => return Err(format!("Failed to parse hex.: {}", e)),
             };
 
-            return Ok(Self(Orig::TrueColor { r, g, b }));
+            return Ok(Self(Orig::TrueColor {
+                r: red,
+                g: green,
+                b: blue,
+            }));
         }
 
         Ok(Self(

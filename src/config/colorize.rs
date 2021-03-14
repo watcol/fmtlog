@@ -59,10 +59,7 @@ impl Colorize {
         match self {
             Self::Off => false,
             // colorize when the "output" is standard stream.
-            Self::Auto => match output {
-                Output::Stdout | Output::Stderr => true,
-                _ => false,
-            },
+            Self::Auto => matches!(output, Output::Stdout | Output::Stderr),
             Self::On => true,
         }
     }

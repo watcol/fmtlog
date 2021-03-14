@@ -138,7 +138,7 @@ impl Logger {
 
         Logger {
             format: Format::new(config.format).expect("Invalid Format."),
-            level: config.level.into(),
+            level: config.level,
             modules: Modules::from(config.modules),
             streams,
             writer: ThreadLocal::new(),
@@ -206,17 +206,14 @@ impl Log for Logger {
     fn flush(&self) {
         use std::io::Write;
 
-        match self.writer.get() {
-            Some(writer) => {
-                // Flush all writers.
-                writer
-                    .borrow_mut()
-                    .iter_mut()
-                    .map(|w| w.0.flush())
-                    .collect::<Result<Vec<_>, _>>()
-                    .expect("Failed to flush the stream.");
-            }
-            None => {}
+        if let Some(writer) = self.writer.get() {
+            // Flush all writers.
+            writer
+                .borrow_mut()
+                .iter_mut()
+                .map(|w| w.0.flush())
+                .collect::<Result<Vec<_>, _>>()
+                .expect("Failed to flush the stream.");
         }
     }
 }

@@ -54,7 +54,7 @@ fn new_file(path: path::PathBuf) -> io::Result<fs::File> {
     fs::OpenOptions::new()
         .append(true)
         .open(path.clone())
-        .or(fs::File::create(path))
+        .or_else(|_| fs::File::create(path))
 }
 
 impl Output {

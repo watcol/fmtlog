@@ -39,7 +39,7 @@ impl Modules {
 
     pub fn contains<T: Into<Module> + Clone>(&self, module: &T) -> bool {
         // When no module is specified, always return "true".
-        if self.0.len() == 0 {
+        if self.0.is_empty() {
             return true;
         }
 
@@ -70,7 +70,7 @@ impl Into<String> for Module {
 
 impl Module {
     fn is_parent<T: Into<Module> + Clone>(&self, other: &T) -> bool {
-        let ref parent = self.0;
+        let parent = &self.0;
         let child = other.clone().into().0;
 
         if *parent == child {
