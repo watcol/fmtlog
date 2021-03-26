@@ -1,4 +1,5 @@
 # fmtlog
+![status](https://img.shields.io/badge/status-Active-brightgreen)
 [![crates.io](https://img.shields.io/crates/v/fmtlog)](https://crates.io/crates/fmtlog)
 [![docs.rs](https://docs.rs/fmtlog/badge.svg)](https://docs.rs/fmtlog)
 [![Downloads](https://img.shields.io/crates/d/fmtlog)](https://crates.io/crates/fmtlog)
