@@ -105,7 +105,7 @@ The default format of [`flexi_logger`](https://docs.rs/flexi_logger) with timest
 ### FLEXI_LOGGER2 (Requires feature: `chrono`)
 The default(detailed) format of [`flexi_logger`](https://docs.rs/flexi_logger).
 
-![flexi-logger2](images/flexi-logger.png)
+![flexi-logger2](images/flexi-logger2.png)
 
 ### SIMPLE_LOGGER (Requires feature: `chrono`)
 The default format of [`simple_logger`](https://docs.rs/simple_logger).
